@@ -1,0 +1,50 @@
+# Uses ${CMAKE_FIND_PACKAGE_NAME} instead of hardcoding @PACKAGE_NAME@, to be case-resilient.
+if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+    set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "The '${CMAKE_FIND_PACKAGE_NAME}' package requires at least one component")
+    set(${CMAKE_FIND_PACKAGE_NAME}_FOUND False)
+    return()
+endif()
+
+include(CMakeFindDependencyMacro)
+
+# Note: Execution of this Config script might be recursive via the find_depency call,
+# in cases where components in the same project depend on each other.
+# Since all invocations occur in the same "variable scope", the unset(_config_location) would also
+# erase the value in the "calling context", even if unset would occur after the loop completes.
+# For this reason, re-set `_config_location` variable at each iteration.
+foreach(module ${${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS})
+    set (_config_location "${CMAKE_CURRENT_LIST_DIR}/${module}")
+
+    # Error when a component has exactly the same identifier as the package_name
+    # (would first find the current Config.cmake, because xxx_DIR variable is already set).
+    if(module STREQUAL ${CMAKE_FIND_PACKAGE_NAME})
+        set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
+            "The '${CMAKE_FIND_PACKAGE_NAME}' package cannot list a component with identical name.\
+             Use at least a distinct capitalization \
+             (advice: package names start with capital, components do not).")
+        set(${CMAKE_FIND_PACKAGE_NAME}_FOUND False)
+        return()
+    endif()
+
+    # find_dependency should forward the QUIET and REQUIRED arguments.
+    find_dependency(${module} CONFIG
+                    PATHS "${_config_location}"
+                    NO_DEFAULT_PATH)
+    if (NOT ${module}_FOUND)
+        if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_${module})
+            string(CONCAT _${CMAKE_FIND_PACKAGE_NAME}_NOTFOUND_MESSAGE
+                   "Failed to find ${CMAKE_FIND_PACKAGE_NAME} component \"${module}\" "
+                   "config file at \"${_config_location}\"\n")
+        elseif(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+            message(WARNING "Failed to find ${CMAKE_FIND_PACKAGE_NAME} component \"${module}\" "
+                             "config file at \"${_config_location}\"")
+        endif()
+    endif()
+
+    unset(_config_location)
+endforeach()
+
+if (_${CMAKE_FIND_PACKAGE_NAME}_NOTFOUND_MESSAGE)
+    set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "${_${CMAKE_FIND_PACKAGE_NAME}_NOTFOUND_MESSAGE}")
+    set(${CMAKE_FIND_PACKAGE_NAME}_FOUND False)
+endif()

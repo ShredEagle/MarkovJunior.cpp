@@ -1,0 +1,5 @@
+<markov values=".IW-" origin="True">
+  <one in="I." out="WI"/>
+  <one in="IW" out="-I"/>
+</markov>
+
