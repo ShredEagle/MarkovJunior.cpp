@@ -1,6 +1,5 @@
-# Sounds
-
-Sounds library with C++, liboggvorbis and openAL
+# MarkovJunior.cpp
+A C++ port of mxgmn's [MarkovJunior library](https://github.com/mxgmn/MarkovJunior/)
 
 ## Development
 
