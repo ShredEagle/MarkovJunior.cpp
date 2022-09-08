@@ -9,7 +9,7 @@ RuleNode::RuleNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParen
         std::string symmetryString = aXmlNode.attribute("symmetry").as_string("");
         SymmetryGroup symmetrySubgroup = getSymmetry(symmetryString, aParentSymmetry);
 
-        pugi::xpath_node_set xmlRuleNodes = aXmlNode.select_nodes("/rule");
+        pugi::xpath_node_set xmlRuleNodes = aXmlNode.select_nodes("rule");
 
         if (xmlRuleNodes.empty())
         {
@@ -17,7 +17,7 @@ RuleNode::RuleNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParen
         }
         else
         {
-            for (pugi::xpath_node node : xmlRuleNodes)
+            for (const pugi::xpath_node & node : xmlRuleNodes)
             {
                 addRule(node.node(), symmetrySubgroup);
             }
@@ -25,6 +25,21 @@ RuleNode::RuleNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParen
 
         mLast.assign(mRules.size(), false);
         mSteps = aXmlNode.attribute("steps").as_int();
+
+        mTemperature = aXmlNode.attribute("temperatur").as_double(0.);
+        pugi::xpath_node_set xmlFieldNodes = aXmlNode.select_nodes("field");
+
+        if (!xmlFieldNodes.empty())
+        {
+            for (const pugi::xpath_node & node : xmlFieldNodes)
+            {
+                unsigned char character = node.node().attribute("for").as_string()[0];
+                if (mInterpreter->mGrid.mValues.contains("c"[0]))
+                {
+                    mFields.at(
+                }
+            }
+        }
 }
 
 bool RuleNode::run()
@@ -46,7 +61,7 @@ bool RuleNode::run()
         {
             math::Position<3, int> changePos = mInterpreter->mChanges.at(i);
             
-            char value = grid.mState.at(grid.getFlatGridIndex(changePos));
+            unsigned char value = grid.mState.at(grid.getFlatGridIndex(changePos));
 
             for (int ruleIndex = 0; ruleIndex < mRules.size(); ruleIndex++)
             {

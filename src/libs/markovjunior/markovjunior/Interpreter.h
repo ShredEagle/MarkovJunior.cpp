@@ -47,6 +47,7 @@ class Interpreter
         std::vector<math::Position<3, int>> mChanges;
         int mCounter = 0;
         std::mt19937 mRandom;
+        std::uniform_real_distribution<double> mProbabilityDistribution = std::uniform_real_distribution(0.0, 1.0);
 
     private:
         static pugi::xml_document pathToXmlParsedDoc(const filesystem::path & aPath)

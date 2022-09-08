@@ -1,0 +1,42 @@
+<sequence values="BGWORK">
+  <prl steps="75">
+    <rule in="WG" out="*W"/>
+    <rule in="W*/*G" out="**/*W"/>
+    <rule in="B" out="G" p="0.01"/>
+    <rule in="W" out="B"/>
+    <rule in="G" out="W" p="0.0001"/>
+  </prl>
+  <all in="W" out="B"/>
+  <all in="*G*/GBG" out="***/*G*"/>
+  <all>
+    <rule in="*B*/BGB/*B*" out="***/*B*/***"/>
+    <rule in="*BB*/BGGB/*BB*" out="****/*BB*/****"/>
+  </all>
+  <markov>
+    <sequence>
+      <one in="G" out="R" steps="1"/>
+      <all in="RG" out="RR" steps="10"/>
+      <all in="RG" out="OO"/>
+      <all>
+        <rule in="OR" out="*O"/>
+        <rule in="OG" out="*O"/>
+      </all>
+    </sequence>
+  </markov>
+  <markov>
+    <sequence>
+      <one in="B" out="K" steps="1"/>
+      <all in="KB" out="*K" steps="10"/>
+      <all in="KB" out="GG"/>
+      <all>
+        <rule in="GB" out="*G"/>
+        <rule in="GK" out="*G"/>
+      </all>
+    </sequence>
+  </markov>
+  <prl>
+    <rule in="K" out="O"/>
+    <rule in="G" out="B"/>
+  </prl>
+  <all in="R" out="B" />
+</sequence>

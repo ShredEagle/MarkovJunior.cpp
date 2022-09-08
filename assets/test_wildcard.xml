@@ -1,0 +1,5 @@
+<sequence values="BGOERK">
+  <prl steps="75">
+    <rule in="B" out="G" p="1.0"/>
+  </prl>
+</sequence>

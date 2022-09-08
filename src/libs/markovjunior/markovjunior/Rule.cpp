@@ -89,7 +89,7 @@ void Rule::setupShifts(int aCount)
 Rule::Rule(
         std::vector<int> aInput,
         math::Size<3, int> aInputSize,
-        std::vector<char> aOutput,
+        std::vector<unsigned char> aOutput,
         math::Size<3, int> aOutputSize, int aCount, double aP) :
     mInputs{aInput},
     mInputSize{aInputSize},
@@ -150,7 +150,7 @@ Rule::Rule(const pugi::xml_node & aXmlNode, const Grid & aGridIn, const Grid & a
     setupShifts(aGridIn.mCharacters.size());
 }
 
-std::tuple<std::vector<char>, math::Size<3, int>> Rule::parsePatternString(
+std::tuple<std::vector<unsigned char>, math::Size<3, int>> Rule::parsePatternString(
         const std::string & aPatternString)
 {
     std::vector<std::vector<std::string>> lines = splitPatternString(aPatternString);
@@ -159,7 +159,7 @@ std::tuple<std::vector<char>, math::Size<3, int>> Rule::parsePatternString(
         lines.at(0).size(),
         lines.size()
     };
-    std::vector<char> result;
+    std::vector<unsigned char> result;
 
     for (int z = 0; z < patternSize.depth(); z++)
     {
@@ -204,7 +204,7 @@ Rule Rule::reflect()
         }
     }
 
-    std::vector<char> newOutputs = mOutputs;
+    std::vector<unsigned char> newOutputs = mOutputs;
     for (int z = 0; z < mOutputSize.depth(); z++)
     {
         for (int y = 0; y < mOutputSize.height(); y++)
@@ -240,7 +240,7 @@ Rule Rule::rotate()
         }
     }
 
-    std::vector<char> newOutputs = mOutputs;
+    std::vector<unsigned char> newOutputs = mOutputs;
     for (int z = 0; z < mOutputSize.depth(); z++)
     {
         for (int y = 0; y < mOutputSize.width(); y++)

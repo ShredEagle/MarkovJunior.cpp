@@ -1,7 +1,6 @@
 #include "Grid.h"
 #include "Rule.h"
-#include <chrono>
-#include <thread>
+#include <iostream>
 
 namespace ad {
 namespace markovjunior {
@@ -76,7 +75,7 @@ bool Grid::matchPatternAtPosition(const Rule & aRule, math::Position<3, int> aPo
 int Grid::makeWave(std::string aValues) const
 {
     std::vector<int> mappedValues;
-    std::for_each(aValues.begin(), aValues.end(), [&](unsigned char value) {mappedValues.emplace_back(mValues.at(value));});
+    std::for_each(aValues.begin(), aValues.end(), [&](unsigned char value) {mappedValues.emplace_back(1 << mValues.at(value));});
     return std::accumulate(mappedValues.begin(), mappedValues.end(), 0);
 }
 
@@ -98,18 +97,21 @@ std::ostream &operator<<(std::ostream & os, const Grid & aGrid)
     }
 
     os << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(3));
-    os << "\x1b[1A" << "\x1b[2K";
-    for (int k = 0; k != aGrid.mSize.depth(); k++)
-    {
-        for (int j = 0; j != aGrid.mSize.height(); j++)
-        {
-            os << "\x1b[1A" << "\x1b[2K";
-        }
-    }
-    os << "\x1b[1A" << "\x1b[2K";
 
     return os;
+}
+
+void Grid::erase()
+{
+    std::cout << "\x1b[1A" << "\x1b[2K";
+    for (int k = 0; k != mSize.depth(); k++)
+    {
+        for (int j = 0; j != mSize.height(); j++)
+        {
+            std::cout << "\x1b[1A" << "\x1b[2K";
+        }
+    }
+    std::cout << "\x1b[1A" << "\x1b[2K";
 }
 }
 }

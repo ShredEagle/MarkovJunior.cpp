@@ -103,7 +103,6 @@ public:
         currentStep = 0;
     }
 
-    friend std::ostream & operator<<(std::ostream & os, const SequenceNode & aNode);
 };
 
 class MarkovNode : public SequenceNode

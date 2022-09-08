@@ -27,6 +27,7 @@ class MarkovJuniorConan(ConanFile):
         ("pugixml/1.12.1"),
         ("handy/4ecfa5b125@adnn/develop"),
         ("math/72087b9ee3@adnn/develop"),
+        ("graphics/2d7d5f5479@adnn/develop"),
     )
 
     build_policy = "missing"

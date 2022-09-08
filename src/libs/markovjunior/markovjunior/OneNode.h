@@ -40,18 +40,21 @@ public:
             {
                 for (int dx = 0; dx < rule.mOutputSize.width(); dx++)
                 {
-                    char newValue = rule.mOutputs.at(getFlatIndex(
+                    unsigned char newValue = rule.mOutputs.at(getFlatIndex(
                         {dx, dy, dz},
                         rule.mOutputSize
                         ));
-                    math::Position<3, int> newValuePos = rulePos + math::Vec<3, int>{dx, dy, dz};
-                    int newValueIndex = getFlatIndex(newValuePos, mInterpreter->mGrid.mSize);
-                    char oldValue = mInterpreter->mGrid.mState.at(newValueIndex);
-
-                    if (newValue != oldValue)
+                    if (newValue != 0xff)
                     {
-                        mInterpreter->mGrid.mState.at(newValueIndex) = newValue;
-                        changes.push_back(newValuePos);
+                        math::Position<3, int> newValuePos = rulePos + math::Vec<3, int>{dx, dy, dz};
+                        int newValueIndex = getFlatIndex(newValuePos, mInterpreter->mGrid.mSize);
+                        unsigned char oldValue = mInterpreter->mGrid.mState.at(newValueIndex);
+
+                        if (newValue != oldValue)
+                        {
+                            mInterpreter->mGrid.mState.at(newValueIndex) = newValue;
+                            changes.push_back(newValuePos);
+                        }
                     }
                 }
             }

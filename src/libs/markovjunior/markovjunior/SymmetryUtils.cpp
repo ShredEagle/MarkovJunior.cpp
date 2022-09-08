@@ -18,7 +18,7 @@ namespace markovjunior {
 
     SymmetryGroup getSymmetry(const std::string & aSymmetryString, const SymmetryGroup & aDefaultGroup)
     {
-        return !aSymmetryString.compare("") == 0 ?
+        return !(aSymmetryString.compare("") == 0 )?
             gSquareSubgroups.at(aSymmetryString) :
             aDefaultGroup;
     }

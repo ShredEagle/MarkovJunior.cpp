@@ -1,3 +1,3 @@
 #pragma once
 
-extern const char gWildcardShiftValue;
+extern const unsigned char gWildcardShiftValue;

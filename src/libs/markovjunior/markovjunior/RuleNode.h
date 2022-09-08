@@ -4,6 +4,7 @@
 #include "Interpreter.h"
 #include "Rule.h"
 #include "SymmetryUtils.h"
+#include "markovjunior/Field.h"
 
 #include <math/Vector.h>
 
@@ -44,7 +45,8 @@ private:
         mRules.insert(mRules.end(), symmetricRules.begin(), symmetricRules.end());
     }
 
-    void addMatch(const int ruleIndex, const math::Position<3, int> & aMatchPosition, std::vector<bool> & aMatchMask)
+public: 
+    virtual void addMatch(const int ruleIndex, const math::Position<3, int> & aMatchPosition, std::vector<bool> & aMatchMask)
     {
         aMatchMask.at(mInterpreter->mGrid.getFlatGridIndex(aMatchPosition)) = true;
 
@@ -59,7 +61,6 @@ private:
         mMatchCount++;
     }
 
-public: 
     int mLastMatchedTurn;
     int mCounter = 0;
     int mSteps = 0;
@@ -69,6 +70,8 @@ public:
     std::vector<bool> mLast;
     std::vector<RuleMatch> mMatches;
     std::vector<std::vector<bool>> mMatchMask;
+    std::vector<Field> mFields;
+    double mTemperature;
 
     friend std::ostream & operator<<(std::ostream & os, const RuleNode & aRuleNode);
 };

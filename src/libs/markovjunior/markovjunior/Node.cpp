@@ -1,6 +1,8 @@
 #include "Node.h"
 #include "Interpreter.h"
-#include "markovjunior/OneNode.h"
+#include "AllNode.h"
+#include "OneNode.h"
+#include "markovjunior/ParallelNode.h"
 
 #include <handy/Crc.h>
 
@@ -18,6 +20,12 @@ std::unique_ptr<Node> createNode(
     {
         case handy::crc64("one"):
             return std::make_unique<OneNode>(aXmlNode, aSymmetry, aInterpreter);
+            break;
+        case handy::crc64("all"):
+            return std::make_unique<AllNode>(aXmlNode, aSymmetry, aInterpreter);
+            break;
+        case handy::crc64("prl"):
+            return std::make_unique<ParallelNode>(aXmlNode, aSymmetry, aInterpreter);
             break;
         case handy::crc64("markov"):
         case handy::crc64("sequence"):
@@ -74,8 +82,9 @@ bool SequenceNode::run()
 {
     mInterpreter->mCurrentBranch = this;
 
-    for (const std::unique_ptr<Node> & node : nodes)
+    for (;currentStep < nodes.size(); currentStep++)
     {
+        const std::unique_ptr<Node> & node = nodes.at(currentStep); 
         if (node->run())
         {
             return true;
@@ -86,16 +95,6 @@ bool SequenceNode::run()
     reset();
 
     return false;
-}
-
-std::ostream &operator<<(std::ostream & os, const SequenceNode & aNode)
-{
-    for (auto & node : aNode.nodes)
-    {
-        os << *reinterpret_cast<OneNode*>(node.get());
-    }
-
-    return os;
 }
 
 }

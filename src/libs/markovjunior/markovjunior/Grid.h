@@ -42,12 +42,14 @@ public:
     std::map<unsigned char, int> mValues;
     std::map<unsigned char, int> mWaves;
     std::vector<unsigned char> mCharacters;
-    std::vector<char> mState;
-    std::vector<char> mStateBuffer;
+    std::vector<unsigned char> mState;
+    std::vector<unsigned char> mStateBuffer;
     std::vector<bool> mMask;
     math::Size<3, int> mSize = math::Size<3, int>{1, 1, 1};
 
     friend std::ostream & operator<<(std::ostream & os, const Grid & aGrid);
+
+    void erase();
 };
 
 }

@@ -1,3 +1,3 @@
 #include "Constants.h"
 
-const char gWildcardShiftValue = 0xff;
+const unsigned char gWildcardShiftValue = 0xff;
