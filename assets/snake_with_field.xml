@@ -1,0 +1,17 @@
+<sequence values="BWDPGRN" origin="True">
+  <all>
+    <rule in="WBB" out="**D"/>
+    <rule in="DBB" out="**D"/>
+  </all>
+  <one in="WBD" out="PGR"/>
+  <one in="RBD" out="GGR" steps="2"/>
+  <one in="D" out="W" steps="14"/>
+  <markov>
+    <one in="RBW" out="GGR"/>
+    <all temperature="1.0">
+      <rule in="RBD" out="GGR"/>
+      <rule in="PGG" out="DBP"/>
+      <field for="R" to="W" on="BDR" recompute="True"/>
+    </all>
+  </markov>
+</sequence>

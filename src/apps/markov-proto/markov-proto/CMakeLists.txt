@@ -11,16 +11,16 @@ add_executable(${TARGET_NAME}
     ${${TARGET_NAME}_SOURCES}
     ${${TARGET_NAME}_HEADERS})
 
-target_compile_options(${TARGET_NAME}
-    PRIVATE "-O2")
+# target_compile_options(${TARGET_NAME}
+#     PRIVATE "-O2")
 
-target_compile_options(${TARGET_NAME}
-     PRIVATE "-O2")
+# target_compile_options(${TARGET_NAME}
+#      PRIVATE "-O2")
 
- # target_compile_options(${TARGET_NAME}
- #     PRIVATE "-fno-omit-frame-pointer" "-g" "-fsanitize=leak" "-Wall" "-Wextra" "-fsanitize=address" "-fsanitize=undefined")
- # target_link_options(${TARGET_NAME}
- #     PRIVATE "-fsanitize=address" "-fsanitize=leak" "-fsanitize=undefined")
+ target_compile_options(${TARGET_NAME}
+     PRIVATE "-fno-omit-frame-pointer" "-g" "-fsanitize=leak" "-Wall" "-Wextra" "-fsanitize=address" "-fsanitize=undefined")
+ target_link_options(${TARGET_NAME}
+     PRIVATE "-fsanitize=address" "-fsanitize=leak" "-fsanitize=undefined")
 
 find_package(Graphics REQUIRED CONFIG COMPONENTS graphics)
 

@@ -23,6 +23,8 @@ public:
 
     Interpreter * mInterpreter = nullptr;
 
+    virtual bool isRuleNode() { return false; };
+
     virtual bool canBeRoot()
     {
         return false;

@@ -11,6 +11,8 @@ namespace markovjunior {
 class Field
 {
 public:
+    Field() = default;
+
     Field(const pugi::xml_node & aXmlNode, const Grid & aGrid) :
         mRecompute{aXmlNode.attribute("recompute").as_bool(false)},
         mEssential{aXmlNode.attribute("essential").as_bool(false)},
@@ -65,17 +67,17 @@ public:
     }
 
     static std::optional<int> deltaPointwise(
-            std::vector<unsigned char> & aState,
-            Rule & aRule,
-            math::Position<3, int> & aPos,
-            std::vector<Field> aFields,
-            std::vector<std::vector<int>> aPotentials,
-            math::Size<3, int> aGridSize);
+            const std::vector<unsigned char> & aState,
+            const Rule & aRule,
+            const math::Position<3, int> & aPos,
+            const std::vector<Field> & aFields,
+            const std::vector<std::vector<int>> & aPotentials,
+            const math::Size<3, int> & aGridSize);
 
-    bool mRecompute;
-    bool mInversed;
-    bool mEssential;
-    int mZero;
+    bool mRecompute = false;
+    bool mInversed = false;
+    bool mEssential = false;
+    int mZero = 0;
     int mSubstrate = -1;
 };
 }

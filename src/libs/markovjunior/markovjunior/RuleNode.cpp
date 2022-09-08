@@ -1,4 +1,6 @@
 #include "RuleNode.h"
+#include "markovjunior/Field.h"
+#include <algorithm>
 #include <math/Vector.h>
 
 namespace ad {
@@ -31,14 +33,23 @@ RuleNode::RuleNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParen
 
         if (!xmlFieldNodes.empty())
         {
+            const Grid & grid = mInterpreter->mGrid;
+            mFields = std::vector<Field>(grid.mCharacters.size(), Field{});
             for (const pugi::xpath_node & node : xmlFieldNodes)
             {
                 unsigned char character = node.node().attribute("for").as_string()[0];
-                if (mInterpreter->mGrid.mValues.contains("c"[0]))
+                if (grid.mValues.contains(character))
                 {
-                    mFields.at(
+                    mFields.at(grid.mValues.at(character)) = Field(node.node(), grid);
+                }
+                else
+                {
+                    std::cout << "UNKNOWN FIELD VALUE" << std::endl;
                 }
             }
+            mPotentials = std::vector<std::vector<int>>(
+                grid.mCharacters.size(), std::vector<int>(
+                    grid.mState.size(), 0));
         }
 }
 
@@ -134,6 +145,32 @@ bool RuleNode::run()
                 }
             }
         }
+    }
+
+    if (!mFields.empty())
+    {
+        bool anySuccess = false;
+        bool anyComputation = false;
+
+        for (int i = 0; i != mFields.size(); i++)
+        {
+            auto field = mFields.at(i);
+
+            if (field.mSubstrate != -1 && (mCounter == 0 || field.mRecompute))
+            {
+                bool success = field.compute(mPotentials.at(i), grid);
+
+                if (!success && field.mEssential)
+                {
+                    return false;
+                }
+
+                anySuccess |= success;
+                anyComputation = true;
+            }
+        }
+
+        return !anyComputation || anySuccess;
     }
 
     return true;

@@ -63,12 +63,12 @@ bool Field::compute(std::vector<int> & aPotential, const Grid & aGrid)
 }
 
 std::optional<int> Field::deltaPointwise(
-        std::vector<unsigned char> & aState,
-        Rule & aRule,
-        math::Position<3, int> & aPos,
-        std::vector<Field> aFields,
-        std::vector<std::vector<int>> aPotentials,
-        math::Size<3, int> aGridSize)
+        const std::vector<unsigned char> & aState,
+        const Rule & aRule,
+        const math::Position<3, int> & aPos,
+        const std::vector<Field> & aFields,
+        const std::vector<std::vector<int>> & aPotentials,
+        const math::Size<3, int> & aGridSize)
 {
     int sum = 0;
     for (int z = 0; z < aRule.mInputSize.depth(); z++)
@@ -108,14 +108,14 @@ std::optional<int> Field::deltaPointwise(
                     {
                         Field oldField = aFields.at(oldValue);
 
-                        if (oldField.mInversed)
+                        if (oldField.mSubstrate != -1 && oldField.mInversed)
                         {
                             sum += 2 * oldPotential;
                         }
-                        Field newField = aFields.at(oldValue);
-                        if (newField.mInversed)
+                        Field newField = aFields.at(newValue);
+                        if (newField.mSubstrate != -1 && newField.mInversed)
                         {
-                            sum -= 2 * oldPotential;
+                            sum -= 2 * newPotential;
                         }
                     }
                 }

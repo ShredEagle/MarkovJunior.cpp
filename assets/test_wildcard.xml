@@ -1,5 +1,10 @@
-<sequence values="BGOERK">
-  <prl steps="75">
-    <rule in="B" out="G" p="1.0"/>
-  </prl>
+<sequence values="BWGR">
+    <one in="B" out="W" steps="10" />
+    <one in="BBBB/BBBB/BBBB/BBBB" out="BBBB/BBRB/BBGB/BBBB" steps="1" />
+    <markov>
+        <one temperature="1.0">
+            <rule in="RBB" out="GGR"/>
+            <field for="R" to="W" on="BR"/>
+        </one>
+    </markov>
 </sequence>

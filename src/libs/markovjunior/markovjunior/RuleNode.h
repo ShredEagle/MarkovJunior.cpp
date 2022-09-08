@@ -30,6 +30,8 @@ public:
         
         std::fill(mLast.begin(), mLast.end(), false);
     }
+
+    bool isRuleNode() override { return true; };
 private:
     void addRule(const pugi::xml_node & aXmlNode, const SymmetryGroup & aSymmetryGroup )
     {
@@ -71,6 +73,7 @@ public:
     std::vector<RuleMatch> mMatches;
     std::vector<std::vector<bool>> mMatchMask;
     std::vector<Field> mFields;
+    std::vector<std::vector<int>> mPotentials;
     double mTemperature;
 
     friend std::ostream & operator<<(std::ostream & os, const RuleNode & aRuleNode);
