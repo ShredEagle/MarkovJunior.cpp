@@ -16,7 +16,8 @@
 using namespace ad::markovjunior;
 using namespace ad::graphics;
 
-constexpr ad::graphics::Size2<int> gWindowSize{500, 500};
+constexpr ad::graphics::Size2<int> gWindowSize{800, 500};
+constexpr ad::graphics::Size2<int> gMarkovDrawSize{500, 500};
 
 inline ApplicationGlfw application{"Markovjunior", gWindowSize, ApplicationFlag::Window_Keep_Ratio};
 inline bool runSimulation = false;
@@ -26,27 +27,27 @@ constexpr float gViewedHeight = 500.;
 
 const std::map<std::string, ad::math::sdr::Rgb> colorMatching = {
     {"B", ad::math::sdr::gBlack},
-    {"W", ad::math::sdr::gWhite},
-    {"t", ad::math::sdr::Rgb{20, 30, 20}},
+    {"W", ad::math::sdr::Rgb{0xff, 0xf1, 0xe8}},
+    {"t", ad::math::sdr::Rgb{0x32, 0x3c, 39}},
     {"K", ad::math::sdr::Rgb{255, 112, 146}},
     {"O", ad::math::sdr::Rgb{255, 153, 0}},
-    {"E", ad::math::sdr::Rgb{70, 200, 70}},
-    {"D", ad::math::sdr::Rgb{40, 100, 40}},
-    {"N", ad::math::sdr::Rgb{100, 40, 40}},
+    {"E", ad::math::sdr::Rgb{0, 0x87, 0x51}},
+    {"D", ad::math::sdr::Rgb{0x5f, 0x57, 0x4f}},
+    {"N", ad::math::sdr::Rgb{0xab, 0x52, 0x36}},
     {"R", ad::math::sdr::gRed},
     {"C", ad::math::sdr::gCyan},
-    {"G", ad::math::sdr::gGreen},
-    {"U", ad::math::sdr::gBlue},
+    {"G", ad::math::sdr::Rgb{0x0, 0xe4, 0x36}},
+    {"U", ad::math::sdr::Rgb{0x29, 0xad, 0xff}},
     {"P", ad::math::sdr::gMagenta},
-    {"Y", ad::math::sdr::gYellow},
-    {"A", ad::math::sdr::Rgb{100, 100, 100}}
+    {"Y", ad::math::sdr::Rgb{0xff, 0xec, 0x27}},
+    {"A", ad::math::sdr::Rgb{0xc2, 0xc3, 0xc7}}
 };
 
 std::vector<TrivialShaping::Rectangle> renderGrid(const Grid & aGrid)
 {
     std::vector<TrivialShaping::Rectangle> result;
 
-    float cellSize = gViewedHeight / (float)aGrid.mSize.width();
+    float cellSize = gMarkovDrawSize / (float)aGrid.mSize.width();
 
     for (int z = 0; z < aGrid.mSize.depth(); z++)
     {
@@ -140,9 +141,9 @@ inline void callbackKeyboard(int key, int scancode, int action, int mods)
 int main()
 {
     Interpreter interpreter(
-            "/home/franz/gamedev/MarkovJunior.cpp/assets/snake_with_field.xml",
-            {101, 101, 1},
-            345);
+            "/home/franz/gamedev/MarkovJunior.cpp/assets/circuit.xml",
+            {59, 59, 1},
+            1345);
     //std::cout << interpreter.mGrid << std::endl;
     interpreter.setup();
     //std::cout << interpreter.mGrid << std::endl;

@@ -9,6 +9,7 @@ set(${TARGET_NAME}_HEADERS
     Node.h
     OneNode.h
     ParallelNode.h
+    Path.h
     Rule.h
     RuleNode.h
     SymmetryUtils.h
@@ -22,6 +23,8 @@ set(${TARGET_NAME}_SOURCES
     Interpreter.cpp
     Node.cpp
     OneNode.cpp
+    ParallelNode.cpp
+    Path.cpp
     Rule.cpp
     RuleNode.cpp
     SymmetryUtils.cpp

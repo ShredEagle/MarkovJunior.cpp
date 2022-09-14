@@ -1,10 +1,9 @@
-<sequence values="BWGR">
-    <one in="B" out="W" steps="10" />
-    <one in="BBBB/BBBB/BBBB/BBBB" out="BBBB/BBRB/BBGB/BBBB" steps="1" />
+<sequence values="BtWGRKE" origin="True">
+    <all in="B" out="E" />
+    <all in="tEE" out="**t"/>
+    <one in="***/*E*/***" out="K*K/KWK/K*K" steps="10" />
     <markov>
-        <one temperature="1.0">
-            <rule in="RBB" out="GGR"/>
-            <field for="R" to="W" on="BR"/>
-        </one>
+      <path from="G" to="W" on="E" color="R" inertia="True"/>
+      <one in="W" out="G" steps="1" />
     </markov>
 </sequence>

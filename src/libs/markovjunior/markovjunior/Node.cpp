@@ -3,6 +3,7 @@
 #include "AllNode.h"
 #include "OneNode.h"
 #include "markovjunior/ParallelNode.h"
+#include "markovjunior/Path.h"
 
 #include <handy/Crc.h>
 
@@ -26,6 +27,9 @@ std::unique_ptr<Node> createNode(
             break;
         case handy::crc64("prl"):
             return std::make_unique<ParallelNode>(aXmlNode, aSymmetry, aInterpreter);
+            break;
+        case handy::crc64("path"):
+            return std::make_unique<Path>(aXmlNode, aSymmetry, aInterpreter);
             break;
         case handy::crc64("markov"):
         case handy::crc64("sequence"):

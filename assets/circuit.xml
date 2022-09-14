@@ -1,4 +1,4 @@
-<sequence values="BtEDGANYOWU" origin="Center">
+<sequence values="BtEDGANYOWU" origin="True">
   <prl in="***/*B*/***" out="***/*E*/***"/>
   <all in="tEE" out="**t"/>
   <one in="tEtEtEtEt/EEEEEEEEE/tEtEtEtEt/EEEEEEEEE/tEtEtEtEt/EEEEEEEEE/tEtEtEtEt/EEEEEEEEE/tEtEtEtEt/EEEEEEEEE/tEtEtEtEt"
@@ -11,7 +11,7 @@
     <path from="A" to="U" on="E" color="G" inertia="True"/>
     <all in="A" out="U"/>
     <one in="tEtEtEtEt/EEEEEEEEE/tEtEtEtEt/EEEEEEEEE/tEtEtEtEt/EEEEEEEEE/tEtEtEtEt/EEEEEEEEE/tEtEtEtEt/EEEEEEEEE/tEtEtEtEt"
-        out="tEtEtEtEt/EEtAtAtEE/ttDNDNDtt/EANDNDNAE/ttDNDNDtt/EANDNDNAE/ttDNDNDtt/EANDNDNAE/ttDNDNDtt/EEtAtAtEE/tEtEtEtEt" steps="2"/>
+        out="tEtEtEtEt/EEtAtAtEE/ttDNDNDtt/EANDNDNAE/ttDNDNDtt/EANDNDNAE/ttDNDNDtt/EANDNDNAE/ttDNDNDtt/EEtAtAtEE/tEtEtEtEt"/>
   </markov>
   <prl in="B" out="E"/>
   <all>
