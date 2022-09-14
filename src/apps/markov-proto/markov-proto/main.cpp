@@ -1,6 +1,8 @@
 #include "markovjunior/Grid.h"
 #include "markovjunior/RuleNode.h"
 #include <graphics/CameraUtilities.h>
+#include <imgui.h>
+#include <imguiui/ImguiUi.h>
 #include <markovjunior/Interpreter.h>
 #include <graphics/ApplicationGlfw.h>
 #include <graphics/TrivialShaping.h>
@@ -9,6 +11,8 @@
 #include <math/Color.h>
 #include <math/Matrix.h>
 #include <math/Rectangle.h>
+#include <memory>
+#include <ratio>
 #include <renderer/commons.h>
 #include <string>
 #include <thread>
@@ -16,14 +20,16 @@
 using namespace ad::markovjunior;
 using namespace ad::graphics;
 
-constexpr ad::graphics::Size2<int> gWindowSize{800, 500};
-constexpr ad::graphics::Size2<int> gMarkovDrawSize{500, 500};
+constexpr ad::graphics::Size2<int> gWindowSize{1400, 800};
+constexpr float gMarkovDrawSize = 800.f;
+inline int gSeed = 0;
+inline int gSize = 59;
+inline int gSteps = 1;
+inline std::string filename = "/home/franz/gamedev/MarkovJunior.cpp/assets/bernouilli_percolation.xml";
 
 inline ApplicationGlfw application{"Markovjunior", gWindowSize, ApplicationFlag::Window_Keep_Ratio};
 inline bool runSimulation = false;
 inline bool stepSimul = false;
-
-constexpr float gViewedHeight = 500.;
 
 const std::map<std::string, ad::math::sdr::Rgb> colorMatching = {
     {"B", ad::math::sdr::gBlack},
@@ -75,7 +81,7 @@ std::vector<TrivialShaping::Rectangle> renderPotential(const std::vector<std::ve
 {
     std::vector<TrivialShaping::Rectangle> result;
 
-    float cellSize = gViewedHeight / (float)aGrid.mSize.width();
+    float cellSize = gMarkovDrawSize / (float)aGrid.mSize.width();
 
     for (int i = 0; i != aPotentials.size(); i++)
     {
@@ -118,8 +124,8 @@ inline ad::math::Rectangle<GLfloat> getViewedRectangle(ad::math::Position<2, flo
 {
     return ad::math::Rectangle<GLfloat>{
         aCameraPosition,
-        ad::math::makeSizeFromHeight(gViewedHeight, aViewportRatio)
-    }.centered();
+        ad::math::makeSizeFromHeight((float)gWindowSize.height(), aViewportRatio)
+    };
 }
 
 inline void callbackKeyboard(int key, int scancode, int action, int mods)
@@ -140,20 +146,21 @@ inline void callbackKeyboard(int key, int scancode, int action, int mods)
 
 int main()
 {
-    Interpreter interpreter(
-            "/home/franz/gamedev/MarkovJunior.cpp/assets/circuit.xml",
-            {59, 59, 1},
-            1345);
-    //std::cout << interpreter.mGrid << std::endl;
-    interpreter.setup();
-    //std::cout << interpreter.mGrid << std::endl;
-    
+    std::shared_ptr<Interpreter> interpreter = std::make_shared<Interpreter>(
+            filename,
+            ad::math::Size<3, int>{59, 59, 1},
+            gSeed);
+
+    interpreter->setup();
+
     application.getAppInterface()->registerKeyCallback(&callbackKeyboard);
+
+    ad::imguiui::ImguiUi debugUi{application};
 
     TrivialShaping shapes{application.getAppInterface()->getWindowSize()};
 
     ad::math::Rectangle<GLfloat> viewed = getViewedRectangle(
-            {gViewedHeight / 2., gViewedHeight / 2.},
+            {0., 0.},
             ad::math::getRatio<GLfloat>(
                 application.getAppInterface()->getWindowSize()));
 
@@ -162,22 +169,67 @@ int main()
     while(application.nextFrame())
     {
         application.getAppInterface()->clear();
+        
+        debugUi.newFrame();
+        std::chrono::time_point<std::chrono::high_resolution_clock> startStep;
+        std::chrono::time_point<std::chrono::high_resolution_clock> endStep;
 
         if (runSimulation || stepSimul)
         {
-            for (int i = 0; i != 1; i++)
+            for (int i = 0; i != gSteps; i++)
             {
-                if (interpreter.mCurrentBranch != nullptr)
+                if (interpreter->mCurrentBranch != nullptr)
                 {
-                    interpreter.runStep();
+                    startStep = std::chrono::high_resolution_clock::now();
+                    interpreter->runStep();
+                    endStep = std::chrono::high_resolution_clock::now();
                 }
             }
             stepSimul = false;
         }
 
+        ImGui::SetNextWindowPos(ImVec2(gMarkovDrawSize + 10, 10), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(gWindowSize.width() - gMarkovDrawSize - 20, gWindowSize.height() - 20), ImGuiCond_Once);
+        ImGui::Begin("haha");
+        if (ImGui::Button("Play"))
+        {
+            runSimulation = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Stop"))
+        {
+            runSimulation = false;
+        }
+        if (!runSimulation)
+        {
+            ImGui::SameLine();
+            if (ImGui::Button("Step"))
+            {
+                stepSimul = true;
+            }
+        }
+        ImGui::InputInt("seed", &gSeed);
+        ImGui::InputInt("size", &gSize);
+        ImGui::SliderInt("steps", &gSteps, 1, 100);
+        ImGui::Text("Frame duration");
+        std::chrono::duration<double, std::milli> time{endStep - startStep};
+        std::ostringstream o;
+        o << time;
+        ImGui::Text(o.str().c_str());
+        if(ImGui::Button("Restart"))
+        {
+            interpreter = std::make_shared<Interpreter>(
+                filename,
+                ad::math::Size<3, int>{gSize, gSize, 1},
+                gSeed);
+            interpreter->setup();
+        }
+        ImGui::End();
+        ImGui::ShowDemoWindow();
+
         std::vector<TrivialShaping::Rectangle> rectangles;
         std::vector<TrivialShaping::Rectangle> inserted;
-        inserted = renderGrid(interpreter.mGrid);
+        inserted = renderGrid(interpreter->mGrid);
         rectangles.insert(rectangles.end(), inserted.begin(), inserted.end());
 
         /*if (interpreter.mRoot->nodes.at(interpreter.mCurrentBranch->currentStep)->isRuleNode())
@@ -191,6 +243,7 @@ int main()
 
         shapes.updateInstances(rectangles);
         shapes.render();
+        debugUi.render();
     }
 
     //std::cout << interpreter.mGrid;

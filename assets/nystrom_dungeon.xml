@@ -1,0 +1,36 @@
+<sequence values="BPWRG" origin="True">
+  <all in="PBB" out="**P" comment="draw a grid"/>
+  <one>
+      <rule
+          in="PBPBPBPBP/BBBBBBBBB/PBPBPBPBP/BBBBBBBBB/PBPBPBPBP/BBBBBBBBB/PBPBPBPBP"
+          out="WWWWWWWWW/WWWWWWWWW/WWWWWWWWW/WWWWWWWWW/WWWWWWWWW/WWWWWWWWW/WWWWWWWWW"
+          />
+      <rule
+          in="PBPBPBP/BBBBBBB/PBPBPBP/BBBBBBB/PBPBPBP/BBBBBBB/PBPBPBP"
+          out="WWWWWWW/WWWWWWW/WWWWWWW/WWWWWWW/WWWWWWW/WWWWWWW/WWWWWWW"
+          />
+      <rule
+          in="PBPBP/BBBBB/PBPBP/BBBBB/PBPBP"
+          out="WWWWW/WWWWW/WWWWW/WWWWW/WWWWW"
+          />
+      <rule
+           in="PBPBPBPBP/BBBBBBBBB/PBPBPBPBP/BBBBBBBBB/PBPBPBPBP/BBBBBBBBB/PBPBPBPBP"
+          out="**WWWWW**/**WWWWW**/WWWWWWWWW/WWWWWWWWW/WWWWWWWWW/**WWWWW**/**WWWWW**"
+          />
+  </one>
+  <markov comment="generate corridors with MazeBacktracker">
+    <one in="RBP" out="GGR"/>
+    <one in="GGR" out="RWW"/>
+    <one in="P" out="R"/>
+  </markov>
+  <one in="R" out="G" steps="1" comment="leave only one start"/>
+  <all in="R" out="W" comment="forget other starts"/>
+  <markov comment="connect components">
+    <all in="GWW" out="**G"/>
+    <one in="GBW" out="*WG"/>
+  </markov>
+  <one in="GBG" out="*W*" steps="5" comment="insert cycles"/>
+  <!--<one in="WGBG/WW**" out="**W*/****" steps="5"/>-->
+  <all in="G" out="W" comment="forget structure"/>
+  <all in="BBB/BWB" out="BBB/BBB" comment="retract dead ends"/>
+</sequence>

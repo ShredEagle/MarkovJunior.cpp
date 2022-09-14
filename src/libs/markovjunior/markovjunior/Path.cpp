@@ -175,71 +175,71 @@ math::Vec<3, int> Path::getDirection(const math::Position<3, int> &aPos, const m
             {
                 return aDirection;
             }
-
-            if (aPos.x() > 0)
-            {
-                addToCandidates(
-                        aPos,
-                        {-1, 0, 0},
-                        aGenerations,
-                        candidateDirection,
-                        grid,
-                        g);
-            }
-            if (aPos.x() < grid.mSize.width() - 1)
-            {
-                addToCandidates(
-                        aPos,
-                        {1, 0, 0},
-                        aGenerations,
-                        candidateDirection,
-                        grid,
-                        g);
-            }
-            if (aPos.y() > 0)
-            {
-                addToCandidates(
-                        aPos,
-                        {0, -1, 0},
-                        aGenerations,
-                        candidateDirection,
-                        grid,
-                        g);
-            }
-            if (aPos.y() < grid.mSize.height() - 1)
-            {
-                addToCandidates(
-                        aPos,
-                        {0, 1, 0},
-                        aGenerations,
-                        candidateDirection,
-                        grid,
-                        g);
-            }
-            if (aPos.z() > 0)
-            {
-                addToCandidates(
-                        aPos,
-                        {0, 0, -1},
-                        aGenerations,
-                        candidateDirection,
-                        grid,
-                        g);
-            }
-            if (aPos.z() < grid.mSize.depth() - 1)
-            {
-                addToCandidates(
-                        aPos,
-                        {0, 0, 1},
-                        aGenerations,
-                        candidateDirection,
-                        grid,
-                        g);
-            }
-
-            int randomIndex = aRandom() % candidateDirection.size();
-            return candidateDirection.at(randomIndex);
         }
+
+        if (aPos.x() > 0)
+        {
+            addToCandidates(
+                    aPos,
+                    {-1, 0, 0},
+                    aGenerations,
+                    candidateDirection,
+                    grid,
+                    g);
+        }
+        if (aPos.x() < grid.mSize.width() - 1)
+        {
+            addToCandidates(
+                    aPos,
+                    {1, 0, 0},
+                    aGenerations,
+                    candidateDirection,
+                    grid,
+                    g);
+        }
+        if (aPos.y() > 0)
+        {
+            addToCandidates(
+                    aPos,
+                    {0, -1, 0},
+                    aGenerations,
+                    candidateDirection,
+                    grid,
+                    g);
+        }
+        if (aPos.y() < grid.mSize.height() - 1)
+        {
+            addToCandidates(
+                    aPos,
+                    {0, 1, 0},
+                    aGenerations,
+                    candidateDirection,
+                    grid,
+                    g);
+        }
+        if (aPos.z() > 0)
+        {
+            addToCandidates(
+                    aPos,
+                    {0, 0, -1},
+                    aGenerations,
+                    candidateDirection,
+                    grid,
+                    g);
+        }
+        if (aPos.z() < grid.mSize.depth() - 1)
+        {
+            addToCandidates(
+                    aPos,
+                    {0, 0, 1},
+                    aGenerations,
+                    candidateDirection,
+                    grid,
+                    g);
+        }
+
+        int randomIndex = aRandom() % candidateDirection.size();
+        return candidateDirection.at(randomIndex);
     }
     else
     {
