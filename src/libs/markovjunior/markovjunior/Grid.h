@@ -39,7 +39,7 @@ public:
     }
 
     int mTransparent;
-    std::map<unsigned char, int> mValues;
+    std::map<unsigned char, unsigned char> mValues;
     std::map<unsigned char, int> mWaves;
     std::vector<unsigned char> mCharacters;
     std::vector<unsigned char> mState;

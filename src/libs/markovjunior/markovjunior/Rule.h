@@ -11,7 +11,7 @@
 namespace ad {
 namespace markovjunior {
 
-typedef std::vector<std::vector<math::Position<3, int>>> RuleShift;
+typedef std::vector<std::vector<math::Vec<3, int>>> RuleShift;
 
 class Rule
 {

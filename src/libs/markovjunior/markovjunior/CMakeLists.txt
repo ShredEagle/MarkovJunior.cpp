@@ -7,11 +7,13 @@ set(${TARGET_NAME}_HEADERS
     Grid.h
     Interpreter.h
     Node.h
+    Observation.h
     OneNode.h
     ParallelNode.h
     Path.h
     Rule.h
     RuleNode.h
+    Search.h
     SymmetryUtils.h
 )
 
@@ -22,11 +24,13 @@ set(${TARGET_NAME}_SOURCES
     Grid.cpp
     Interpreter.cpp
     Node.cpp
+    Observation.cpp
     OneNode.cpp
     ParallelNode.cpp
     Path.cpp
     Rule.cpp
     RuleNode.cpp
+    Search.cpp
     SymmetryUtils.cpp
 )
 

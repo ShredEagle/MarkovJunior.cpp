@@ -5,6 +5,7 @@
 #include "Rule.h"
 #include "SymmetryUtils.h"
 #include "markovjunior/Field.h"
+#include "markovjunior/Observation.h"
 
 #include <math/Vector.h>
 
@@ -73,8 +74,16 @@ public:
     std::vector<RuleMatch> mMatches;
     std::vector<std::vector<bool>> mMatchMask;
     std::vector<Field> mFields;
+    std::vector<Observation> mObservations;
+    std::vector<int> mFuture;
     std::vector<std::vector<int>> mPotentials;
+    std::vector<std::vector<unsigned char>> mTrajectory;
     double mTemperature;
+    bool mSearch;
+    bool mAllSearch = false;
+    bool mFutureComputed = false;
+    int mLimit;
+    float mDepthCoefficient;
 
     friend std::ostream & operator<<(std::ostream & os, const RuleNode & aRuleNode);
 };

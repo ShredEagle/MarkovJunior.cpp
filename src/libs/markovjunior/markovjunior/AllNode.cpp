@@ -59,6 +59,16 @@ bool AllNode::run()
 
     mLastMatchedTurn = mInterpreter->mCounter;
 
+    if (mTrajectory.size() > 0)
+    {
+        if (mCounter >= mTrajectory.size())
+        {
+            return false;
+        }
+        mInterpreter->mGrid.mState = mTrajectory.at(mCounter++);
+        return true;
+    }
+
     if (mMatchCount == 0)
     {
         return false;

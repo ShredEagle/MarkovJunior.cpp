@@ -11,6 +11,7 @@ public:
     AllNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetry, Interpreter * aInterpreter) :
         RuleNode(aXmlNode, aParentSymmetry, aInterpreter)
     {
+        mAllSearch = true;
         mMatchMask = std::vector<std::vector<bool>>(
             mRules.size(), std::vector<bool>(
                 mInterpreter->mGrid.mState.size(), false));

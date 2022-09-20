@@ -25,7 +25,7 @@ constexpr float gMarkovDrawSize = 800.f;
 inline int gSeed = 0;
 inline int gSize = 59;
 inline int gSteps = 1;
-inline std::string filename = "/home/franz/gamedev/MarkovJunior.cpp/assets/bernouilli_percolation.xml";
+inline std::string filename = "/home/franz/gamedev/MarkovJunior.cpp/assets/diagonal_path.xml";
 
 inline ApplicationGlfw application{"Markovjunior", gWindowSize, ApplicationFlag::Window_Keep_Ratio};
 inline bool runSimulation = false;

@@ -21,7 +21,7 @@ int countTrailingZeroes(int x)
 
 void Rule::setupShifts(int aCount)
 {
-    mInputShifts.insert(mInputShifts.end(), aCount, std::vector<math::Position<3, int>>{});
+    mInputShifts.insert(mInputShifts.end(), aCount, std::vector<math::Vec<3, int>>{});
 
     for (int z = 0; z < mInputSize.depth(); z++)
     {
