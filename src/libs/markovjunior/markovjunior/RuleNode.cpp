@@ -5,6 +5,7 @@
 #include "Search.h"
 
 #include <algorithm>
+#include <cassert>
 #include <math/Vector.h>
 
 namespace ad {
@@ -58,19 +59,16 @@ RuleNode::RuleNode(const pugi::xml_node & aXmlNode,
             unsigned char value =
                 grid.mValues.at(node.node().attribute("value").as_string()[0]);
             std::string character(1, grid.mCharacters.at(value));
-            mObservations.at(value) = Observation(
-                node.node().attribute("from").as_string(character.c_str())[0],
-                node.node().attribute("to").as_string(), grid);
+            mObservations.at(value) =
+                Observation(node.node().attribute("from").as_string(character.c_str())[0],
+                            node.node().attribute("to").as_string(), grid);
         }
 
         mSearch = aXmlNode.attribute("search").as_bool(false);
-        if (mSearch)
-        {
+        if (mSearch) {
             mLimit = aXmlNode.attribute("limit").as_int(-1);
             mDepthCoefficient = aXmlNode.attribute("depthCoefficient").as_float(0.5);
-        }
-        else
-        {
+        } else {
             mPotentials = std::vector<std::vector<int>>(
                 grid.mCharacters.size(), std::vector<int>(grid.mState.size(), 0));
         }
@@ -89,26 +87,25 @@ bool RuleNode::run()
         return false;
     }
 
-    if (!mObservations.empty() && !mFutureComputed)
-    {
-        if (!Observation::computeFutureSetPresent(mFuture, grid.mState, mObservations))
-        {
+    if (!mObservations.empty() && !mFutureComputed) {
+        if (!Observation::computeFutureSetPresent(mFuture, grid.mState, mObservations)) {
             return false;
-        }
-        else
-        {
+        } else {
             mFutureComputed = true;
-            if (mSearch)
-            {
+            if (mSearch) {
                 int maxTries = mLimit < 0 ? 1 : 20;
-                for (int k = 0; k < maxTries && mTrajectory.size() > 0; k++)
-                {
-                    mTrajectory = runSearch(grid.mState, mFuture, mRules, grid.mSize, grid.mCharacters.size(), mAllSearch, mLimit, mDepthCoefficient, mInterpreter->mRandom());
+                for (int k = 0; k < maxTries && mTrajectory.size() == 0; k++) {
+                    mTrajectory = runSearch(grid.mState, mFuture, mRules, grid.mSize,
+                                            grid.mCharacters.size(), mAllSearch, mLimit,
+                                            mDepthCoefficient, mInterpreter->mRandom());
                 }
-            }
-            else
-            {
-                Observation::computeBackwardPotentials(mPotentials, mFuture, grid.mSize, mRules);
+
+                if (mTrajectory.size() == 0) {
+                    return false;
+                }
+            } else {
+                Observation::computeBackwardPotentials(mPotentials, mFuture, grid.mSize,
+                                                       mRules);
             }
         }
     }
@@ -126,8 +123,7 @@ bool RuleNode::run()
                 std::vector<math::Vec<3, int>> shifts = rule.mInputShifts.at(value);
 
                 for (math::Vec<3, int> shiftPos : shifts) {
-                    math::Position<3, int> matchPos =
-                        changePos - shiftPos;
+                    math::Position<3, int> matchPos = changePos - shiftPos;
 
                     if (matchPos.x() < 0 || matchPos.y() < 0 || matchPos.z() < 0
                         || matchPos.x() + rule.mInputSize.width() > gridSize.width()

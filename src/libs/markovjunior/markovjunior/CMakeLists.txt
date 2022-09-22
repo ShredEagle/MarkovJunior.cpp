@@ -2,7 +2,9 @@ set(TARGET_NAME markovjunior)
 
 set(${TARGET_NAME}_HEADERS
     AllNode.h
+    Commons.h
     Constants.h
+    ConvolutionNode.h
     Field.h
     Grid.h
     Interpreter.h
@@ -20,6 +22,7 @@ set(${TARGET_NAME}_HEADERS
 set(${TARGET_NAME}_SOURCES
     AllNode.cpp
     Constants.cpp
+    ConvolutionNode.cpp
     Field.cpp
     Grid.cpp
     Interpreter.cpp

@@ -5,140 +5,14 @@
 #include "Observation.h"
 #include "Rule.h"
 
+#include <iostream>
+#include <list>
 #include <queue>
 #include <random>
 #include <vector>
 
 namespace ad {
 namespace markovjunior {
-
-std::vector<std::vector<unsigned char>>
-runSearch(const std::vector<unsigned char> & aPresent,
-          const std::vector<int> & aFuture,
-          const std::vector<Rule> & aRules,
-          const math::Size<3, int> & aSize,
-          int aCharacterSize,
-          bool aAll,
-          int aLimit,
-          double aDepthCoefficient,
-          int aSeed)
-{
-    std::vector<std::vector<int>> backwardPotentials(
-        aCharacterSize, std::vector<int>(aPresent.size(), -1));
-    std::vector<std::vector<int>> forwardPotentials(
-        aCharacterSize, std::vector<int>(aPresent.size(), -1));
-
-    Observation::computeBackwardPotentials(backwardPotentials, aFuture, aSize, aRules);
-    int rootBackwardEstimate =
-        Observation::backwardPointwise(backwardPotentials, aPresent);
-    Observation::computeForwardPotentials(forwardPotentials, aPresent, aSize, aRules);
-    int rootForwardEstimate = Observation::forwardPointwise(forwardPotentials, aFuture);
-
-    if (rootBackwardEstimate < 0 || rootForwardEstimate < 0) {
-        std::cout << "HIIIIN HIIIIN WRONG PROBLEM" << std::endl;
-    }
-
-    if (rootBackwardEstimate == 0) {
-        return {{}};
-    }
-
-    std::vector<Board> database;
-    database.emplace_back(aPresent, -1, 0, rootBackwardEstimate, rootForwardEstimate);
-
-    std::map<std::vector<unsigned char>, int> visited;
-
-    visited.insert_or_assign(aPresent, 0);
-
-    constexpr auto priorityComp = [](const auto & aLhs, const auto & aRhs) {
-        return std::get<double>(aLhs) < std::get<double>(aRhs);
-    };
-
-    std::priority_queue<std::tuple<int, double>, std::vector<std::tuple<int, double>>,
-                        decltype(priorityComp)>
-        frontier(priorityComp);
-
-    std::mt19937 random(aSeed);
-    frontier.emplace(0, database.at(0).rank(random, aDepthCoefficient));
-
-    int frontierLength = 1;
-    int record = rootBackwardEstimate + rootForwardEstimate;
-
-    while (frontierLength > 0 && (aLimit < 0 || database.size() < aLimit))
-    {
-        int parentIndex = std::get<int>(frontier.top());
-        frontierLength--;
-
-        const Board & parentBoard = database.at(parentIndex);
-
-        auto children = aAll ? allChildStates(parentBoard.mState, aSize, aRules) : oneChildStates(parentBoard.mState, aSize, aRules);
-
-        for (auto childState : children)
-        {
-            bool success = visited.contains(childState);
-
-            if (success)
-            {
-                int childIndex = visited.at(childState);
-
-                Board & oldBoard = database.at(childIndex);
-
-                if (parentBoard.mDepth + 1 < oldBoard.mDepth)
-                {
-                    oldBoard.mDepth = parentBoard.mDepth + 1;
-                    oldBoard.mParentIndex = parentIndex;
-
-                    if (oldBoard.mBackwardEstimate >= 0 && oldBoard.mForwardEstimate >= 0)
-                    {
-                        frontier.emplace(childIndex, oldBoard.rank(random, aDepthCoefficient));
-                        frontierLength++;
-                    }
-                }
-            }
-            else
-            {
-                int childBackwardEstimate = Observation::backwardPointwise(backwardPotentials, childState);
-                Observation::computeForwardPotentials(forwardPotentials, childState, aSize, aRules);
-                int childForwardEstimate = Observation::forwardPointwise(forwardPotentials, aFuture);
-
-                if (childBackwardEstimate < 0 || childForwardEstimate < 0)
-                {
-                    continue;
-                }
-
-                Board childBoard(childState, parentIndex, parentBoard.mDepth + 1, childBackwardEstimate, childForwardEstimate);
-                database.push_back(childBoard);
-                int childIndex = database.size() - 1;
-                visited.insert_or_assign(childBoard.mState, childIndex);
-
-                if (childBoard.mForwardEstimate == 0)
-                {
-                    std::vector<Board> trajectory = Board::trajectory(childIndex, database);
-                    std::vector<Board> reverseTrajectory(trajectory.rbegin(), trajectory.rend());
-
-                    std::vector<std::vector<unsigned char>> result;
-                    result.reserve(reverseTrajectory.size());
-
-                    for (const auto & board : reverseTrajectory)
-                    {
-                        result.push_back(board.mState);
-                    }
-
-                    return result;
-                }
-                else
-                {
-                    if (aLimit < 0 && childBackwardEstimate + childForwardEstimate <= record)
-                    {
-                        record = childBackwardEstimate + childForwardEstimate;
-                    }
-
-                    frontier.emplace(childIndex, childBoard.rank(random, aDepthCoefficient));
-                    frontierLength++;
-                }
-            }
-        }
-    }
-};
 
 void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
         std::vector<std::tuple<const Rule *, int>> & aSolution,
@@ -209,7 +83,7 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
 
 std::vector<std::vector<unsigned char>>
 allChildStates(const std::vector<unsigned char> & aState,
-               math::Size<3, int> aSize,
+               const math::Size<3, int> & aSize,
                const std::vector<Rule> & aRules)
 {
     std::vector<std::tuple<const Rule *, int>> tiles;
@@ -279,14 +153,14 @@ void applyRule(const Rule * aRule,
         for (int x = 0; x < aRule->mOutputSize.width(); x++)
         {
             math::Position<3, int> shiftedPos = aPos + math::Vec<3, int>{x, y, 0};
-            aState.at(getFlatIndex(shiftedPos, {width, 0, 0})) = aRule->mOutputs.at(getFlatIndex({x, y, 0}, aRule->mOutputSize));
+            aState.at(getFlatIndex(shiftedPos, {width, 1, 1})) = aRule->mOutputs.at(getFlatIndex({x, y, 0}, aRule->mOutputSize));
         }
     }
 }
 
 std::vector<unsigned char>
 applyToState(const std::vector<unsigned char> & aState,
-        const std::vector<std::tuple<const Rule *, int>> aSolution,
+        const std::vector<std::tuple<const Rule *, int>> & aSolution,
         int width)
 {
     std::vector<unsigned char> result = aState;
@@ -348,7 +222,7 @@ void setMaskAnIncrement(
     {
         for (int x = 0; x < rule->mInputSize.width(); x++)
         {
-            aAmounts.at(getFlatIndex(pos + math::Vec<3, int>{x, y, 0}, {width, 0, 0})) += increment;
+            aAmounts.at(getFlatIndex(pos + math::Vec<3, int>{x, y, 0}, {width, 1, 1})) += increment;
         }
     }
 }
@@ -398,7 +272,7 @@ std::vector<unsigned char> applied(const Rule & aRule,
                 unsigned char newValue = aRule.mOutputs.at(getFlatIndex({x, y, z}, aRule.mOutputSize));
                 if (newValue != gWildcardShiftValue)
                 {
-                    result.at(getFlatIndex(aPos + math::Vec<3, int>{x, y, z}, {width, 0, 0})) = newValue;
+                    result.at(getFlatIndex(aPos + math::Vec<3, int>{x, y, z}, {width, 1, 1})) = newValue;
                 }
             }
         }
@@ -406,6 +280,136 @@ std::vector<unsigned char> applied(const Rule & aRule,
 
     return result;
 }
+
+std::vector<std::vector<unsigned char>>
+runSearch(const std::vector<unsigned char> & aPresent,
+          const std::vector<int> & aFuture,
+          const std::vector<Rule> & aRules,
+          const math::Size<3, int> & aSize,
+          int aCharacterSize,
+          bool aAll,
+          int aLimit,
+          double aDepthCoefficient,
+          int aSeed)
+{
+    std::vector<std::vector<int>> backwardPotentials(
+        aCharacterSize, std::vector<int>(aPresent.size(), -1));
+    std::vector<std::vector<int>> forwardPotentials(
+        aCharacterSize, std::vector<int>(aPresent.size(), -1));
+
+    Observation::computeBackwardPotentials(backwardPotentials, aFuture, aSize, aRules);
+    int rootBackwardEstimate =
+        Observation::backwardPointwise(backwardPotentials, aPresent);
+    Observation::computeForwardPotentials(forwardPotentials, aPresent, aSize, aRules);
+    int rootForwardEstimate = Observation::forwardPointwise(forwardPotentials, aFuture);
+
+    if (rootBackwardEstimate < 0 || rootForwardEstimate < 0) {
+        std::cout << "HIIIIN HIIIIN WRONG PROBLEM" << std::endl;
+    }
+
+    if (rootBackwardEstimate == 0) {
+        return {{}};
+    }
+
+    std::vector<Board> database;
+    database.emplace_back(aPresent, -1, 0, rootBackwardEstimate, rootForwardEstimate);
+
+    std::map<std::vector<unsigned char>, int> visited;
+
+    visited.emplace(aPresent, 0);
+
+    constexpr auto priorityComp = [](const auto & aLhs, const auto & aRhs) {
+        return std::get<double>(aLhs) > std::get<double>(aRhs);
+    };
+
+    std::priority_queue<std::tuple<int, double>, std::vector<std::tuple<int, double>>,
+                        decltype(priorityComp)>
+        frontier(priorityComp);
+
+    std::mt19937 random(aSeed);
+    frontier.emplace(0, database.at(0).rank(random, aDepthCoefficient));
+
+    int record = rootBackwardEstimate + rootForwardEstimate;
+
+    while (frontier.size() > 0 && (aLimit < 0 || database.size() < aLimit))
+    {
+        int parentIndex = std::get<int>(frontier.top());
+        frontier.pop();
+
+        const Board & parentBoard = database.at(parentIndex);
+
+        auto children = aAll ? allChildStates(parentBoard.mState, aSize, aRules) : oneChildStates(parentBoard.mState, aSize, aRules);
+
+        for (const auto & childState : children)
+        {
+            bool success = visited.contains(childState);
+
+            if (success)
+            {
+                int childIndex = visited.at(childState);
+
+                Board & oldBoard = database.at(childIndex);
+
+                if (parentBoard.mDepth + 1 < oldBoard.mDepth)
+                {
+                    oldBoard.mDepth = parentBoard.mDepth + 1;
+                    oldBoard.mParentIndex = parentIndex;
+
+                    if (oldBoard.mBackwardEstimate >= 0 && oldBoard.mForwardEstimate >= 0)
+                    {
+                        frontier.emplace(childIndex, oldBoard.rank(random, aDepthCoefficient));
+                    }
+                }
+            }
+            else
+            {
+                int childBackwardEstimate = Observation::backwardPointwise(backwardPotentials, childState);
+                Observation::computeForwardPotentials(forwardPotentials, childState, aSize, aRules);
+                int childForwardEstimate = Observation::forwardPointwise(forwardPotentials, aFuture);
+
+
+                if (childBackwardEstimate < 0 || childForwardEstimate < 0)
+                {
+                    continue;
+                }
+
+
+                database.emplace_back(childState, parentIndex, database.at(parentIndex).mDepth + 1, childBackwardEstimate, childForwardEstimate);
+                Board & childBoard = database.back();
+                int childIndex = database.size() - 1;
+                visited.emplace(childBoard.mState, childIndex);
+                //printState(std::vector<int>(childBoard.mState.begin(), childBoard.mState.end()), aSize);
+
+                if (childBoard.mForwardEstimate == 0)
+                {
+                    std::vector<Board> trajectory = Board::trajectory(childIndex, database);
+                    std::vector<Board> reverseTrajectory(trajectory.rbegin(), trajectory.rend());
+
+                    std::vector<std::vector<unsigned char>> result;
+                    result.reserve(reverseTrajectory.size());
+
+                    for (const auto & board : reverseTrajectory)
+                    {
+                        result.push_back(board.mState);
+                    }
+
+                    return result;
+                }
+                else
+                {
+                    if (childBackwardEstimate + childForwardEstimate < record)
+                    {
+                        record = childBackwardEstimate + childForwardEstimate;
+                    }
+
+                    frontier.emplace(childIndex, childBoard.rank(random, aDepthCoefficient));
+                }
+            }
+        }
+    }
+
+    return std::vector<std::vector<unsigned char>>{};
+};
 
 } // namespace markovjunior
 } // namespace ad

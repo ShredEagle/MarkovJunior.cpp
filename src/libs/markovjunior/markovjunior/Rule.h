@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Grid.h"
+#include "Commons.h"
 
 #include <math/Vector.h>
 
@@ -43,38 +44,5 @@ public:
 
     friend std::ostream & operator<<(std::ostream & os, const Rule & aRule);
 };
-
-inline std::vector<std::string> splitString(std::string aString, const std::string & aDelimiter)
-{
-    std::vector<std::string> result;
-
-    std::size_t pos = 0;
-    std::string token;
-    while((pos = aString.find(aDelimiter)) != std::string::npos)
-    {
-        token = aString.substr(0, pos);
-        result.push_back(token);
-        aString.erase(0, pos + aDelimiter.length());
-    }
-
-    result.push_back(aString);
-
-    return result;
-}
-
-inline std::vector<std::vector<std::string>> splitPatternString(std::string aString)
-{
-    std::vector<std::vector<std::string>> result;
-    std::vector<std::string> zPlanes = splitString(std::move(aString), " ");
-    result.reserve(zPlanes.size());
-
-    for (const auto & zPlane : zPlanes)
-    {
-        result.push_back(splitString(zPlane, "/"));
-    }
-
-    return result;
-}
-
 }
 }

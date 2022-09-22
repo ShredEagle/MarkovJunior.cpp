@@ -17,7 +17,7 @@ bool Observation::computeFutureSetPresent(std::vector<int> & aFuture,
 
     for (int i = 0; i < aState.size(); i++) {
         unsigned char value = aState.at(i);
-        Observation obs = aObservations.at(value);
+        const Observation obs = aObservations.at(value);
         mask.at(value) = true;
 
         if (obs.mTo != -1) {
@@ -73,7 +73,7 @@ void Observation::computePotentials(std::vector<std::vector<int>> & aPotentials,
             std::vector<bool> & ruleMask = matchMask.at(ruleIndex);
 
             const Rule & rule = aRules.at(ruleIndex);
-            auto shifts =
+            const auto & shifts =
                 aBackwards ? rule.mOutputShifts.at(value) : rule.mInputShifts.at(value);
 
             for (auto shiftPos : shifts) {
@@ -111,6 +111,7 @@ bool Observation::forwardMatches(const Rule & aRule,
     for (int z = 0; z < aRule.mInputSize.depth(); z++) {
         for (int y = 0; y < aRule.mInputSize.height(); y++) {
             for (int x = 0; x < aRule.mInputSize.width(); x++) {
+
                 int flatIndex = getFlatIndex({x, y, z}, aRule.mInputSize);
                 unsigned char value = values.at(flatIndex);
 
@@ -121,6 +122,7 @@ bool Observation::forwardMatches(const Rule & aRule,
                         return false;
                     }
                 }
+
             }
         }
     }

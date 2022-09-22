@@ -2,6 +2,7 @@
 
 #include "Grid.h"
 
+#include <iomanip>
 #include <math/Vector.h>
 #include <random>
 #include <vector>
@@ -29,6 +30,7 @@ struct Board
         double result = aDepthCoefficient < 0. ? 1000. - mDepth
                                                : mForwardEstimate + mBackwardEstimate
                                                      + 2. * aDepthCoefficient * mDepth;
+        aRandom();
         return result + 0.0001 * std::uniform_real_distribution<double>{}(aRandom);
     }
 
@@ -49,6 +51,32 @@ struct Board
     int mForwardEstimate;
 };
 
+inline void printState(const std::vector<int> & aState, const math::Size<3, int> & aSize)
+{
+    for (int z = 0; z < aSize.depth(); z++)
+    {
+        for (int y = 0; y < aSize.height(); y++)
+        {
+            for (int x = 0; x < aSize.width(); x++)
+            {
+                std::cout << " " << std::setw(3) << aState.at(getFlatIndex({x, y, z}, aSize));
+            }
+            std::cout << std::endl;
+        }
+    }
+};
+
+inline void printPotential(const std::vector<std::vector<int>> & aPotentials, const math::Size<3, int> & aSize)
+{
+    for (int c = 0; c < aPotentials.size(); c++)
+    {
+        std::cout << "c = " << c << std::endl;
+        std::cout << "[" << std::endl;
+        printState(aPotentials.at(c), aSize);
+        std::cout << "]" << std::endl;
+    }
+}
+
 std::vector<std::vector<unsigned char>>
 runSearch(const std::vector<unsigned char> & aPresent,
           const std::vector<int> & aFuture,
@@ -62,7 +90,7 @@ runSearch(const std::vector<unsigned char> & aPresent,
 
 std::vector<std::vector<unsigned char>>
 allChildStates(const std::vector<unsigned char> & aState,
-               math::Size<3, int> aSize,
+               const math::Size<3, int> & aSize,
                const std::vector<Rule> & aRules);
 
 std::vector<std::vector<unsigned char>>
@@ -85,7 +113,7 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
 
 std::vector<unsigned char>
 applyToState(const std::vector<unsigned char> & aState,
-        const std::vector<std::tuple<const Rule *, int>> aSolution,
+        const std::vector<std::tuple<const Rule *, int>> & aSolution,
         int width);
 
 void applyRule(const Rule * aRule,

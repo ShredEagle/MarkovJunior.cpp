@@ -1,6 +1,8 @@
 #include "Rule.h"
 
+#include "Commons.h"
 #include "Constants.h"
+
 #include <iostream>
 
 namespace ad {

@@ -1,5 +1,6 @@
 #include "markovjunior/Grid.h"
 #include "markovjunior/RuleNode.h"
+#include <ctime>
 #include <graphics/CameraUtilities.h>
 #include <imgui.h>
 #include <imguiui/ImguiUi.h>
@@ -22,10 +23,11 @@ using namespace ad::graphics;
 
 constexpr ad::graphics::Size2<int> gWindowSize{1400, 800};
 constexpr float gMarkovDrawSize = 800.f;
-inline int gSeed = 0;
-inline int gSize = 59;
+inline std::mt19937 randomSeedgenerator(std::chrono::system_clock::now().time_since_epoch().count());
+inline int gSeed = randomSeedgenerator();
+inline int gSize = 19;
 inline int gSteps = 1;
-inline std::string filename = "/home/franz/gamedev/MarkovJunior.cpp/assets/diagonal_path.xml";
+inline std::string filename = "/home/franz/gamedev/MarkovJunior.cpp/assets/organic_mechanic.xml";
 
 inline ApplicationGlfw application{"Markovjunior", gWindowSize, ApplicationFlag::Window_Keep_Ratio};
 inline bool runSimulation = false;
@@ -46,7 +48,9 @@ const std::map<std::string, ad::math::sdr::Rgb> colorMatching = {
     {"U", ad::math::sdr::Rgb{0x29, 0xad, 0xff}},
     {"P", ad::math::sdr::gMagenta},
     {"Y", ad::math::sdr::Rgb{0xff, 0xec, 0x27}},
-    {"A", ad::math::sdr::Rgb{0xc2, 0xc3, 0xc7}}
+    {"A", ad::math::sdr::Rgb{0xc2, 0xc3, 0xc7}},
+    {"I", ad::math::sdr::Rgb{0x1d, 0x2b, 0x53}},
+    {"F", ad::math::sdr::Rgb{0xff, 0xcc, 0xaa}}
 };
 
 std::vector<TrivialShaping::Rectangle> renderGrid(const Grid & aGrid)
@@ -148,7 +152,7 @@ int main()
 {
     std::shared_ptr<Interpreter> interpreter = std::make_shared<Interpreter>(
             filename,
-            ad::math::Size<3, int>{59, 59, 1},
+            ad::math::Size<3, int>{gSize, gSize, 1},
             gSeed);
 
     interpreter->setup();
