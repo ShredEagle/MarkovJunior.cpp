@@ -27,7 +27,7 @@ inline std::mt19937 randomSeedgenerator(std::chrono::system_clock::now().time_si
 inline int gSeed = randomSeedgenerator();
 inline int gSize = 19;
 inline int gSteps = 1;
-inline std::string filename = "/home/franz/gamedev/MarkovJunior.cpp/assets/organic_mechanic.xml";
+inline std::string filename = "/home/franz/gamedev/MarkovJunior.cpp/assets/island.xml";
 
 inline ApplicationGlfw application{"Markovjunior", gWindowSize, ApplicationFlag::Window_Keep_Ratio};
 inline bool runSimulation = false;
@@ -50,7 +50,11 @@ const std::map<std::string, ad::math::sdr::Rgb> colorMatching = {
     {"Y", ad::math::sdr::Rgb{0xff, 0xec, 0x27}},
     {"A", ad::math::sdr::Rgb{0xc2, 0xc3, 0xc7}},
     {"I", ad::math::sdr::Rgb{0x1d, 0x2b, 0x53}},
-    {"F", ad::math::sdr::Rgb{0xff, 0xcc, 0xaa}}
+    {"F", ad::math::sdr::Rgb{0xff, 0xcc, 0xaa}},
+    {"T", ad::math::sdr::Rgb{0x2b, 0x8a, 0xa9}},
+    {"S", ad::math::sdr::Rgb{0xd0, 0xd8, 0xac}},
+    {"s", ad::math::sdr::Rgb{0xe9, 0xe0, 0xb2}},
+    {"u", ad::math::sdr::Rgb{0x06, 0x5a, 0xb5}}
 };
 
 std::vector<TrivialShaping::Rectangle> renderGrid(const Grid & aGrid)

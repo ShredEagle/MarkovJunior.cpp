@@ -16,7 +16,7 @@ public:
     unsigned char mInput;
     unsigned char mOutput;
     std::vector<unsigned char> mValues;
-    std::array<bool, 28> mSums;
+    std::vector<bool> mSums;
     double mProbability;
 
     ConvolutionRule(const pugi::xml_node & aXmlNode, const Grid & aGrid);
@@ -37,7 +37,7 @@ class ConvolutionNode : public Node
 public:
     ConvolutionNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetryGroup, Interpreter * aInterpreter);
 
-    bool run();
+    bool run() override;
 
     void reset() override
     {
@@ -48,7 +48,7 @@ public:
     std::vector<int> mKernel;
     bool mPeriodic;
     int mCounter;
-    int mSteps;
+    int mSteps = 0;
     std::vector<std::vector<int>> mSumField;
 };
 

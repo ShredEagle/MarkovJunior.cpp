@@ -11,7 +11,7 @@ namespace markovjunior {
 ConvolutionRule::ConvolutionRule(const pugi::xml_node & aXmlNode, const Grid & aGrid) :
     mInput{aGrid.mValues.at(aXmlNode.attribute("in").as_string("")[0])},
     mOutput{aGrid.mValues.at(aXmlNode.attribute("out").as_string("")[0])},
-    mProbability{aXmlNode.attribute("p").as_double()}
+    mProbability{aXmlNode.attribute("p").as_double(1.0)}
 {
     std::string valueString = aXmlNode.attribute("values").as_string("");
     std::string sumsString = aXmlNode.attribute("sum").as_string("");
@@ -25,13 +25,14 @@ ConvolutionRule::ConvolutionRule(const pugi::xml_node & aXmlNode, const Grid & a
         std::cout << "missing values attribute for convolution rule" << std::endl;
     }
 
-    if (!valueString.compare(""))
+    if (valueString.compare("") != 0)
     {
         for (unsigned char character : valueString)
         {
             mValues.push_back(aGrid.mValues.at(character));
         }
 
+        mSums = std::vector<bool>(28, false);
 
         for (int i : splitIntervals(sumsString))
         {
@@ -109,7 +110,7 @@ bool ConvolutionNode::run()
                                 continue;
                             }
 
-                            sums.at(grid.getFlatGridIndex(offsetPos)) = mKernel.at(offsetX + 1 + (offsetY + 1) * 3 + (offsetZ + 1) * 9);
+                            sums.at(grid.mState.at(grid.getFlatGridIndex(offsetPos))) += mKernel.at(offsetX + 1 + (offsetY + 1) * 3 + (offsetZ + 1) * 9);
                         }
                     }
                 }
@@ -126,6 +127,7 @@ bool ConvolutionNode::run()
 
         for (ConvolutionRule rule : mRules)
         {
+            mInterpreter->mRandom();
             if (input == rule.mInput && rule.mOutput != grid.mState.at(i) && mInterpreter->mProbabilityDistribution(mInterpreter->mRandom) < rule.mProbability)
             {
                 bool success = true;
@@ -136,7 +138,7 @@ bool ConvolutionNode::run()
 
                     for (auto value : rule.mValues)
                     {
-                        sum += value;
+                        sum += sums.at(value);
                     }
 
                     success = rule.mSums.at(sum);

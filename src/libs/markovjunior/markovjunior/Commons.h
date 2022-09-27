@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -45,13 +46,13 @@ inline std::vector<int> splitIntervals(const std::string & aString)
 
     for (const std::string & interval : intervals)
     {
-        if (interval.find('.') == interval.length())
+        if (interval.find('.') != std::string::npos)
         {
             std::vector<std::string> bounds = splitString(interval, "..");
-            unsigned char min = bounds.at(0)[0]; 
-            unsigned char max = bounds.at(1)[0]; 
+            unsigned char min = bounds.at(0)[0] - 48; 
+            unsigned char max = bounds.at(1)[0] - 48; 
 
-            for (int i = 0; i < max - min - 1; i++)
+            for (int i = 0; i < max - min + 1; i++)
             {
                 result.push_back(min + i);
             }
