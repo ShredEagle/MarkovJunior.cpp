@@ -4,9 +4,11 @@ set(${TARGET_NAME}_HEADERS
     AllNode.h
     Commons.h
     Constants.h
+    ConvChain.h
     ConvolutionNode.h
     Field.h
     Grid.h
+    ImageHelpers.h
     Interpreter.h
     Node.h
     Observation.h
@@ -22,9 +24,11 @@ set(${TARGET_NAME}_HEADERS
 set(${TARGET_NAME}_SOURCES
     AllNode.cpp
     Constants.cpp
+    ConvChain.cpp
     ConvolutionNode.cpp
     Field.cpp
     Grid.cpp
+    ImageHelpers.cpp
     Interpreter.cpp
     Node.cpp
     Observation.cpp
@@ -63,22 +67,24 @@ cmc_target_current_include_directory(${TARGET_NAME})
 
 cmc_find_dependencies(FILE CMakeFinds.cmake.in)
 
-target_compile_options(${TARGET_NAME}
-    PRIVATE "-O2")
+# target_compile_options(${TARGET_NAME}
+#     PRIVATE "-O2")
 
-target_compile_options(${TARGET_NAME}
-     PRIVATE "-O2")
+# target_compile_options(${TARGET_NAME}
+#      PRIVATE "-O2")
 
- # target_compile_options(${TARGET_NAME}
- #     PRIVATE "-g" "-fsanitize=leak" "-Wall" "-Wextra" "-fsanitize=address" "-fsanitize=undefined")
- # target_link_options(${TARGET_NAME}
- #     PRIVATE "-fsanitize=address" "-fsanitize=leak" "-fsanitize=undefined")
+ target_compile_options(${TARGET_NAME}
+     PRIVATE "-g" "-fsanitize=leak" "-Wall" "-Wextra" "-fsanitize=address" "-fsanitize=undefined")
+ target_link_options(${TARGET_NAME}
+     PRIVATE "-fsanitize=address" "-fsanitize=leak" "-fsanitize=undefined")
 
 target_link_libraries(${TARGET_NAME}
     PUBLIC
         ad::platform
+        ad::resource
         ad::math
         ad::handy
+        ad::arte
         pugixml::pugixml
 )
 

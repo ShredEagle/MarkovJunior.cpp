@@ -1,11 +1,16 @@
 #pragma once
 
+#include <resource/ResourceLocator.h>
+
+#include <filesystem>
 #include <iostream>
 #include <vector>
 #include <string>
 
 namespace ad {
 namespace markovjunior {
+
+const resource::ResourceLocator gResourceLocator(std::filesystem::current_path());
 
 inline std::vector<std::string> splitString(std::string aString, const std::string & aDelimiter)
 {

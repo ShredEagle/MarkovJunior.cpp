@@ -2,6 +2,7 @@
 #include "Interpreter.h"
 #include "AllNode.h"
 #include "OneNode.h"
+#include "markovjunior/ConvChain.h"
 #include "markovjunior/ConvolutionNode.h"
 #include "markovjunior/ParallelNode.h"
 #include "markovjunior/Path.h"
@@ -34,6 +35,9 @@ std::unique_ptr<Node> createNode(
             break;
         case handy::crc64("convolution"):
             return std::make_unique<ConvolutionNode>(aXmlNode, aSymmetry, aInterpreter);
+            break;
+        case handy::crc64("convchain"):
+            return std::make_unique<ConvChain>(aXmlNode, aSymmetry, aInterpreter);
             break;
         case handy::crc64("markov"):
         case handy::crc64("sequence"):

@@ -74,6 +74,7 @@ class MarkovJuniorConan(ConanFile):
            self._generate_cmake_configfile()
 
     def build(self):
+        copy(self, "*.png", path.join(self.folders.build_folder, "resources"), path.join(self.folders.source_folder, "assets/resources"));
         cmake = self._configure_cmake()
         cmake.build()
 

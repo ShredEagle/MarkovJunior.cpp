@@ -1,4 +1,5 @@
 #include "markovjunior/Grid.h"
+#include "markovjunior/ImageHelpers.h"
 #include "markovjunior/RuleNode.h"
 #include <ctime>
 #include <graphics/CameraUtilities.h>
@@ -7,14 +8,15 @@
 #include <markovjunior/Interpreter.h>
 #include <graphics/ApplicationGlfw.h>
 #include <graphics/TrivialShaping.h>
+#include <platform/Filesystem.h>
 
+#include <renderer/commons.h>
 #include <chrono>
 #include <math/Color.h>
 #include <math/Matrix.h>
 #include <math/Rectangle.h>
 #include <memory>
 #include <ratio>
-#include <renderer/commons.h>
 #include <string>
 #include <thread>
 
@@ -27,35 +29,11 @@ inline std::mt19937 randomSeedgenerator(std::chrono::system_clock::now().time_si
 inline int gSeed = randomSeedgenerator();
 inline int gSize = 19;
 inline int gSteps = 1;
-inline std::string filename = "/home/franz/gamedev/MarkovJunior.cpp/assets/island.xml";
+inline ad::filesystem::path filename{"assets/chain_maze.xml"};
 
 inline ApplicationGlfw application{"Markovjunior", gWindowSize, ApplicationFlag::Window_Keep_Ratio};
 inline bool runSimulation = false;
 inline bool stepSimul = false;
-
-const std::map<std::string, ad::math::sdr::Rgb> colorMatching = {
-    {"B", ad::math::sdr::gBlack},
-    {"W", ad::math::sdr::Rgb{0xff, 0xf1, 0xe8}},
-    {"t", ad::math::sdr::Rgb{0x32, 0x3c, 39}},
-    {"K", ad::math::sdr::Rgb{255, 112, 146}},
-    {"O", ad::math::sdr::Rgb{255, 153, 0}},
-    {"E", ad::math::sdr::Rgb{0, 0x87, 0x51}},
-    {"D", ad::math::sdr::Rgb{0x5f, 0x57, 0x4f}},
-    {"N", ad::math::sdr::Rgb{0xab, 0x52, 0x36}},
-    {"R", ad::math::sdr::gRed},
-    {"C", ad::math::sdr::gCyan},
-    {"G", ad::math::sdr::Rgb{0x0, 0xe4, 0x36}},
-    {"U", ad::math::sdr::Rgb{0x29, 0xad, 0xff}},
-    {"P", ad::math::sdr::gMagenta},
-    {"Y", ad::math::sdr::Rgb{0xff, 0xec, 0x27}},
-    {"A", ad::math::sdr::Rgb{0xc2, 0xc3, 0xc7}},
-    {"I", ad::math::sdr::Rgb{0x1d, 0x2b, 0x53}},
-    {"F", ad::math::sdr::Rgb{0xff, 0xcc, 0xaa}},
-    {"T", ad::math::sdr::Rgb{0x2b, 0x8a, 0xa9}},
-    {"S", ad::math::sdr::Rgb{0xd0, 0xd8, 0xac}},
-    {"s", ad::math::sdr::Rgb{0xe9, 0xe0, 0xb2}},
-    {"u", ad::math::sdr::Rgb{0x06, 0x5a, 0xb5}}
-};
 
 std::vector<TrivialShaping::Rectangle> renderGrid(const Grid & aGrid)
 {
@@ -76,7 +54,7 @@ std::vector<TrivialShaping::Rectangle> renderGrid(const Grid & aGrid)
                             {x * cellSize, y * cellSize},
                             {cellSize, cellSize}
                         },
-                        colorMatching.at(color)
+                        gColorMatching.at(color)
                 });
             }
         }
@@ -103,7 +81,7 @@ std::vector<TrivialShaping::Rectangle> renderPotential(const std::vector<std::ve
                     {
                         unsigned char value = aGrid.mCharacters.at(i); 
                         std::string color = std::string(1, static_cast<char>(value));
-                        ad::math::sdr::Rgb colorRgb = colorMatching.at(color);
+                        ad::math::sdr::Rgb colorRgb = gColorMatching.at(color);
                         int flatIndex = aGrid.getFlatGridIndex({x, y, z});
                         int potential = aPotentials.at(i).at(flatIndex);
                         if (potential > 0)
@@ -155,7 +133,7 @@ inline void callbackKeyboard(int key, int scancode, int action, int mods)
 int main()
 {
     std::shared_ptr<Interpreter> interpreter = std::make_shared<Interpreter>(
-            filename,
+            gResourceLocator.pathFor(filename),
             ad::math::Size<3, int>{gSize, gSize, 1},
             gSeed);
 
@@ -227,7 +205,7 @@ int main()
         if(ImGui::Button("Restart"))
         {
             interpreter = std::make_shared<Interpreter>(
-                filename,
+                gResourceLocator.pathFor(filename),
                 ad::math::Size<3, int>{gSize, gSize, 1},
                 gSeed);
             interpreter->setup();
