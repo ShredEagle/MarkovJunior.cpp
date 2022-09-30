@@ -10,6 +10,7 @@ set(${TARGET_NAME}_HEADERS
     Grid.h
     ImageHelpers.h
     Interpreter.h
+    Map.h
     Node.h
     Observation.h
     OneNode.h
@@ -19,6 +20,8 @@ set(${TARGET_NAME}_HEADERS
     RuleNode.h
     Search.h
     SymmetryUtils.h
+    TileModel.h
+    WaveFunctionCollapse.h
 )
 
 set(${TARGET_NAME}_SOURCES
@@ -30,6 +33,7 @@ set(${TARGET_NAME}_SOURCES
     Grid.cpp
     ImageHelpers.cpp
     Interpreter.cpp
+    Map.cpp
     Node.cpp
     Observation.cpp
     OneNode.cpp
@@ -39,6 +43,8 @@ set(${TARGET_NAME}_SOURCES
     RuleNode.cpp
     Search.cpp
     SymmetryUtils.cpp
+    TileModel.cpp
+    WaveFunctionCollapse.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR}
@@ -67,16 +73,16 @@ cmc_target_current_include_directory(${TARGET_NAME})
 
 cmc_find_dependencies(FILE CMakeFinds.cmake.in)
 
-# target_compile_options(${TARGET_NAME}
-#     PRIVATE "-O2")
+target_compile_options(${TARGET_NAME}
+    PRIVATE "-O2")
 
-# target_compile_options(${TARGET_NAME}
-#      PRIVATE "-O2")
+target_compile_options(${TARGET_NAME}
+     PRIVATE "-O2")
 
- target_compile_options(${TARGET_NAME}
-     PRIVATE "-g" "-fsanitize=leak" "-Wall" "-Wextra" "-fsanitize=address" "-fsanitize=undefined")
- target_link_options(${TARGET_NAME}
-     PRIVATE "-fsanitize=address" "-fsanitize=leak" "-fsanitize=undefined")
+ # target_compile_options(${TARGET_NAME}
+ #     PRIVATE "-g" "-fsanitize=leak" "-Wall" "-Wextra" "-fsanitize=address" "-fsanitize=undefined")
+ # target_link_options(${TARGET_NAME}
+ #     PRIVATE "-fsanitize=address" "-fsanitize=leak" "-fsanitize=undefined")
 
 target_link_libraries(${TARGET_NAME}
     PUBLIC

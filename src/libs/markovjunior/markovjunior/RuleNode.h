@@ -21,7 +21,7 @@ typedef std::tuple<int, math::Position<3, int>> RuleMatch;
 class RuleNode : public Node
 {
 public:
-    RuleNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetry, Interpreter * aInterpreter);
+    RuleNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetry, Interpreter * aInterpreter, Grid * aGrid);
     bool run() override;
 
     void reset() override
@@ -51,7 +51,7 @@ private:
 public: 
     virtual void addMatch(const int ruleIndex, const math::Position<3, int> & aMatchPosition, std::vector<bool> & aMatchMask)
     {
-        aMatchMask.at(mInterpreter->mGrid.getFlatGridIndex(aMatchPosition)) = true;
+        aMatchMask.at(mGrid->getFlatGridIndex(aMatchPosition)) = true;
 
         if (mMatchCount < mMatches.size())
         {

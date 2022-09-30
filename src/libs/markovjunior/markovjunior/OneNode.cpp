@@ -21,12 +21,12 @@ void OneNode::apply(Rule rule, math::Position<3, int> rulePos)
                 if (newValue != 0xff)
                 {
                     math::Position<3, int> newValuePos = rulePos + math::Vec<3, int>{dx, dy, dz};
-                    int newValueIndex = getFlatIndex(newValuePos, mInterpreter->mGrid.mSize);
-                    unsigned char oldValue = mInterpreter->mGrid.mState.at(newValueIndex);
+                    int newValueIndex = getFlatIndex(newValuePos, mGrid->mSize);
+                    unsigned char oldValue = mGrid->mState.at(newValueIndex);
 
                     if (newValue != oldValue)
                     {
-                        mInterpreter->mGrid.mState.at(newValueIndex) = newValue;
+                        mGrid->mState.at(newValueIndex) = newValue;
                         changes.push_back(newValuePos);
                     }
                 }
@@ -48,9 +48,9 @@ RuleMatch OneNode::getRandomMatch(std::mt19937 &aRandom)
         for (int i = 0; i < mMatchCount; i++)
         {
             auto [ruleIndex, matchPos] = mMatches.at(i);
-            int flatIndex = mInterpreter->mGrid.getFlatGridIndex(matchPos);
+            int flatIndex = mGrid->getFlatGridIndex(matchPos);
 
-            if (!mInterpreter->mGrid.matchPatternAtPosition(mRules.at(ruleIndex), matchPos))
+            if (!mGrid->matchPatternAtPosition(mRules.at(ruleIndex), matchPos))
             {
                 mMatchMask.at(ruleIndex).at(flatIndex) = false;
                 mMatches.at(i) = mMatches.at(--mMatchCount);
@@ -59,12 +59,12 @@ RuleMatch OneNode::getRandomMatch(std::mt19937 &aRandom)
             else
             {
                 std::optional<int> heuristicOpt = Field::deltaPointwise(
-                        mInterpreter->mGrid.mState,
+                        mGrid->mState,
                         mRules.at(ruleIndex),
                         matchPos,
                         mFields,
                         mPotentials,
-                        mInterpreter->mGrid.mSize);
+                        mGrid->mSize);
 
                 if (!heuristicOpt)
                 {
@@ -101,12 +101,12 @@ RuleMatch OneNode::getRandomMatch(std::mt19937 &aRandom)
             int matchIndex = aRandom() % mMatchCount;
             auto [ruleIndex, matchPos] = mMatches.at(matchIndex);
 
-            int flatIndex = mInterpreter->mGrid.getFlatGridIndex(matchPos);
+            int flatIndex = mGrid->getFlatGridIndex(matchPos);
 
             mMatchMask.at(ruleIndex).at(flatIndex) = false;
             mMatches.at(matchIndex) = mMatches[--mMatchCount];
 
-            if (mInterpreter->mGrid.matchPatternAtPosition(mRules.at(ruleIndex), matchPos))
+            if (mGrid->matchPatternAtPosition(mRules.at(ruleIndex), matchPos))
             {
                 return {ruleIndex, matchPos};
             }
@@ -131,7 +131,7 @@ bool OneNode::run()
         {
             return false;
         }
-        mInterpreter->mGrid.mState = mTrajectory.at(mCounter++);
+        mGrid->mState = mTrajectory.at(mCounter++);
         return true;
     }
 

@@ -29,7 +29,7 @@ inline std::mt19937 randomSeedgenerator(std::chrono::system_clock::now().time_si
 inline int gSeed = randomSeedgenerator();
 inline int gSize = 19;
 inline int gSteps = 1;
-inline ad::filesystem::path filename{"assets/chain_maze.xml"};
+inline ad::filesystem::path filename{"assets/marching_square.xml"};
 
 inline ApplicationGlfw application{"Markovjunior", gWindowSize, ApplicationFlag::Window_Keep_Ratio};
 inline bool runSimulation = false;

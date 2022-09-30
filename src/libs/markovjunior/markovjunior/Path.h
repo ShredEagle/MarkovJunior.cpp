@@ -15,15 +15,15 @@ namespace markovjunior {
 class Path : public Node
 {
 public:
-    Path(const pugi::xml_node & aXmlNode, const SymmetryGroup & aSymmetryGroup, Interpreter * aInterpreter) :
-        Node(aInterpreter),
+    Path(const pugi::xml_node & aXmlNode, const SymmetryGroup & aSymmetryGroup, Interpreter * aInterpreter, Grid * aGrid) :
+        Node(aInterpreter, aGrid),
         mInertia{aXmlNode.attribute("inertia").as_bool()},
         mLongest{aXmlNode.attribute("longest").as_bool()},
         mEdges{aXmlNode.attribute("edges").as_bool()},
         mVertices{aXmlNode.attribute("vertices").as_bool()}
     {
         std::string startSymbols = aXmlNode.attribute("from").as_string("");
-        const Grid & grid = mInterpreter->mGrid;
+        const Grid & grid = *mGrid;
         mStart = grid.makeWave(startSymbols);
         mValue = grid.mValues.at(aXmlNode.attribute("color").as_string(startSymbols.substr(0, 1).c_str())[0]);
         mFinish = grid.makeWave(aXmlNode.attribute("to").as_string(""));

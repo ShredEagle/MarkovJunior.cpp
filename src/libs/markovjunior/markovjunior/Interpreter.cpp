@@ -18,7 +18,7 @@ Interpreter::Interpreter(
     mStartGrid{mGrid},
     mRoot{
         createRootNode(
-                mXmlParsedDoc.document_element(), mGlobalSymmetryGroup, this)
+                mXmlParsedDoc.document_element(), mGlobalSymmetryGroup, this, &this->mGrid)
     }, 
     mCurrentBranch{mRoot.get()},
     mOrigin{mXmlParsedDoc.document_element().attribute("origin").as_bool(false)},

@@ -1,7 +1,9 @@
 #pragma once
 
+#include <functional>
 #include <resource/ResourceLocator.h>
 
+#include <cmath>
 #include <filesystem>
 #include <iostream>
 #include <vector>
@@ -54,8 +56,8 @@ inline std::vector<int> splitIntervals(const std::string & aString)
         if (interval.find('.') != std::string::npos)
         {
             std::vector<std::string> bounds = splitString(interval, "..");
-            unsigned char min = bounds.at(0)[0] - 48; 
-            unsigned char max = bounds.at(1)[0] - 48; 
+            unsigned char min = std::stoi(bounds.at(0)); 
+            unsigned char max = std::stoi(bounds.at(1)); 
 
             for (int i = 0; i < max - min + 1; i++)
             {
@@ -76,6 +78,52 @@ inline int modulo(int a, int divisor)
     const int result = a % divisor;
     return result >= 0 ? result : result + divisor;
 }
+
+template<class T>
+std::vector<T> createPattern(std::function<T(int, int)> aFunction, int aN)
+{
+    std::vector<T> result(aN * aN);
+    for (int y = 0; y < aN; y++)
+    {
+        for (int x = 0; x < aN; x++)
+        {
+            result.at(x + y * aN) = aFunction(x, y);
+        }
+    }
+    return result;
+}
+
+template<class T_sampleType>
+struct SamplePattern : public std::vector<T_sampleType>
+{
+    using std::vector<T_sampleType>::vector;
+
+    SamplePattern<T_sampleType> rotate()
+    {
+        std::vector<T_sampleType> result = createPattern<T_sampleType>([&](int x, int y) { return this->at(std::sqrt(this->size()) - 1 - y + x * std::sqrt(this->size()));}, std::sqrt(this->size()));
+        return SamplePattern<T_sampleType>(result.begin(), result.end());
+    }
+    SamplePattern<T_sampleType> reflect()
+    {
+        std::vector<T_sampleType> result = createPattern<T_sampleType>([&](int x, int y) { return this->at(std::sqrt(this->size()) - 1 - x + y * std::sqrt(this->size()));}, std::sqrt(this->size()));
+        return SamplePattern<T_sampleType>(result.begin(), result.end());
+    }
+    int index()
+    {
+        int result = 0;
+        int power = 1;
+
+        for (int i = 0; i < this->size(); i++, power *= 2)
+        {
+            if (this->at(i))
+            {
+                result += power;
+            }
+        }
+
+        return result;
+    }
+};
 
 }
 }

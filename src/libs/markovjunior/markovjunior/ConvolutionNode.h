@@ -35,7 +35,7 @@ const std::map<std::string, std::array<int, 27>> gThreeDKernels = {
 class ConvolutionNode : public Node
 {
 public:
-    ConvolutionNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetryGroup, Interpreter * aInterpreter);
+    ConvolutionNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetryGroup, Interpreter * aInterpreter, Grid * aGrid);
 
     bool run() override;
 

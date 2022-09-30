@@ -26,8 +26,8 @@ void Path::pushToFrontier(
         std::vector<int> & aGenerations,
         std::queue<std::tuple<int, math::Position<3, int>>> & aFrontier)
 {
-    int flatIndex = mInterpreter->mGrid.getFlatGridIndex(aPos);
-    unsigned char value = mInterpreter->mGrid.mState.at(flatIndex);
+    int flatIndex = mGrid->getFlatGridIndex(aPos);
+    unsigned char value = mGrid->mState.at(flatIndex);
 
     if (aGenerations.at(flatIndex) == -1 &&
             ((mSubstrate & 1 << value) != 0 ||
@@ -46,7 +46,7 @@ bool Path::run()
 {
     std::queue<std::tuple<int, math::Position<3, int>>> frontier;
     std::vector<math::Position<3, int>> startPosition;
-    Grid & grid = mInterpreter->mGrid;
+    Grid & grid = *mGrid;
     std::vector<int> generations(grid.mState.size(), -1);
 
     for (int z = 0; z < grid.mSize.depth(); z++)
@@ -153,7 +153,7 @@ bool Path::run()
 math::Vec<3, int> Path::getDirection(const math::Position<3, int> &aPos, const math::Vec<3, int> &aDirection, const std::vector<int> &aGenerations, std::mt19937 &aRandom)
 {
     std::vector<math::Vec<3, int>> candidateDirection;
-    const Grid & grid = mInterpreter->mGrid;
+    const Grid & grid = *mGrid;
     int flatIndex = grid.getFlatGridIndex(aPos);
     int g = aGenerations.at(flatIndex) - 1;
 

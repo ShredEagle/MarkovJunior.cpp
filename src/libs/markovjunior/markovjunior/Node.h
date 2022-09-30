@@ -1,5 +1,6 @@
 #pragma once
 #include "SymmetryUtils.h"
+#include "markovjunior/Grid.h"
 
 #include <pugixml.hpp>
 
@@ -17,15 +18,17 @@ public:
     virtual ~Node() = default;
 
     Node() = default;
-    Node(Interpreter * aInterpreter) :
-        mInterpreter{aInterpreter}
+    Node(Interpreter * aInterpreter, Grid * aGrid) :
+        mInterpreter{aInterpreter},
+        mGrid{aGrid}
     {}
 
     Interpreter * mInterpreter = nullptr;
+    Grid * mGrid = nullptr;
 
     virtual bool isRuleNode() { return false; };
 
-    virtual bool canBeRoot()
+    virtual bool isSequenceNode()
     {
         return false;
     }
@@ -40,20 +43,23 @@ std::unique_ptr<Node> createNode(
         SequenceNode * aParent,
         const pugi::xml_node & aXmlNode,
         const SymmetryGroup & aSymmetry,
-        Interpreter * aInterpreter
+        Interpreter * aInterpreter,
+        Grid * aGrid
         );
 
 std::unique_ptr<SequenceNode> createSequenceNode(
         SequenceNode * aParent,
         const pugi::xml_node & aXmlNode,
         const SymmetryGroup & aSymmetry,
-        Interpreter * aInterpreter
+        Interpreter * aInterpreter,
+        Grid * aGrid
         );
 
 std::unique_ptr<SequenceNode> createRootNode(
         const pugi::xml_node & aXmlNode,
         const SymmetryGroup & aSymmetry,
-        Interpreter * aInterpreter
+        Interpreter * aInterpreter,
+        Grid * aGrid
         );
 
 class SequenceNode : public Node
@@ -61,10 +67,16 @@ class SequenceNode : public Node
 public:
     SequenceNode * parent = nullptr;
     std::vector<std::unique_ptr<Node>> nodes;
-    int currentStep = 0;
+    int mCurrentStep = 0;
 
-    SequenceNode(std::unique_ptr<Node> && child, Interpreter * aInterpreter) :
-        Node(aInterpreter)
+    SequenceNode() = default;
+
+    SequenceNode(Interpreter * aInterpreter, Grid * aGrid) :
+        Node(aInterpreter, aGrid)
+    {};
+
+    SequenceNode(std::unique_ptr<Node> && child, Interpreter * aInterpreter, Grid * aGrid) :
+        Node(aInterpreter, aGrid)
     {
         nodes.push_back(std::move(child));
     }
@@ -73,22 +85,20 @@ public:
             SequenceNode * aParent,
             const pugi::xml_node & aXmlNode,
             const SymmetryGroup & parentSymmetry,
-            Interpreter * aInterpreter
+            Interpreter * aInterpreter,
+            Grid * aGrid
             ) :
-        Node(aInterpreter),
         parent{aParent}
     {
-        std::string symmetryString = aXmlNode.attribute("symmetry").as_string("");
-        //assert(!symmetryString.empty()); Why did I put that here
-        SymmetryGroup symmetrySubgroup = getSymmetry(symmetryString, parentSymmetry);
-
-        for (auto child : aXmlNode.children())
-        {
-            nodes.push_back(std::move(createNode(this, child, symmetrySubgroup, aInterpreter)));
-        }
+        setupSequenceNode(this,
+            aParent,
+            aXmlNode,
+            parentSymmetry,
+            aInterpreter,
+            aGrid);
     }
 
-    bool canBeRoot() override
+    bool isSequenceNode() override
     {
         return true;
     }
@@ -102,9 +112,34 @@ public:
             node->reset();
         }
 
-        currentStep = 0;
+        mCurrentStep = 0;
     }
 
+protected:
+    static void setupSequenceNode(SequenceNode * aSequenceNode,
+            SequenceNode * aParent,
+            const pugi::xml_node & aXmlNode,
+            const SymmetryGroup & parentSymmetry,
+            Interpreter * aInterpreter,
+            Grid * aGrid
+            )
+    {
+        aSequenceNode->mInterpreter = aInterpreter;
+        aSequenceNode->mGrid = aGrid;
+        std::string symmetryString = aXmlNode.attribute("symmetry").as_string("");
+        //assert(!symmetryString.empty()); Why did I put that here
+        SymmetryGroup symmetrySubgroup = getSymmetry(symmetryString, parentSymmetry);
+
+        for (auto child : aXmlNode.children())
+        {
+            aSequenceNode->nodes.push_back(std::move(createNode(aSequenceNode, child, symmetrySubgroup, aInterpreter, aGrid)));
+
+            if (aSequenceNode->nodes.back()->isSequenceNode())
+            {
+                dynamic_cast<SequenceNode*>(aSequenceNode->nodes.back().get())->parent = aSequenceNode;
+            }
+        }
+    }
 };
 
 class MarkovNode : public SequenceNode
@@ -112,13 +147,13 @@ class MarkovNode : public SequenceNode
 public:
     using SequenceNode::SequenceNode;
 
-    MarkovNode(std::unique_ptr<Node> && aChild, Interpreter * aInterpreter) :
-        SequenceNode(std::move(aChild), aInterpreter)
+    MarkovNode(std::unique_ptr<Node> && aChild, Interpreter * aInterpreter, Grid * aGrid) :
+        SequenceNode(std::move(aChild), aInterpreter, aGrid)
     {}
 
     bool run() override
     {
-        currentStep = 0;
+        mCurrentStep = 0;
         return SequenceNode::run();
     }
 };

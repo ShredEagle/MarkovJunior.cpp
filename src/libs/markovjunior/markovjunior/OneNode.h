@@ -8,12 +8,12 @@ namespace markovjunior {
 class OneNode : public RuleNode
 {
 public:
-    OneNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetry, Interpreter * aInterpreter) :
-        RuleNode(aXmlNode, aParentSymmetry, aInterpreter)
+    OneNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetry, Interpreter * aInterpreter, Grid * aGrid) :
+        RuleNode(aXmlNode, aParentSymmetry, aInterpreter, aGrid)
     {
         mMatchMask = std::vector<std::vector<bool>>(
             mRules.size(), std::vector<bool>(
-                mInterpreter->mGrid.mState.size(), false));
+                mGrid->mState.size(), false));
     }
 
     void reset() override

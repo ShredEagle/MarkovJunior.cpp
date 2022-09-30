@@ -12,8 +12,9 @@ namespace ad {
 namespace markovjunior {
 RuleNode::RuleNode(const pugi::xml_node & aXmlNode,
                    const SymmetryGroup & aParentSymmetry,
-                   Interpreter * aInterpreter) :
-    Node(aInterpreter)
+                   Interpreter * aInterpreter,
+                   Grid * aGrid) :
+    Node(aInterpreter, aGrid)
 {
     std::string symmetryString = aXmlNode.attribute("symmetry").as_string("");
     SymmetryGroup symmetrySubgroup = getSymmetry(symmetryString, aParentSymmetry);
@@ -31,7 +32,7 @@ RuleNode::RuleNode(const pugi::xml_node & aXmlNode,
     mLast.assign(mRules.size(), false);
     mSteps = aXmlNode.attribute("steps").as_int();
 
-    const Grid & grid = mInterpreter->mGrid;
+    const Grid & grid = *mGrid;
 
     mTemperature = aXmlNode.attribute("temperatur").as_double(0.);
     pugi::xpath_node_set xmlFieldNodes = aXmlNode.select_nodes("field");
@@ -80,7 +81,7 @@ bool RuleNode::run()
 {
     std::fill(mLast.begin(), mLast.end(), false);
 
-    Grid & grid = mInterpreter->mGrid;
+    Grid & grid = *mGrid;
     math::Size<3, int> gridSize = grid.mSize;
 
     if (mSteps > 0 && mCounter >= mSteps) {

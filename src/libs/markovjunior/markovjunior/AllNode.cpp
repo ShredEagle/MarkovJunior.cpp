@@ -42,7 +42,7 @@ void AllNode::fit(int aRuleIndex, const math::Position<3, int> & aPos, std::vect
                     int i = getFlatIndex(statePos, aSize);
 
                     aNewStateMask.at(i) = true;
-                    mInterpreter->mGrid.mState.at(i) = newValue;
+                    mGrid->mState.at(i) = newValue;
                     mInterpreter->mChanges.push_back(statePos);
                 }
             }
@@ -65,7 +65,7 @@ bool AllNode::run()
         {
             return false;
         }
-        mInterpreter->mGrid.mState = mTrajectory.at(mCounter++);
+        mGrid->mState = mTrajectory.at(mCounter++);
         return true;
     }
 
@@ -84,12 +84,12 @@ bool AllNode::run()
         {
             auto [ruleIndex, matchPos] = mMatches.at(i);
             std::optional<int> heuristicOpt = Field::deltaPointwise(
-                    mInterpreter->mGrid.mState,
+                    mGrid->mState,
                     mRules.at(ruleIndex),
                     matchPos,
                     mFields,
                     mPotentials,
-                    mInterpreter->mGrid.mSize);
+                    mGrid->mSize);
 
             if (heuristicOpt)
             {
@@ -117,9 +117,9 @@ bool AllNode::run()
         for (auto [matchIndex, key] : listPotentials)
         {
             auto [ruleIndex, matchPos] = mMatches.at(matchIndex);
-            mMatchMask.at(ruleIndex).at(mInterpreter->mGrid.getFlatGridIndex(matchPos)) = false;
+            mMatchMask.at(ruleIndex).at(mGrid->getFlatGridIndex(matchPos)) = false;
 
-            fit(ruleIndex, matchPos, mInterpreter->mGrid.mMask, mInterpreter->mGrid.mSize);
+            fit(ruleIndex, matchPos, mGrid->mMask, mGrid->mSize);
         }
     }
     else
@@ -138,15 +138,15 @@ bool AllNode::run()
         for (int value : shuffle)
         {
             auto [ruleIndex, matchPos] = mMatches.at(value);
-            mMatchMask.at(ruleIndex).at(getFlatIndex(matchPos, mInterpreter->mGrid.mSize)) = false;
-            fit(ruleIndex, matchPos, mInterpreter->mGrid.mMask, mInterpreter->mGrid.mSize);
+            mMatchMask.at(ruleIndex).at(getFlatIndex(matchPos, mGrid->mSize)) = false;
+            fit(ruleIndex, matchPos, mGrid->mMask, mGrid->mSize);
         }
     }
 
     for (int n = mInterpreter->mFirst[mLastMatchedTurn]; n < mInterpreter->mChanges.size(); n++)
     {
         auto changePos = mInterpreter->mChanges.at(n);
-        mInterpreter->mGrid.mMask.at(getFlatIndex(changePos, mInterpreter->mGrid.mSize)) = false;
+        mGrid->mMask.at(getFlatIndex(changePos, mGrid->mSize)) = false;
     }
 
     mCounter++;

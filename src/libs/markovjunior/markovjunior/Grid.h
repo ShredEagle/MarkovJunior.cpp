@@ -25,6 +25,7 @@ class Rule;
 class Grid
 {
 public:
+    Grid() = default;
     Grid(const pugi::xml_node & aNode, const math::Size<3, int> & aSize);
     bool matchPatternAtPosition(const Rule & aRule, math::Position<3, int> aPosition) const;
     int makeWave(std::string aValues) const ;
@@ -38,7 +39,7 @@ public:
         return getFlatIndex(aPos, mSize);
     }
 
-    int mTransparent;
+    int mTransparent = 0;
     std::map<unsigned char, unsigned char> mValues;
     std::map<unsigned char, int> mWaves;
     std::vector<unsigned char> mCharacters;

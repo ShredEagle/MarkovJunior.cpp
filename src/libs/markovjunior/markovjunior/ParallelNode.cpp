@@ -26,9 +26,9 @@ void ParallelNode::addMatch(const int ruleIndex, const math::Position<3, int> &a
 
                 math::Position<3, int> statePos = aMatchPosition + math::Vec<3, int>{x, y, z};
 
-                int i = getFlatIndex(statePos, mInterpreter->mGrid.mSize);
+                int i = getFlatIndex(statePos, mGrid->mSize);
 
-                if (newValue != gWildcardShiftValue && newValue != mInterpreter->mGrid.mState.at(i))
+                if (newValue != gWildcardShiftValue && newValue != mGrid->mState.at(i))
                 {
 
                     mNewState.at(i) = newValue;
@@ -50,8 +50,8 @@ bool ParallelNode::run()
 
     for (int n = mInterpreter->mFirst.at(mInterpreter->mCounter); n < mInterpreter->mChanges.size(); n++)
     {
-        int i = getFlatIndex(mInterpreter->mChanges.at(n), mInterpreter->mGrid.mSize);
-        mInterpreter->mGrid.mState.at(i) = mNewState.at(i);
+        int i = getFlatIndex(mInterpreter->mChanges.at(n), mGrid->mSize);
+        mGrid->mState.at(i) = mNewState.at(i);
     }
 
     mCounter++;

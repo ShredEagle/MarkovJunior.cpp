@@ -41,8 +41,8 @@ ConvolutionRule::ConvolutionRule(const pugi::xml_node & aXmlNode, const Grid & a
     }
 }
 
-ConvolutionNode::ConvolutionNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetryGroup, Interpreter * aInterpreter) :
-    Node(aInterpreter),
+ConvolutionNode::ConvolutionNode(const pugi::xml_node & aXmlNode, const SymmetryGroup & aParentSymmetryGroup, Interpreter * aInterpreter, Grid * aGrid) :
+    Node(aInterpreter, aGrid),
     mSteps{aXmlNode.attribute("steps").as_int(-1)},
     mPeriodic{aXmlNode.attribute("periodic").as_bool(false)}
 {
@@ -55,7 +55,7 @@ ConvolutionNode::ConvolutionNode(const pugi::xml_node & aXmlNode, const Symmetry
 
     std::string neighborhood = aXmlNode.attribute("neighborhood").as_string("");
 
-    if (mInterpreter->mGrid.mSize.depth() == 1)
+    if (mGrid->mSize.depth() == 1)
     {
         mKernel = std::vector<int>{gTwoDKernels.at(neighborhood).begin(), gTwoDKernels.at(neighborhood).end()};
     }
@@ -72,9 +72,9 @@ bool ConvolutionNode::run()
         return false;
     }
 
-    mSumField = std::vector<std::vector<int>>(mInterpreter->mGrid.mState.size(), std::vector<int>(mInterpreter->mGrid.mCharacters.size(), 0));
+    mSumField = std::vector<std::vector<int>>(mGrid->mState.size(), std::vector<int>(mGrid->mCharacters.size(), 0));
 
-    Grid & grid = mInterpreter->mGrid;
+    Grid & grid = *mGrid;
     const auto & gridSize = grid.mSize;
 
     for (int z = 0; z < gridSize.depth(); z++)
