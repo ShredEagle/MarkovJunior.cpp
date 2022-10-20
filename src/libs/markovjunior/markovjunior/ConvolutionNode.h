@@ -1,14 +1,23 @@
 #pragma once
 
-#include "markovjunior/Grid.h"
-#include "markovjunior/Interpreter.h"
-#include "markovjunior/Node.h"
-#include "markovjunior/SymmetryUtils.h"
+#include "Node.h"
+#include "SymmetryUtils.h"
 
-#include <pugixml.hpp>
+#include <algorithm>
+#include <array>
+#include <map>
+#include <string>                        // for string, allocator, operator<=>
+#include <vector>                        // for vector
+
+namespace pugi {
+    class xml_node;
+}
 
 namespace ad {
 namespace markovjunior {
+
+class Grid;
+class Interpreter;
 
 class ConvolutionRule
 {

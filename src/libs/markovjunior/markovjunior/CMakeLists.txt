@@ -20,7 +20,6 @@ set(${TARGET_NAME}_HEADERS
     RuleNode.h
     Search.h
     SymmetryUtils.h
-    TileModel.h
     WaveFunctionCollapse.h
 )
 
@@ -43,7 +42,6 @@ set(${TARGET_NAME}_SOURCES
     RuleNode.cpp
     Search.cpp
     SymmetryUtils.cpp
-    TileModel.cpp
     WaveFunctionCollapse.cpp
 )
 

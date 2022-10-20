@@ -1,7 +1,12 @@
 #include "Field.h"
-#include "markovjunior/Rule.h"
+#include "Grid.h"
+#include "Rule.h"
+
+#include <math/MatrixBase.h>
 #include <math/Vector.h>
 
+#include <memory>
+#include <tuple>
 #include <queue>
 
 namespace ad {

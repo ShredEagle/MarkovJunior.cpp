@@ -26,6 +26,8 @@ public:
 
     void reset() override
     {
+        mFutureComputed = false;
+        mTrajectory.clear();
         mLastMatchedTurn = -1;
         mCounter = 0;
         

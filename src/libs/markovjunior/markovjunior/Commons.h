@@ -12,7 +12,7 @@
 namespace ad {
 namespace markovjunior {
 
-const resource::ResourceLocator gResourceLocator(std::filesystem::current_path());
+const resource::ResourceLocator gResourceLocator("/home/franz/gamedev/MarkovJunior.cpp/");
 
 inline std::vector<std::string> splitString(std::string aString, const std::string & aDelimiter)
 {

@@ -1,0 +1,128 @@
+<sequence values="BGWARDEUYKtsPSFNIuO" origin="True">
+  <union symbol="?" values="Btu"/>
+  <union symbol="$" values="UW"/>
+  <union symbol="-" values="sR"/>
+  <union symbol=")" values="sS"/>
+  <union symbol="!" values="UI"/>
+  <one in="BBBBBBB/BBBBBBB/BBBGBBB" out="tuuuuut/tuuuuut/tGGGGGt" symmetry="()"/>
+  <all in="tBB" out="ttB"/>
+  <all in="tBt" out="ttt"/>
+  <one in="Gt" out="GW" symmetry="(x)"/>
+  <one in="Wtt" out="WOW" symmetry="(x)"/>
+  <one in="WB" out="KB" symmetry="(x)"/>
+  <one in="Wtt" out="WAW"/>
+  <all in="???/?W?" out="***/*U*"/>
+  <all in="Ut$" out="WAW"/>
+  <markov>
+      <all in="OWA" out="OWO" symmetry="(x)"/>
+      <all in="WAWAW/AtAtA/WAWAW" out="WAWAW/AtttA/WAWAW"/>
+      <one steps="1">
+          <rule in="WAW/AtA/WAW" out="DED/EtE/DED"/>
+          <rule in="WOW/AtA/WAW" out="DOD/EtE/DED"/>
+      </one>
+      <all in="DA" out="DY"/>
+      <all in="DOW" out="DYW"/>
+      <all in="DOK" out="DYK"/>
+      <one in="Y" out="U" steps="1"/>
+      <one in="Y" out="R" steps="1"/>
+      <all in="Y" out="R"/>
+      <one in="DOD" out="sss"/>
+      <one search="True">
+          <rule in="UD" out="UU"/>
+          <rule in="UE" out="UU"/>
+          <rule in="UR" out="UU"/>
+          <rule in="Us" out="UU"/>
+          <observe value="s" to="Us" />
+          <observe value="R" to="U" />
+          <observe value="U" to="U" />
+          <observe value="E" to="EU" />
+          <observe value="D" to="DU" />
+      </one>
+      <one search="True">
+          <rule in="UD" out="UU"/>
+          <rule in="UE" out="UU"/>
+          <rule in="UR" out="UU"/>
+          <observe value="R" to="U" />
+          <observe value="U" to="U" />
+          <observe value="E" to="EU" />
+          <observe value="D" to="DU" />
+      </one>
+      <all in="UE" out="UP"/>
+      <one>
+          <rule in="PD" out="PP"/>
+          <rule in="PE" out="PP"/>
+      </one>
+      <all>
+          <rule in="P" out="t"/>
+          <rule in="UUW" out="WAW"/>
+      </all>
+      <all in="U" out="A"/>
+      <one in="DED/EtE/DED" out="SAS/AtA/SAS" steps="1"/>
+      <markov>
+          <one in="StW" out="WAW" steps="1"/>
+          <one in="SAS/AtA/SAS" out="ttt/ttt/ttt"/>
+          <one in="S" out="W"/>
+      </markov>
+      <all in="ttt/tRt" out="ttt/ttt"/>
+      <all in="R" out="A"/>
+  </markov>
+  <all in="O" out="A"/>
+  <one in="S" out="W"/>
+  <markov>
+      <one in="FAW" out="FAF" symmetry="(x)"/>
+      <one in="GW" out="GF"/>
+  </markov>
+  <markov>
+      <one in="Y/A/W" out="S/U/P" steps="1" symmetry="(y)"/>
+      <markov>
+          <all in="WUP" out="WAW" />
+          <all>
+              <rule in="-AF" out="*AR"/>
+              <rule in="-A)" out="*AI"/>
+              <rule in="IAF" out="IAR"/>
+              <rule in="IA)" out="IAI"/>
+              <rule in="-GGGGGF" out="*GGGGGR"/>
+              <rule in="-GGGGG)" out="*GGGGGI"/>
+              <rule in="IGGGGGF" out="RGGGGGR"/>
+              <rule in="IGGGGG)" out="RGGGGGI"/>
+          </all>
+          <one>
+              <rule in="IU*" out="FNW" />
+              <rule in="RU*" out="FNW" />
+          </one>
+          <one>
+              <rule in="PAW" out="PUP"/>
+              <rule in="PAP" out="PUP"/>
+          </one>
+          <all in="PAF" out="PUs"/>
+          <all in="FU" out="FI"/>
+      </markov>
+      <all in="S" out="F"/>
+      <all in="R" out="F"/>
+      <one in="FA" out="YA" steps="1"/>
+  </markov>
+  <all in="WUW" out="WAW"/>
+  <all in="N" out="A"/>
+  <all in="Y" out="W"/>
+  <all in="?!?/!P?/?!?" out="***/*Y*/***"/>
+  <markov>
+      <all in="IP" out="AI"/>
+      <all in="IU" out="WI"/>
+      <all in="IY" out="AY"/>
+  </markov>
+  <all steps="1">
+      <rule in="Pt" out="Nt"/>
+  </all>
+  <one steps="1" temperature="1.0">
+      <rule in="W" out="I"/>
+      <field for="I" to="N" on="tWAUP"/>
+  </one>
+  <one in="NtI" out="WAW"/>
+  <all in="U" out="A"/>
+  <all in="P" out="W"/>
+  <all in="N" out="W"/>
+  <all in="Y" out="W"/>
+  <all in="A" out="W"/>
+  <one in="uuuuu/uuuuu/GGGGG" out="tOOOt/ttOtt/WWUWW"/>
+</sequence>
+

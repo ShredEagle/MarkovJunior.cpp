@@ -2,12 +2,19 @@
 
 #include "Grid.h"
 
+#include <math/Vector.h>
+
 #include <optional>
 #include <pugixml.hpp>
+#include <algorithm>
+#include <vector>
 #include <string>
 
 namespace ad {
 namespace markovjunior {
+
+class Rule;
+
 class Field
 {
 public:

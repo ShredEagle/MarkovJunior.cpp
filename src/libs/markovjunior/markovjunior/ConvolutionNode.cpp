@@ -1,9 +1,18 @@
 #include "ConvolutionNode.h"
 
-#include "markovjunior/Commons.h"
+#include "Commons.h"
+#include "Grid.h"           // for Grid
+#include "Interpreter.h"    // for Interpreter
+#include "Node.h"           // for Node
+#include "SymmetryUtils.h"  // for SymmetryGroup
 
+#include <math/MatrixBase.h>             // for operator+, MatrixBase
+#include <math/Vector.h>                 // for Position, Size, Vec
+
+#include <pugixml.hpp>                   // for xml_node, xml_attribute, char_t
 #include <iostream>
 #include <string>
+#include <random>                        // for mt19937, uniform_real_distri...
 
 namespace ad {
 namespace markovjunior {
