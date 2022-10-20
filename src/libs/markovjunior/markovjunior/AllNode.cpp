@@ -80,7 +80,7 @@ bool AllNode::run()
         bool firstHeuristicComputed = false;
 
         std::vector<std::tuple<int, double>> listPotentials;
-        for (int i = 0; i < mMatchCount; i++)
+        for (unsigned int i = 0; i < mMatchCount; i++)
         {
             auto [ruleIndex, matchPos] = mMatches.at(i);
             std::optional<int> heuristicOpt = Field::deltaPointwise(
@@ -143,7 +143,7 @@ bool AllNode::run()
         }
     }
 
-    for (int n = mInterpreter->mFirst[mLastMatchedTurn]; n < mInterpreter->mChanges.size(); n++)
+    for (unsigned int n = mInterpreter->mFirst[mLastMatchedTurn]; n < mInterpreter->mChanges.size(); n++)
     {
         auto changePos = mInterpreter->mChanges.at(n);
         mGrid->mMask.at(getFlatIndex(changePos, mGrid->mSize)) = false;

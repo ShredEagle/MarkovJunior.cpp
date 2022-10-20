@@ -2,7 +2,6 @@
 #include "Grid.h"
 #include "Rule.h"
 
-#include <math/MatrixBase.h>
 #include <math/Vector.h>
 
 #include <memory>

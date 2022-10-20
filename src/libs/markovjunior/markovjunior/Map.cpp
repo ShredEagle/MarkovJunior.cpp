@@ -29,7 +29,7 @@ Scale createMapScale(const pugi::xml_node & aXmlNode)
         assert(false);
     }
 
-    for (int i = 0; i < scales.size(); i++)
+    for (unsigned int i = 0; i < scales.size(); i++)
     {
         std::string scale = scales.at(i);
         if (scale.find("/") == std::string::npos)
@@ -54,7 +54,7 @@ Map::Map(const pugi::xml_node & aXmlNode,
         aGrid->mSize.depth() * mScale.mNumerator.z() / mScale.mDenominator.z()
     }}
 {
-    setupSequenceNode(this, nullptr, aXmlNode, aSymmetryGroup, aInterpreter, &mNewGrid);
+    setupSequenceNode(this, aXmlNode, aSymmetryGroup, aInterpreter, &mNewGrid);
     SymmetryGroup symmetry = getSymmetry(aXmlNode.attribute("symmetry").as_string(""), aSymmetryGroup);
 
     pugi::xpath_node_set xmlRuleNodes = aXmlNode.select_nodes("rule");

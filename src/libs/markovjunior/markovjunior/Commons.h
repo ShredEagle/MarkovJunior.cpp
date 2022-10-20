@@ -59,7 +59,7 @@ inline std::vector<int> splitIntervals(const std::string & aString)
             unsigned char min = std::stoi(bounds.at(0)); 
             unsigned char max = std::stoi(bounds.at(1)); 
 
-            for (int i = 0; i < max - min + 1; i++)
+            for (unsigned int i = 0; i < max - min + 1; i++)
             {
                 result.push_back(min + i);
             }
@@ -113,7 +113,7 @@ struct SamplePattern : public std::vector<T_sampleType>
         int result = 0;
         int power = 1;
 
-        for (int i = 0; i < this->size(); i++, power *= 2)
+        for (unsigned int i = 0; i < this->size(); i++, power *= 2)
         {
             if (this->at(i))
             {

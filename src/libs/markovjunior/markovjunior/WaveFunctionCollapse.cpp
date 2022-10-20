@@ -9,7 +9,7 @@
 namespace ad {
 namespace markovjunior {
 
-void Wave::setupWave(int aLength, int aP, int aD, bool aShannon)
+void Wave::setupWave(int aLength, int aP, int aD, bool)
 {
     mData = std::vector<std::vector<bool>>(aLength, std::vector<bool>(aP, true));
     mCompatible = std::vector<std::vector<std::vector<int>>>(
@@ -35,10 +35,10 @@ void Wave::init(const Propagator & aPropagator,
 
     int p = mData.at(0).size();
 
-    for (int i = 0; i < mData.size(); i++) {
+    for (unsigned int i = 0; i < mData.size(); i++) {
         for (int j = 0; j < p; j++) {
             mData.at(i).at(j) = true;
-            for (int k = 0; k < aPropagator.size(); k++) {
+            for (unsigned int k = 0; k < aPropagator.size(); k++) {
                 mCompatible.at(i).at(j).at(k) = aPropagator.at(sOpposite.at(k)).at(j).size();
             }
         }
@@ -56,12 +56,12 @@ void Wave::init(const Propagator & aPropagator,
 
 void Wave::copyFrom(const Wave &aWave, int aD, bool aShannon)
 {
-    for (int i = 0; i < mData.size(); i++)
+    for (unsigned int i = 0; i < mData.size(); i++)
     {
         std::vector<bool> dataItem = mData.at(i);
         std::vector<bool> waveItem = aWave.mData.at(i);
 
-        for (int j = 0; j < dataItem.size(); j++)
+        for (unsigned int j = 0; j < dataItem.size(); j++)
         {
             dataItem.at(j) = waveItem.at(j);
 
@@ -105,7 +105,7 @@ void WFCNode::setupWFCNode(const pugi::xml_node & aXmlNode,
 
     mDistribution.reserve(mP);
 
-    setupSequenceNode(this, nullptr, aXmlNode, aParentSymmetry, aInterpreter, &mNewGrid);
+    setupSequenceNode(this, aXmlNode, aParentSymmetry, aInterpreter, &mNewGrid);
 }
 
 void WFCNode::ban(int aIndex, int aT)
@@ -114,7 +114,7 @@ void WFCNode::ban(int aIndex, int aT)
 
     std::vector<int> & compatibility = mWave.mCompatible.at(aIndex).at(aT);
 
-    for (int i = 0; i < mPropagator.size(); i++) {
+    for (unsigned int i = 0; i < mPropagator.size(); i++) {
         compatibility.at(i) = 0;
     }
 
@@ -146,7 +146,7 @@ bool WFCNode::propagate()
             i1 % (mGrid->mSize.width() * mGrid->mSize.height()) / mGrid->mSize.width(),
             i1 / (mGrid->mSize.width() * mGrid->mSize.height())};
 
-        for (int i = 0; i < mPropagator.size(); i++) {
+        for (unsigned int i = 0; i < mPropagator.size(); i++) {
             math::Vec<3, int> shift = {sDx.at(i), sDy.at(i), sDz.at(i)};
 
             math::Position<3, int> pos2 = pos1 + shift;
@@ -274,7 +274,7 @@ bool WFCNode::run()
         mWave.init(mPropagator, mSumOfWeights, mSumOfWeightLogWeights, mStartingEntropy,
                    mShannon);
 
-        for (int i = 0; i < mWave.mData.size(); i++) {
+        for (unsigned int i = 0; i < mWave.mData.size(); i++) {
             unsigned char value = mGrid->mState.at(i);
 
             if (mMap.contains(value)) {

@@ -80,7 +80,7 @@ void Rule::setupShifts(int aCount)
 
     int wildcard = (1 << aCount) - 1;
 
-    for (int i = 0; i < mInputs.size(); i++)
+    for (unsigned int i = 0; i < mInputs.size(); i++)
     {
         mByteInput.push_back(
                 mInputs.at(i) == wildcard
@@ -166,7 +166,7 @@ std::tuple<std::vector<unsigned char>, math::Size<3, int>> Rule::parsePatternStr
     for (int z = 0; z < patternSize.depth(); z++)
     {
         std::vector<std::string> plane = lines.at(patternSize.depth() - 1 - z);
-        if (plane.size() != patternSize.height())
+        if (plane.size() != static_cast<unsigned int>(patternSize.height()))
         {
             std::cout << "PATTERN is not rectangular" << std::endl;
             return {{}, {-1, -1, -1}};
@@ -175,7 +175,7 @@ std::tuple<std::vector<unsigned char>, math::Size<3, int>> Rule::parsePatternStr
         for (int y = 0; y < patternSize.height(); y++)
         {
             std::string line = plane.at(y);
-            if (line.size() != patternSize.width())
+            if (line.size() != static_cast<unsigned int>(patternSize.width()))
             {
                 std::cout << "PATTERN is not rectangular" << std::endl;
                 return {{}, {-1, -1, -1}};

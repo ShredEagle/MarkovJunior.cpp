@@ -67,7 +67,7 @@ renderPotential(const std::vector<std::vector<int>> & aPotentials, const Grid & 
 
     float cellSize = gMarkovDrawSize / (float)aGrid.mSize.width();
 
-    for (int i = 0; i != aPotentials.size(); i++) {
+    for (unsigned int i = 0; i != aPotentials.size(); i++) {
         for (int z = 0; z < aGrid.mSize.depth(); z++) {
             for (int y = 0; y < aGrid.mSize.height(); y++) {
                 for (int x = 0; x < aGrid.mSize.width(); x++) {
@@ -102,7 +102,7 @@ getViewedRectangle(ad::math::Position<2, float> aCameraPosition, float aViewport
         ad::math::makeSizeFromHeight((float)gWindowSize.height(), aViewportRatio)};
 }
 
-inline void callbackKeyboard(int key, int scancode, int action, int mods)
+inline void callbackKeyboard(int key, int , int action, int)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         application.getAppInterface()->requestCloseApplication();
@@ -184,12 +184,12 @@ int main()
         std::chrono::duration<double, std::milli> time{endStep - startStep};
         std::ostringstream oStep;
         oStep << time;
-        ImGui::Text(oStep.str().c_str());
+        ImGui::Text("%s", oStep.str().c_str());
         ImGui::Text("Simul duration");
         std::chrono::duration<double, std::milli> simulTime{endTime - startTime};
         std::ostringstream oSimul;
         oSimul << simulTime;
-        ImGui::Text(oSimul.str().c_str());
+        ImGui::Text("%s", oSimul.str().c_str());
         if (ImGui::Button("Restart")) {
             startTime = std::chrono::high_resolution_clock::now();
             interpreter = std::make_shared<Interpreter>(

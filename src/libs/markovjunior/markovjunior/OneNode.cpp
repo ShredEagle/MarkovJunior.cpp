@@ -39,7 +39,7 @@ RuleMatch OneNode::getRandomMatch(std::mt19937 & aRandom)
         double firstHeuristic = 0.0;
         bool firstHeuristicComputed = false;
 
-        for (int i = 0; i < mMatchCount; i++) {
+        for (unsigned int i = 0; i < mMatchCount; i++) {
             auto [ruleIndex, matchPos] = mMatches.at(i);
             int flatIndex = mGrid->getFlatGridIndex(matchPos);
 

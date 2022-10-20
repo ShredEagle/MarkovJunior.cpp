@@ -68,7 +68,7 @@ inline void printState(const std::vector<int> & aState, const math::Size<3, int>
 
 inline void printPotential(const std::vector<std::vector<int>> & aPotentials, const math::Size<3, int> & aSize)
 {
-    for (int c = 0; c < aPotentials.size(); c++)
+    for (unsigned int c = 0; c < aPotentials.size(); c++)
     {
         std::cout << "c = " << c << std::endl;
         std::cout << "[" << std::endl;
@@ -84,7 +84,7 @@ runSearch(const std::vector<unsigned char> & aPresent,
           const math::Size<3, int> & aSize,
           int aCharacterSize,
           bool aAll,
-          int aLimit,
+          unsigned int aLimit,
           double aDepthCoefficient,
           int aSeed);
 

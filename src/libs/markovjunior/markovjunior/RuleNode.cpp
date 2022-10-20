@@ -112,13 +112,13 @@ bool RuleNode::run()
     }
 
     if (mLastMatchedTurn >= 0) {
-        for (int i = mInterpreter->mFirst.at(mLastMatchedTurn);
+        for (unsigned int i = mInterpreter->mFirst.at(mLastMatchedTurn);
              i < mInterpreter->mChanges.size(); i++) {
             math::Position<3, int> changePos = mInterpreter->mChanges.at(i);
 
             unsigned char value = grid.mState.at(grid.getFlatGridIndex(changePos));
 
-            for (int ruleIndex = 0; ruleIndex < mRules.size(); ruleIndex++) {
+            for (unsigned int ruleIndex = 0; ruleIndex < mRules.size(); ruleIndex++) {
                 Rule rule = mRules.at(ruleIndex);
                 std::vector<bool> & ruleMask = mMatchMask.at(ruleIndex);
                 std::vector<math::Vec<3, int>> shifts = rule.mInputShifts.at(value);
@@ -146,7 +146,7 @@ bool RuleNode::run()
     } else {
         mMatchCount = 0;
 
-        for (int ruleIndex = 0; ruleIndex < mRules.size(); ruleIndex++) {
+        for (unsigned int ruleIndex = 0; ruleIndex < mRules.size(); ruleIndex++) {
             Rule rule = mRules.at(ruleIndex);
             std::vector<bool> & ruleMask = mMatchMask.at(ruleIndex);
 
@@ -186,7 +186,7 @@ bool RuleNode::run()
         bool anySuccess = false;
         bool anyComputation = false;
 
-        for (int i = 0; i != mFields.size(); i++) {
+        for (unsigned int i = 0; i != mFields.size(); i++) {
             auto field = mFields.at(i);
 
             if (field.mSubstrate != -1 && (mCounter == 0 || field.mRecompute)) {

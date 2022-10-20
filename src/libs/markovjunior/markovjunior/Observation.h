@@ -49,7 +49,7 @@ class Observation
             std::fill(potentialField.begin(), potentialField.end(), -1);
         }
 
-        for (int i = 0; i < mState.size(); i++) {
+        for (std::size_t i = 0; i != mState.size(); i++) {
             aPotentials.at(mState.at(i)).at(i) = 0;
         }
 
@@ -61,9 +61,9 @@ class Observation
                                           const math::Size<3, int> & aSize,
                                           const std::vector<Rule> & aRules)
     {
-        for (int c = 0; c < aPotentials.size(); c++) {
+        for (std::size_t c = 0; c < aPotentials.size(); c++) {
             auto & potentialField = aPotentials.at(c);
-            for (int i = 0; i < aFuture.size(); i++) {
+            for (std::size_t i = 0; i < aFuture.size(); i++) {
                 potentialField.at(i) = (aFuture.at(i) & (1 << c)) != 0 ? 0 : -1;
             }
         }
@@ -74,7 +74,7 @@ class Observation
     static bool isGoalReached(const std::vector<unsigned char> & aPresent,
                               const std::vector<int> & aFuture)
     {
-        for (int i = 0; i < aPresent.size(); i++) {
+        for (std::size_t i = 0; i != aPresent.size(); i++) {
             if (((1 << aPresent.at(i)) & aFuture.at(i)) == 0) {
                 return false;
             }
@@ -87,12 +87,12 @@ class Observation
     {
         int sum = 0;
 
-        for (int i = 0; i < aFuture.size(); i++) {
+        for (std::size_t i = 0; i != aFuture.size(); i++) {
             int f = aFuture.at(i);
             int min = 1000;
             int argmin = -1;
 
-            for (int c = 0; c < aPotentials.size(); c++, f >>= 1) {
+            for (std::size_t c = 0; c < aPotentials.size(); c++, f >>= 1) {
                 int potential = aPotentials.at(c).at(i);
 
                 if ((f & 1) == 1 && potential >= 0 && potential < min) {
@@ -116,7 +116,7 @@ class Observation
     {
         int sum = 0;
 
-        for (int i = 0; i < aPresent.size(); i++) {
+        for (std::size_t i = 0; i != aPresent.size(); i++) {
             int potential = aPotentials.at(aPresent.at(i)).at(i);
 
             if (potential < 0) {

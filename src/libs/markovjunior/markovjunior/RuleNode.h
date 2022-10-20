@@ -67,9 +67,9 @@ public:
     }
 
     int mLastMatchedTurn;
-    int mCounter = 0;
-    int mSteps = 0;
-    int mMatchCount = 0;
+    unsigned int mCounter = 0;
+    unsigned int mSteps = 0;
+    unsigned int mMatchCount = 0;
     std::vector<Rule> mRules;
     //bool mFutureComputed; //This is for observation
     std::vector<bool> mLast;

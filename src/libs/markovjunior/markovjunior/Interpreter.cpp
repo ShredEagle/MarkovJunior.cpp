@@ -21,8 +21,8 @@ Interpreter::Interpreter(
                 mXmlParsedDoc.document_element(), mGlobalSymmetryGroup, this, &this->mGrid)
     }, 
     mCurrentBranch{mRoot.get()},
-    mOrigin{mXmlParsedDoc.document_element().attribute("origin").as_bool(false)},
-    mRandom(aSeed)
+    mRandom(aSeed),
+    mOrigin{mXmlParsedDoc.document_element().attribute("origin").as_bool(false)}
 {
 }
 

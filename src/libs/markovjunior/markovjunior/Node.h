@@ -67,7 +67,7 @@ class SequenceNode : public Node
 public:
     SequenceNode * parent = nullptr;
     std::vector<std::unique_ptr<Node>> nodes;
-    int mCurrentStep = 0;
+    unsigned int mCurrentStep = 0;
 
     SequenceNode() = default;
 
@@ -91,7 +91,6 @@ public:
         parent{aParent}
     {
         setupSequenceNode(this,
-            aParent,
             aXmlNode,
             parentSymmetry,
             aInterpreter,
@@ -117,7 +116,6 @@ public:
 
 protected:
     static void setupSequenceNode(SequenceNode * aSequenceNode,
-            SequenceNode * aParent,
             const pugi::xml_node & aXmlNode,
             const SymmetryGroup & parentSymmetry,
             Interpreter * aInterpreter,
@@ -132,7 +130,7 @@ protected:
 
         for (auto child : aXmlNode.children())
         {
-            aSequenceNode->nodes.push_back(std::move(createNode(aSequenceNode, child, symmetrySubgroup, aInterpreter, aGrid)));
+            aSequenceNode->nodes.push_back(createNode(aSequenceNode, child, symmetrySubgroup, aInterpreter, aGrid));
 
             if (aSequenceNode->nodes.back()->isSequenceNode())
             {

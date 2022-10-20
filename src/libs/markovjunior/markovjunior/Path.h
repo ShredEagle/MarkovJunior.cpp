@@ -15,7 +15,7 @@ namespace markovjunior {
 class Path : public Node
 {
 public:
-    Path(const pugi::xml_node & aXmlNode, const SymmetryGroup & aSymmetryGroup, Interpreter * aInterpreter, Grid * aGrid) :
+    Path(const pugi::xml_node & aXmlNode, const SymmetryGroup &, Interpreter * aInterpreter, Grid * aGrid) :
         Node(aInterpreter, aGrid),
         mInertia{aXmlNode.attribute("inertia").as_bool()},
         mLongest{aXmlNode.attribute("longest").as_bool()},

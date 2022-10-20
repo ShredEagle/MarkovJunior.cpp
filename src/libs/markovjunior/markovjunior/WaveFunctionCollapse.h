@@ -77,9 +77,9 @@ class WFCNode : public SequenceNode
         static constexpr std::array<int, 6> sDz = {0, 0, 0, 0, 1, -1};
 
         WFCNode(const pugi::xml_node & aXmlNode,
-                const SymmetryGroup & aParentSymmetry,
-                Interpreter * aInterpreter,
-                Grid * aGrid) :
+                const SymmetryGroup &,
+                Interpreter *,
+                Grid *) :
             SequenceNode(),
             mShannon{aXmlNode.attribute("shannon").as_bool(false)},
             mTries{aXmlNode.attribute("tries").as_int(1000)}
@@ -103,7 +103,7 @@ class WFCNode : public SequenceNode
             double threshold = r * sum;
             double partialSum = 0.;
 
-            for (int i = 0; i < aWeights.size(); i++)
+            for (unsigned int i = 0; i < aWeights.size(); i++)
             {
                 partialSum += aWeights.at(i);
                 if (partialSum >= threshold)

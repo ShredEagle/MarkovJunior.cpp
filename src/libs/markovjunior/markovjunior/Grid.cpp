@@ -5,14 +5,14 @@
 namespace ad {
 namespace markovjunior {
 Grid::Grid(const pugi::xml_node & aNode, const math::Size<3, int> & aSize) :
-        mSize{aSize},
         mState(aSize.width() * aSize.depth() * aSize.height(), 0),
         mStateBuffer(aSize.width() * aSize.depth() * aSize.height(), 0),
-        mMask(aSize.width() * aSize.depth() * aSize.height(), false)
+        mMask(aSize.width() * aSize.depth() * aSize.height(), false),
+        mSize{aSize}
 {
     std::string valuesString = aNode.attribute("values").as_string("");
     assert(!valuesString.empty());
-    for (int i = 0; i < valuesString.size(); i++)
+    for (unsigned int i = 0; i < valuesString.size(); i++)
     {
         mCharacters.push_back(valuesString.at(i));
         mValues.insert({valuesString.at(i), i});

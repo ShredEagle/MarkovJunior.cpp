@@ -22,7 +22,7 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
         const std::vector<unsigned char> & aState,
         int width)
 {
-    int maxIndex = std::distance(aAmounts.begin(), std::max_element(aAmounts.begin(), aAmounts.end()));
+    unsigned int maxIndex = std::distance(aAmounts.begin(), std::max_element(aAmounts.begin(), aAmounts.end()));
 
     math::Position<3, int> maxIndexPos{maxIndex % width, maxIndex / width, 0};
 
@@ -34,7 +34,7 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
 
     std::vector<std::tuple<const Rule *, int>> cover;
 
-    for (int i = 0; i < aTiles.size(); i++)
+    for (unsigned int i = 0; i < aTiles.size(); i++)
     {
         auto [rule, ruleIndex] = aTiles.at(i);
         if (aMask.at(i) && isInsideRule(maxIndexPos, rule, {ruleIndex % width, ruleIndex / width, 0}))
@@ -49,7 +49,7 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
 
         std::vector<int> intersecting;
 
-        for (int i = 0; i < aTiles.size(); i++)
+        for (unsigned int i = 0; i < aTiles.size(); i++)
         {
             if (aMask.at(i))
             {
@@ -89,7 +89,7 @@ allChildStates(const std::vector<unsigned char> & aState,
     std::vector<std::tuple<const Rule *, int>> tiles;
     std::vector<int> amounts(aState.size(), 0);
 
-    for (int i = 0; i < aState.size(); i++)
+    for (unsigned int i = 0; i < aState.size(); i++)
     {
         int x = i % aSize.width();
         int y = i / aSize.width();
@@ -288,7 +288,7 @@ runSearch(const std::vector<unsigned char> & aPresent,
           const math::Size<3, int> & aSize,
           int aCharacterSize,
           bool aAll,
-          int aLimit,
+          unsigned int aLimit,
           double aDepthCoefficient,
           int aSeed)
 {

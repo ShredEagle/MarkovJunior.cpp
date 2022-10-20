@@ -14,8 +14,8 @@ ConvChain::ConvChain(const pugi::xml_node & aXmlNode,
     mC1{mGrid->mValues.at(aXmlNode.attribute("white").as_string("")[0])},
     mSubstrateColor{
         mGrid->mValues.at(aXmlNode.attribute("on").as_string("")[0])},
-    mSteps{aXmlNode.attribute("steps").as_int(-1)},
-    mCounter{0}
+    mCounter{0},
+    mSteps{aXmlNode.attribute("steps").as_int(-1)}
 {
     if (mGrid->mSize.depth() > 1) {
         assert(false);
@@ -59,7 +59,7 @@ ConvChain::ConvChain(const pugi::xml_node & aXmlNode,
 
 bool ConvChain::run()
 {
-    if (mSteps > 0; mCounter >= mSteps) {
+    if (mSteps > 0 && mCounter >= mSteps) {
         return false;
     }
 
@@ -68,7 +68,7 @@ bool ConvChain::run()
     if (mCounter == 0) {
         bool anySubstrate = false;
 
-        for (int i = 0; i < mSubstrate.size(); i++) {
+        for (std::size_t i = 0; i < mSubstrate.size(); i++) {
             if (grid.mState.at(i) == mSubstrateColor) {
                 grid.mState.at(i) = mInterpreter->mRandom() % 2 == 0 ? mC0 : mC1;
                 mSubstrate.at(i) = true;
@@ -80,7 +80,7 @@ bool ConvChain::run()
         return anySubstrate;
     }
 
-    for (int i = 0; i < grid.mState.size(); i++) {
+    for (std::size_t i = 0; i < grid.mState.size(); i++) {
         int r = mInterpreter->mRandom() % grid.mState.size();
 
         if (!mSubstrate.at(r)) {

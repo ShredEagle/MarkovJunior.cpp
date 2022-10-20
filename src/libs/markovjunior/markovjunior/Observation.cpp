@@ -11,11 +11,11 @@ bool Observation::computeFutureSetPresent(std::vector<int> & aFuture,
 {
     std::vector<bool> mask(aObservations.size(), false);
 
-    for (int i = 0; i < aObservations.size(); i++) {
+    for (unsigned int i = 0; i < aObservations.size(); i++) {
         mask.at(i) = aObservations.at(i).mTo == -1;
     }
 
-    for (int i = 0; i < aState.size(); i++) {
+    for (unsigned int i = 0; i < aState.size(); i++) {
         unsigned char value = aState.at(i);
         const Observation obs = aObservations.at(value);
         mask.at(value) = true;
@@ -49,7 +49,7 @@ void Observation::computePotentials(std::vector<std::vector<int>> & aPotentials,
     for (unsigned char c = 0; c < aPotentials.size(); c++) {
         std::vector<int> potentialField = aPotentials.at(c);
 
-        for (int i = 0; i < potentialField.size(); i++) {
+        for (unsigned int i = 0; i < potentialField.size(); i++) {
             if (potentialField.at(i) == 0) {
                 posQueue.emplace(
                     c, math::Position<3, int>{
@@ -69,7 +69,7 @@ void Observation::computePotentials(std::vector<std::vector<int>> & aPotentials,
         int flatIndex = getFlatIndex(pos, aSize);
         int potentialValue = aPotentials.at(value).at(flatIndex);
 
-        for (int ruleIndex = 0; ruleIndex < aRules.size(); ruleIndex++) {
+        for (unsigned int ruleIndex = 0; ruleIndex < aRules.size(); ruleIndex++) {
             std::vector<bool> & ruleMask = matchMask.at(ruleIndex);
 
             const Rule & rule = aRules.at(ruleIndex);
