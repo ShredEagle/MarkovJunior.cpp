@@ -53,9 +53,9 @@ void Observation::computePotentials(std::vector<std::vector<int>> & aPotentials,
             if (potentialField.at(i) == 0) {
                 posQueue.emplace(
                     c, math::Position<3, int>{
-                           i % aSize.width(),
-                           (i % (aSize.width() * aSize.height())) / aSize.width(),
-                           i / (aSize.width() * aSize.height())});
+                           static_cast<int>(i % aSize.width()),
+                           static_cast<int>((i % (aSize.width() * aSize.height())) / aSize.width()),
+                           static_cast<int>(i / (aSize.width() * aSize.height()))});
             }
         }
     }

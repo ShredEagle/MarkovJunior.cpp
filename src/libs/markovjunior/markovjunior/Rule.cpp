@@ -157,7 +157,7 @@ std::tuple<std::vector<unsigned char>, math::Size<3, int>> Rule::parsePatternStr
 {
     std::vector<std::vector<std::string>> lines = splitPatternString(aPatternString);
     math::Size<3, int> patternSize{
-        lines.at(0).at(0).length(),
+        static_cast<int>(lines.at(0).at(0).length()),
         static_cast<int>(lines.at(0).size()),
         static_cast<int>(lines.size())
     };
