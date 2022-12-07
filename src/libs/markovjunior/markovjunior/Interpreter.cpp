@@ -58,7 +58,7 @@ void Interpreter::runStep()
 {
     mCurrentBranch->run();
     mCounter++;
-    mFirst.push_back(mChanges.size());
+    mFirst.push_back(static_cast<int>(mChanges.size()));
 }
 }
 }

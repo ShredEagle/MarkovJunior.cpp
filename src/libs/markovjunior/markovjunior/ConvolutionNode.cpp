@@ -122,7 +122,8 @@ bool ConvolutionNode::run()
         unsigned char input = grid.mState.at(i);
 
         for (ConvolutionRule rule : mRules) {
-            mInterpreter->mRandom();
+            // TODO: check if this is necessary
+            mInterpreter->mRandom.discard(1);
             if (input == rule.mInput && rule.mOutput != grid.mState.at(i)
                 && mInterpreter->mProbabilityDistribution(mInterpreter->mRandom)
                        < rule.mProbability) {

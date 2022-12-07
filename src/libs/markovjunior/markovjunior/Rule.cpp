@@ -149,7 +149,7 @@ Rule::Rule(const pugi::xml_node & aXmlNode, const Grid & aGridIn, const Grid & a
 
     mP = aXmlNode.attribute("p").as_double(1.0);
 
-    setupShifts(aGridIn.mCharacters.size());
+    setupShifts(static_cast<int>(aGridIn.mCharacters.size()));
 }
 
 std::tuple<std::vector<unsigned char>, math::Size<3, int>> Rule::parsePatternString(
@@ -158,8 +158,8 @@ std::tuple<std::vector<unsigned char>, math::Size<3, int>> Rule::parsePatternStr
     std::vector<std::vector<std::string>> lines = splitPatternString(aPatternString);
     math::Size<3, int> patternSize{
         lines.at(0).at(0).length(),
-        lines.at(0).size(),
-        lines.size()
+        static_cast<int>(lines.at(0).size()),
+        static_cast<int>(lines.size())
     };
     std::vector<unsigned char> result;
 

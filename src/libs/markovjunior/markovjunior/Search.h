@@ -30,7 +30,8 @@ struct Board
         double result = aDepthCoefficient < 0. ? 1000. - mDepth
                                                : mForwardEstimate + mBackwardEstimate
                                                      + 2. * aDepthCoefficient * mDepth;
-        aRandom();
+        // TODO: check if this is necessary
+        aRandom.discard(1);
         return result + 0.0001 * std::uniform_real_distribution<double>{}(aRandom);
     }
 

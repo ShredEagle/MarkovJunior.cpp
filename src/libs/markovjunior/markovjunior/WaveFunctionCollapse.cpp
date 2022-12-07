@@ -33,13 +33,13 @@ void Wave::init(const Propagator & aPropagator,
         mEntropies.reserve(mData.size());
     }
 
-    int p = mData.at(0).size();
+    int p = static_cast<int>(mData.at(0).size());
 
     for (unsigned int i = 0; i < mData.size(); i++) {
         for (int j = 0; j < p; j++) {
             mData.at(i).at(j) = true;
             for (unsigned int k = 0; k < aPropagator.size(); k++) {
-                mCompatible.at(i).at(j).at(k) = aPropagator.at(sOpposite.at(k)).at(j).size();
+                mCompatible.at(i).at(j).at(k) = static_cast<int>(aPropagator.at(sOpposite.at(k)).at(j).size());
             }
         }
 
@@ -87,7 +87,7 @@ void WFCNode::setupWFCNode(const pugi::xml_node & aXmlNode,
                            Interpreter * aInterpreter,
                            Grid * aGrid)
 {
-    mWave.setupWave(aGrid->mState.size(), mP, mPropagator.size(), mShannon);
+    mWave.setupWave(static_cast<int>(aGrid->mState.size()), mP, static_cast<int>(mPropagator.size()), mShannon);
     mStartWave = mWave;
 
     if (mShannon) {
@@ -238,12 +238,12 @@ std::optional<int> WFCNode::getGoodSeed()
 {
     for (int i = 0; i < mTries; i++) {
         int observationSoFar = 0;
-        int seed = mInterpreter->mRandom();
+        int seed = static_cast<int>(mInterpreter->mRandom());
         mLocalRandom = std::mt19937(seed);
 
         mStack = std::stack<std::pair<int, int>>();
 
-        mWave.copyFrom(mStartWave, mPropagator.size(), mShannon);
+        mWave.copyFrom(mStartWave, static_cast<int>(mPropagator.size()), mShannon);
 
         while (true) {
             int node = nextUnobservedNode();
@@ -281,7 +281,7 @@ bool WFCNode::run()
                 std::vector<bool> boolStartWave = mMap.at(value);
                 for (int j = 0; j < mP; j++) {
                     if (!boolStartWave.at(j)) {
-                        ban(i, j);
+                        ban(static_cast<int>(i), j);
                     }
                 }
             }
@@ -293,7 +293,7 @@ bool WFCNode::run()
             return false;
         }
 
-        mStartWave.copyFrom(mWave, mPropagator.size(), mShannon);
+        mStartWave.copyFrom(mWave, static_cast<int>(mPropagator.size()), mShannon);
 
         std::optional<int> goodseed = getGoodSeed();
         if (!goodseed) {

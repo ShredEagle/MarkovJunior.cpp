@@ -97,7 +97,7 @@ class Observation
 
                 if ((f & 1) == 1 && potential >= 0 && potential < min) {
                     min = potential;
-                    argmin = c;
+                    argmin = static_cast<int>(c);
                 }
             }
 

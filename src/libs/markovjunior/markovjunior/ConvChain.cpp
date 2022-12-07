@@ -32,7 +32,7 @@ ConvChain::ConvChain(const pugi::xml_node & aXmlNode,
 
     mSubstrate = std::vector<bool>(mGrid->mState.size());
 
-    mWeights = std::vector<double>(1 << (mN * mN), 0.);
+    mWeights = std::vector<double>((std::size_t)1 << (mN * mN), 0.);
     for (int y = 0; y < size.height(); y++) {
         for (int x = 0; x < size.width(); x++) {
             std::vector<bool> patternResult = createPattern<bool>(

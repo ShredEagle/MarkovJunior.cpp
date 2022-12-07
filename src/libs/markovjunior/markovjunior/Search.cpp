@@ -22,9 +22,9 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
         const std::vector<unsigned char> & aState,
         int width)
 {
-    unsigned int maxIndex = std::distance(aAmounts.begin(), std::max_element(aAmounts.begin(), aAmounts.end()));
+    std::size_t maxIndex = std::distance(aAmounts.begin(), std::max_element(aAmounts.begin(), aAmounts.end()));
 
-    math::Position<3, int> maxIndexPos{maxIndex % width, maxIndex / width, 0};
+    math::Position<3, int> maxIndexPos{static_cast<int>(maxIndex) % width, static_cast<int>(maxIndex) / width, 0};
 
     if (maxIndex == aAmounts.size())
     {
@@ -60,7 +60,7 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
                             otherRule,
                             {otherRuleIndex % width, otherRuleIndex / width, 0}))
                 {
-                    intersecting.push_back(i);
+                    intersecting.push_back(static_cast<int>(i));
                 }
             }
         }
@@ -91,8 +91,8 @@ allChildStates(const std::vector<unsigned char> & aState,
 
     for (unsigned int i = 0; i < aState.size(); i++)
     {
-        int x = i % aSize.width();
-        int y = i / aSize.width();
+        int x = static_cast<int>(i) % aSize.width();
+        int y = static_cast<int>(i) / aSize.width();
 
         for (const Rule & rule : aRules)
         {

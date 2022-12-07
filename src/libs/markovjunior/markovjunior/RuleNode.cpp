@@ -59,7 +59,7 @@ RuleNode::RuleNode(const pugi::xml_node & aXmlNode,
         for (const pugi::xpath_node & node : xmlObservationsNode) {
             unsigned char value =
                 grid.mValues.at(node.node().attribute("value").as_string()[0]);
-            std::string character(1, grid.mCharacters.at(value));
+            std::string character(1, static_cast<char>(grid.mCharacters.at(value)));
             mObservations.at(value) =
                 Observation(node.node().attribute("from").as_string(character.c_str())[0],
                             node.node().attribute("to").as_string(), grid);
@@ -97,8 +97,8 @@ bool RuleNode::run()
                 int maxTries = mLimit < 0 ? 1 : 20;
                 for (int k = 0; k < maxTries && mTrajectory.size() == 0; k++) {
                     mTrajectory = runSearch(grid.mState, mFuture, mRules, grid.mSize,
-                                            grid.mCharacters.size(), mAllSearch, mLimit,
-                                            mDepthCoefficient, mInterpreter->mRandom());
+                                            static_cast<int>(grid.mCharacters.size()), mAllSearch, mLimit,
+                                            mDepthCoefficient, static_cast<int>(mInterpreter->mRandom()));
                 }
 
                 if (mTrajectory.size() == 0) {
@@ -138,7 +138,7 @@ bool RuleNode::run()
 
                     if (!ruleMask.at(shiftIndex)
                         && grid.matchPatternAtPosition(rule, matchPos)) {
-                        addMatch(ruleIndex, matchPos, ruleMask);
+                        addMatch(static_cast<int>(ruleIndex), matchPos, ruleMask);
                     }
                 }
             }
@@ -173,7 +173,7 @@ bool RuleNode::run()
                             }
 
                             if (grid.matchPatternAtPosition(rule, matchPos)) {
-                                addMatch(ruleIndex, matchPos, ruleMask);
+                                addMatch(static_cast<int>(ruleIndex), matchPos, ruleMask);
                             }
                         }
                     }
@@ -210,7 +210,7 @@ bool RuleNode::run()
 std::ostream & operator<<(std::ostream & os, const RuleNode & aRuleNode)
 {
     int ruleIndex = 0;
-    for (auto rule : aRuleNode.mRules) {
+    for (const auto & rule : aRuleNode.mRules) {
         os << ruleIndex++ << " : " << std::endl << rule;
     }
 
