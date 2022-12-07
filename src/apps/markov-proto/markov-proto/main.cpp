@@ -183,12 +183,12 @@ int main()
         ImGui::Text("Frame duration");
         std::chrono::duration<double, std::milli> time{endStep - startStep};
         std::ostringstream oStep;
-        oStep << time;
+        oStep << time.count();
         ImGui::Text("%s", oStep.str().c_str());
         ImGui::Text("Simul duration");
         std::chrono::duration<double, std::milli> simulTime{endTime - startTime};
         std::ostringstream oSimul;
-        oSimul << simulTime;
+        oSimul << simulTime.count();
         ImGui::Text("%s", oSimul.str().c_str());
         if (ImGui::Button("Restart")) {
             startTime = std::chrono::high_resolution_clock::now();
