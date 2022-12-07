@@ -59,7 +59,7 @@ inline std::vector<int> splitIntervals(const std::string & aString)
             unsigned char min = std::stoi(bounds.at(0)); 
             unsigned char max = std::stoi(bounds.at(1)); 
 
-            for (unsigned int i = 0; i < max - min + 1; i++)
+            for (unsigned int i = 0; i < (unsigned int)1 + max - min; i++)
             {
                 result.push_back(min + i);
             }
