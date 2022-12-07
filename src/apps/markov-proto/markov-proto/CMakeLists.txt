@@ -11,16 +11,9 @@ add_executable(${TARGET_NAME}
     ${${TARGET_NAME}_SOURCES}
     ${${TARGET_NAME}_HEADERS})
 
-# target_compile_options(${TARGET_NAME}
-#     PRIVATE "-O2")
+cmc_cpp_all_warnings_as_errors(${TARGET_NAME} ENABLED ${BUILD_CONF_WarningAsError})
 
-# target_compile_options(${TARGET_NAME}
-#      PRIVATE "-O2")
-
- target_compile_options(${TARGET_NAME}
-     PRIVATE "-fno-omit-frame-pointer" "-g" "-fsanitize=leak" "-Wall" "-Wextra" "-fsanitize=address" "-fsanitize=undefined")
- target_link_options(${TARGET_NAME}
-     PRIVATE "-fsanitize=address" "-fsanitize=leak" "-fsanitize=undefined")
+cmc_cpp_sanitizer(${TARGET_NAME} ${BUILD_CONF_Sanitizer})
 
 find_package(Graphics REQUIRED CONFIG COMPONENTS graphics imguiui)
 
