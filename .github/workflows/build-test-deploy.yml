@@ -13,9 +13,8 @@ jobs:
       # Disable macOS
       # apple-clang 13 is being a little itch with deduction guides for template aliases.
       os: >-
-        ["ubuntu-20.04", "windows-2019"]
+        ["ubuntu-20.04", "windows-2022"]
       deployrecipe_userchannel: adnn/develop
-      step_conancache: false
       step_runtests: false
     secrets:
       SHREDROBOT_GITHUB_TOKEN: ${{ secrets.SHREDROBOT_GITHUB_TOKEN }}
