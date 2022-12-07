@@ -64,6 +64,10 @@ add_custom_target(${TARGET_NAME}_IDE
 
 cmc_target_current_include_directory(${TARGET_NAME})
 
+cmc_cpp_all_warnings_as_errors(${TARGET_NAME} ENABLED ${BUILD_CONF_WarningAsError})
+
+cmc_cpp_sanitizer(${TARGET_NAME} ${BUILD_CONF_Sanitizer})
+
 
 ##
 ## Dependencies
@@ -71,16 +75,6 @@ cmc_target_current_include_directory(${TARGET_NAME})
 
 cmc_find_dependencies(FILE CMakeFinds.cmake.in)
 
-# target_compile_options(${TARGET_NAME}
-#     PRIVATE "-O2")
-
-# target_compile_options(${TARGET_NAME}
-#      PRIVATE "-O2")
-
- target_compile_options(${TARGET_NAME}
-     PRIVATE "-g" "-fsanitize=leak" "-Wall" "-Wextra" "-fsanitize=address" "-fsanitize=undefined")
- target_link_options(${TARGET_NAME}
-     PRIVATE "-fsanitize=address" "-fsanitize=leak" "-fsanitize=undefined")
 
 target_link_libraries(${TARGET_NAME}
     PUBLIC
