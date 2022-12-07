@@ -7,7 +7,7 @@ from os import getcwd
 
 
 class MarkovJuniorConan(ConanFile):
-    name = "MarkovJunior"
+    name = "MarkovJunior.cpp"
     license = "MIT"
     author = "FranzPoize"
     url = "https://github.com/Shreadeagle/MarkovJunior.cpp"
