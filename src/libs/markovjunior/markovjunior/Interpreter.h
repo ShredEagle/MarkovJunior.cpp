@@ -2,6 +2,7 @@
 #include "Node.h"
 #include "SymmetryUtils.h"
 #include "Grid.h"
+#include "resource/ResourceLocator.h"
 
 #include <platform/Filesystem.h>
 #include <math/Vector.h>
@@ -23,11 +24,13 @@ class Interpreter
 {
     public:
         Interpreter(
-                const filesystem::path & aPath,
+                const filesystem::path & aAssetRoot,
+                const filesystem::path & aRelativePath,
                 const math::Size<3, int> & aSize,
                 const int aSeed
                 );
         Interpreter(
+                const filesystem::path & aAssetRoot,
                 std::shared_ptr<std::istream> aSteam,
                 const math::Size<3, int> & aSize,
                 const int aSeed
@@ -36,6 +39,8 @@ class Interpreter
         void setup();
         void runStep();
 
+        // TODO: in the future this should not exist
+        const resource::ResourceLocator mResourceLocator;
         pugi::xml_document mXmlParsedDoc;
         SymmetryGroup mGlobalSymmetryGroup;
         Grid mGrid;

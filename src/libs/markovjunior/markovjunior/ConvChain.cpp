@@ -23,7 +23,7 @@ ConvChain::ConvChain(const pugi::xml_node & aXmlNode,
 
     std::string name = aXmlNode.attribute("sample").as_string();
     auto [samples, size] = loadConvChainSample(
-        gResourceLocator.pathFor("assets/resources/" + name + ".png"));
+        aInterpreter->mResourceLocator.pathFor("assets/resources/" + name + ".png"));
 
     mSample.reserve(samples.size());
     for (auto s : samples) {

@@ -4,9 +4,11 @@ namespace ad {
 namespace markovjunior {
 
 Interpreter::Interpreter(
+        const filesystem::path & aAssetRoot,
         std::shared_ptr<std::istream> aStream,
         const math::Size<3, int> & aSize,
         const int aSeed) :
+    mResourceLocator(aAssetRoot),
     mXmlParsedDoc{streamToXmlParsedDoc(*aStream)},
     mGlobalSymmetryGroup(
             getSymmetry(
@@ -27,11 +29,14 @@ Interpreter::Interpreter(
 }
 
 Interpreter::Interpreter(
-        const filesystem::path & aPath,
+        const filesystem::path & aAssetRoot,
+        const filesystem::path & aRelativePath,
         const math::Size<3, int> & aSize,
-        const int aSeed) :
+        const int aSeed
+        ) :
     Interpreter(
-            std::make_shared<std::ifstream>(aPath.string()),
+            aAssetRoot,
+            std::make_shared<std::ifstream>(aAssetRoot / aRelativePath),
             aSize,
             aSeed
             )
