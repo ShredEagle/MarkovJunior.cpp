@@ -3,6 +3,7 @@
 #include "markovjunior/Rule.h"
 #include "Node.h"
 
+#include <imgui.h>
 #include <math/Vector.h>
 #include <pugixml.hpp>
 
@@ -45,6 +46,8 @@ class Map : public SequenceNode
         SequenceNode::reset();
         mCurrentStep = -1;
     }
+
+    void debugRender() override { ImGui::Text("map"); }
 
     Scale mScale;
     Grid mNewGrid;

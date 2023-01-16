@@ -8,6 +8,8 @@
 #include "markovjunior/ParallelNode.h"
 #include "markovjunior/Path.h"
 
+#include <imgui.h>
+
 #include <handy/Crc.h>
 
 namespace ad {
@@ -115,6 +117,17 @@ bool SequenceNode::run()
     reset();
 
     return false;
+}
+
+void SequenceNode::debugRender()
+{
+    ImGui::Text("Sequence");
+    ImGui::TreePush();
+    for (auto & node : nodes)
+    {
+        node->debugRender();
+    }
+    ImGui::TreePop();
 }
 
 }

@@ -37,6 +37,8 @@ class ConvChain : public Node
 
     bool run() override;
 
+    void debugRender() override;
+
     int mN;
     double mTemperature;
     std::vector<double> mWeights;

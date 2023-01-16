@@ -197,6 +197,7 @@ int main()
                 ad::math::Size<3, int>{gSize, gSize, 1}, gSeed);
             interpreter->setup();
         }
+        interpreter->mRoot->debugRender();
         ImGui::End();
         ImGui::ShowDemoWindow();
 

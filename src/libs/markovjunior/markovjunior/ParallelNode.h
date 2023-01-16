@@ -2,6 +2,7 @@
 
 #include "RuleNode.h"
 #include "Interpreter.h"
+#include <imgui.h>
 #include <random>
 
 namespace ad {
@@ -21,6 +22,8 @@ public:
     void addMatch(const int ruleIndex, const math::Position<3, int> & aMatchPosition, std::vector<bool> & aMatchMask) override;
 
     bool run() override;
+
+    void debugRender() override { ImGui::Text("parallel"); }
 
     std::vector<unsigned char> mNewState;
 };

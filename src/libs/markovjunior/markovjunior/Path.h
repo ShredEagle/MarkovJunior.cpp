@@ -4,6 +4,7 @@
 
 #include "Interpreter.h"
 
+#include <imgui.h>
 #include <math/Vector.h>
 #include <pugixml.hpp>
 #include <queue>
@@ -34,6 +35,9 @@ public:
     {}
 
     bool run() override;
+
+    void debugRender() override { ImGui::Text("path"); }
+
     math::Vec<3, int> getDirection(
             const math::Position<3, int> & aPos,
             const math::Vec<3, int> & aDirection,

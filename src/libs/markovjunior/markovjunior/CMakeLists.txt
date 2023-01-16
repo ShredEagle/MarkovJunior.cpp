@@ -83,6 +83,7 @@ target_link_libraries(${TARGET_NAME}
         ad::math
         ad::handy
         ad::arte
+        ad::imguiui
         pugixml::pugixml
 )
 
