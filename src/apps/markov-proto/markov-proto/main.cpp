@@ -30,7 +30,7 @@ constexpr float gMarkovDrawSize = 800.f;
 inline std::mt19937
     randomSeedgenerator(std::chrono::system_clock::now().time_since_epoch().count());
 inline int gSeed = randomSeedgenerator();
-inline int gSize = 19;
+inline int gSize = 29;
 inline int gSteps = 1;
 inline ad::filesystem::path filename{"snaclvl.xml"};
 
