@@ -32,7 +32,7 @@ inline std::mt19937
 inline int gSeed = randomSeedgenerator();
 inline int gSize = 19;
 inline int gSteps = 1;
-inline ad::filesystem::path filename{"assets/pacman_level.xml"};
+inline ad::filesystem::path filename{"snaclvl.xml"};
 
 inline ApplicationGlfw application{"Markovjunior", gWindowSize,
                                    ApplicationFlag::Window_Keep_Ratio};
@@ -118,7 +118,7 @@ inline void callbackKeyboard(int key, int , int action, int)
 int main()
 {
     std::shared_ptr<Interpreter> interpreter =
-        std::make_shared<Interpreter>(gResourceLocator.pathFor(filename),
+        std::make_shared<Interpreter>("/home/franz/gamedev/snac-assets/markov", filename,
                                       ad::math::Size<3, int>{gSize, gSize, 1}, gSeed);
 
     interpreter->setup();
@@ -130,7 +130,7 @@ int main()
     TrivialShaping shapes{application.getAppInterface()->getWindowSize()};
 
     ad::math::Rectangle<GLfloat> viewed = getViewedRectangle(
-        {0., 0.},
+        {0.f, 0.f},
         ad::math::getRatio<GLfloat>(application.getAppInterface()->getWindowSize()));
 
     setViewedRectangle(shapes, viewed);
@@ -192,8 +192,7 @@ int main()
         ImGui::Text("%s", oSimul.str().c_str());
         if (ImGui::Button("Restart")) {
             startTime = std::chrono::high_resolution_clock::now();
-            interpreter = std::make_shared<Interpreter>(
-                gResourceLocator.pathFor(filename),
+            interpreter = std::make_shared<Interpreter>("/home/franz/snac-assets/markov", filename,
                 ad::math::Size<3, int>{gSize, gSize, 1}, gSeed);
             interpreter->setup();
         }
