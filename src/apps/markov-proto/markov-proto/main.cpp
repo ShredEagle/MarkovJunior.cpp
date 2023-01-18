@@ -28,7 +28,7 @@ using namespace ad::graphics;
 constexpr ad::graphics::Size2<int> gWindowSize{1400, 800};
 constexpr float gMarkovDrawSize = 800.f;
 inline std::mt19937
-    randomSeedgenerator(std::chrono::system_clock::now().time_since_epoch().count());
+    randomSeedgenerator((std::uint32_t)std::chrono::system_clock::now().time_since_epoch().count());
 inline int gSeed = randomSeedgenerator();
 inline int gSize = 29;
 inline int gSteps = 1;
@@ -161,7 +161,8 @@ int main()
 
         ImGui::SetNextWindowPos(ImVec2(gMarkovDrawSize + 10, 10), ImGuiCond_Always);
         ImGui::SetNextWindowSize(
-            ImVec2(gWindowSize.width() - gMarkovDrawSize - 20, gWindowSize.height() - 20),
+            ImVec2((float)(gWindowSize.width() - gMarkovDrawSize - 20),
+                   (float)(gWindowSize.height() - 20)),
             ImGuiCond_Once);
         ImGui::Begin("haha");
         if (ImGui::Button("Play")) {
