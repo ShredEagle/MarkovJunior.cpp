@@ -43,7 +43,7 @@ void Rule::setupShifts(int aCount)
             }
         }
     }
-    
+
 
     if (mInputSize == mOutputSize)
     {
@@ -200,7 +200,7 @@ Rule Rule::reflect()
         {
             for (int x = 0; x < mInputSize.width(); x++)
             {
-                newInputs.at(getFlatIndex({x, y, z}, mInputSize)) = 
+                newInputs.at(getFlatIndex({x, y, z}, mInputSize)) =
                     mInputs.at(getFlatIndex({mInputSize.width() - 1 - x, y, z}, mInputSize));
             }
         }
@@ -213,13 +213,13 @@ Rule Rule::reflect()
         {
             for (int x = 0; x < mOutputSize.width(); x++)
             {
-                newOutputs.at(getFlatIndex({x, y, z}, mOutputSize)) = 
+                newOutputs.at(getFlatIndex({x, y, z}, mOutputSize)) =
                     mOutputs.at(getFlatIndex({mOutputSize.width() - 1 - x, y, z}, mOutputSize));
             }
         }
     }
 
-    return Rule(newInputs, mInputSize, newOutputs, mOutputSize, mInputShifts.size(), mP);
+    return Rule(newInputs, mInputSize, newOutputs, mOutputSize, (int)mInputShifts.size(), mP);
 }
 
 Rule Rule::rotate()
@@ -234,7 +234,7 @@ Rule Rule::rotate()
                 newInputs.at(
                         getFlatIndex({x, y, z}, {
                             mInputSize.height(), mInputSize.width(), mInputSize.depth()
-                        })) = 
+                        })) =
                     mInputs.at(
                             getFlatIndex({mInputSize.width() - 1 - y, x, z},
                             mInputSize));
@@ -252,7 +252,7 @@ Rule Rule::rotate()
                 newOutputs.at(
                         getFlatIndex({x, y, z}, {
                             mOutputSize.height(), mOutputSize.width(), mOutputSize.depth()
-                        })) = 
+                        })) =
                     mOutputs.at(
                             getFlatIndex({mOutputSize.width() - 1 - y, x, z},
                             mOutputSize));
@@ -260,7 +260,7 @@ Rule Rule::rotate()
         }
     }
 
-    return Rule(newInputs, 
+    return Rule(newInputs,
             {
                 mInputSize.height(),
                 mInputSize.width(),
@@ -270,7 +270,9 @@ Rule Rule::rotate()
                 mOutputSize.height(),
                 mOutputSize.width(),
                 mOutputSize.depth()
-            }, mInputShifts.size(), mP);
+            },
+            (int)mInputShifts.size(),
+            mP);
 }
 
 bool Rule::operator==(const Rule & aRhs) const

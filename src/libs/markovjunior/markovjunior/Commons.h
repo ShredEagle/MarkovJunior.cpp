@@ -56,8 +56,8 @@ inline std::vector<int> splitIntervals(const std::string & aString)
         if (interval.find('.') != std::string::npos)
         {
             std::vector<std::string> bounds = splitString(interval, "..");
-            unsigned char min = std::stoi(bounds.at(0)); 
-            unsigned char max = std::stoi(bounds.at(1)); 
+            unsigned char min = std::stoi(bounds.at(0));
+            unsigned char max = std::stoi(bounds.at(1));
 
             for (unsigned int i = 0; i < (unsigned int)1 + max - min; i++)
             {
@@ -100,12 +100,22 @@ struct SamplePattern : public std::vector<T_sampleType>
 
     SamplePattern<T_sampleType> rotate()
     {
-        std::vector<T_sampleType> result = createPattern<T_sampleType>([&](int x, int y) { return this->at(std::sqrt(this->size()) - 1 - y + x * std::sqrt(this->size()));}, std::sqrt(this->size()));
+        std::vector<T_sampleType> result = createPattern<T_sampleType>(
+            [&](int x, int y)
+            {
+                return this->at((unsigned int)std::sqrt(this->size()) - 1 - y + x * (unsigned int)std::sqrt(this->size()));
+            },
+            (int)std::sqrt(this->size()));
         return SamplePattern<T_sampleType>(result.begin(), result.end());
     }
     SamplePattern<T_sampleType> reflect()
     {
-        std::vector<T_sampleType> result = createPattern<T_sampleType>([&](int x, int y) { return this->at(std::sqrt(this->size()) - 1 - x + y * std::sqrt(this->size()));}, std::sqrt(this->size()));
+        std::vector<T_sampleType> result = createPattern<T_sampleType>(
+            [&](int x, int y)
+            {
+                return this->at((unsigned int)std::sqrt(this->size()) - 1 - x + y * (unsigned int)std::sqrt(this->size()));
+            },
+            (int)std::sqrt(this->size()));
         return SamplePattern<T_sampleType>(result.begin(), result.end());
     }
     int index()

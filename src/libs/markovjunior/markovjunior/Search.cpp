@@ -376,7 +376,7 @@ runSearch(const std::vector<unsigned char> & aPresent,
 
                 database.emplace_back(childState, parentIndex, database.at(parentIndex).mDepth + 1, childBackwardEstimate, childForwardEstimate);
                 Board & childBoard = database.back();
-                int childIndex = database.size() - 1;
+                int childIndex = (int)database.size() - 1;
                 visited.emplace(childBoard.mState, childIndex);
                 //printState(std::vector<int>(childBoard.mState.begin(), childBoard.mState.end()), aSize);
 
