@@ -1,24 +1,20 @@
 name: Build, test, deploy recipe
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - develop
-      - master
 
 jobs:
-  build-test-deployrecipe:
-    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.4.1
+  build:
+    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.5.0
     with:
-      # Disable macOS
-      # apple-clang 13 is being a little itch with deduction guides for template aliases.
       os: >-
-        ["ubuntu-20.04", "windows-2022"]
+        ["ubuntu-22.04", "windows-2022"]
       deployrecipe_userchannel: adnn/develop
-      step_runtests: false
     secrets:
       SHREDROBOT_GITHUB_TOKEN: ${{ secrets.SHREDROBOT_GITHUB_TOKEN }}
       ACTION_CACHENAME: ${{ secrets.ACTION_CACHENAME }}
       CONAN_USER_NAME: ${{ secrets.CONAN_USER_NAME }}
       CONAN_USER_PASSWORD: ${{ secrets.CONAN_USER_PASSWORD }}
-
