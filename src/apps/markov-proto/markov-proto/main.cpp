@@ -218,6 +218,7 @@ int main()
         shapes.updateInstances(rectangles);
         shapes.render();
         debugUi.render();
+        debugUi.renderBackend();
     }
 
     // std::cout << interpreter.mGrid;
