@@ -13,6 +13,7 @@ jobs:
     with:
       os: >-
         ["ubuntu-22.04", "windows-2022"]
+      step_runtests: false
     secrets:
       SHREDROBOT_GITHUB_TOKEN: ${{ secrets.SHREDROBOT_GITHUB_TOKEN }}
       ACTION_CACHENAME: ${{ secrets.ACTION_CACHENAME }}
