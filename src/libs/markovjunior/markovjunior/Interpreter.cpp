@@ -41,6 +41,7 @@ Interpreter::Interpreter(
             aSeed
             )
 {
+    // FIX: Check size is not 0
 }
 
 void Interpreter::setup()
