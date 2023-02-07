@@ -1,8 +1,21 @@
-#include "Search.h"
+// We need map to be included first because we want
+// to ignore the warning just for the map include
+// and otherwise it will be imported by Searhc.h
+#if defined(__GNUC__) && !defined(__llvm__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overread"
+#endif
+
+#include <map>
+
+#if defined(__GNUC__) && !defined(__llvm__)
+#pragma GCC diagnostic pop
+#endif
 
 #include "Constants.h"
 #include "Observation.h"
 #include "Rule.h"
+#include "Search.h"
 
 #include <iostream>
 #include <list>
@@ -13,17 +26,20 @@
 namespace ad {
 namespace markovjunior {
 
-void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
-        std::vector<std::tuple<const Rule *, int>> & aSolution,
-        const std::vector<std::tuple<const Rule *, int>> & aTiles,
-        std::vector<int> & aAmounts,
-        std::vector<bool> & aMask,
-        const std::vector<unsigned char> & aState,
-        int width)
+void enumerateSolution(
+    std::vector<std::vector<unsigned char>> & aChildren,
+    std::vector<std::tuple<const Rule *, int>> & aSolution,
+    const std::vector<std::tuple<const Rule *, int>> & aTiles,
+    std::vector<int> & aAmounts,
+    std::vector<bool> & aMask,
+    const std::vector<unsigned char> & aState,
+    int width)
 {
-    std::size_t maxIndex = std::distance(aAmounts.begin(), std::max_element(aAmounts.begin(), aAmounts.end()));
+    std::size_t maxIndex = std::distance(
+        aAmounts.begin(), std::max_element(aAmounts.begin(), aAmounts.end()));
 
-    math::Position<3, int> maxIndexPos{static_cast<int>(maxIndex) % width, static_cast<int>(maxIndex) / width, 0};
+    math::Position<3, int> maxIndexPos{static_cast<int>(maxIndex) % width,
+                                       static_cast<int>(maxIndex) / width, 0};
 
     if (maxIndex == aAmounts.size())
     {
@@ -36,13 +52,15 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
     for (unsigned int i = 0; i < aTiles.size(); i++)
     {
         auto [rule, ruleIndex] = aTiles.at(i);
-        if (aMask.at(i) && isInsideRule(maxIndexPos, rule, {ruleIndex % width, ruleIndex / width, 0}))
+        if (aMask.at(i)
+            && isInsideRule(maxIndexPos, rule,
+                            {ruleIndex % width, ruleIndex / width, 0}))
         {
             cover.emplace_back(rule, ruleIndex);
         }
     }
 
-    for(auto [rule, ruleIndex] : cover)
+    for (auto [rule, ruleIndex] : cover)
     {
         aSolution.emplace_back(rule, ruleIndex);
 
@@ -54,10 +72,10 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
             {
                 auto [otherRule, otherRuleIndex] = aTiles.at(i);
 
-                if (overlap(rule,
-                            {ruleIndex % width, ruleIndex / width, 0},
-                            otherRule,
-                            {otherRuleIndex % width, otherRuleIndex / width, 0}))
+                if (overlap(
+                        rule, {ruleIndex % width, ruleIndex / width, 0},
+                        otherRule,
+                        {otherRuleIndex % width, otherRuleIndex / width, 0}))
                 {
                     intersecting.push_back(static_cast<int>(i));
                 }
@@ -69,7 +87,8 @@ void enumerateSolution(std::vector<std::vector<unsigned char>> & aChildren,
             setMaskAnIncrement(false, i, aTiles, aAmounts, aMask, width);
         }
 
-        enumerateSolution(aChildren, aSolution, aTiles, aAmounts, aMask, aState, width);
+        enumerateSolution(aChildren, aSolution, aTiles, aAmounts, aMask, aState,
+                          width);
 
         for (int i : intersecting)
         {
@@ -114,15 +133,16 @@ allChildStates(const std::vector<unsigned char> & aState,
     std::vector<std::tuple<const Rule *, int>> solution;
 
     std::vector<std::vector<unsigned char>> result;
-    enumerateSolution(result, solution, tiles, amounts, mask, aState, aSize.width());
-    
+    enumerateSolution(result, solution, tiles, amounts, mask, aState,
+                      aSize.width());
+
     return result;
 }
 
 std::vector<std::vector<unsigned char>>
 oneChildStates(const std::vector<unsigned char> & aState,
-        math::Size<3, int> aSize,
-        const std::vector<Rule> & aRules)
+               math::Size<3, int> aSize,
+               const std::vector<Rule> & aRules)
 {
     std::vector<std::vector<unsigned char>> result;
     for (const Rule & rule : aRules)
@@ -133,7 +153,8 @@ oneChildStates(const std::vector<unsigned char> & aState,
             {
                 if (matchRule(rule, {x, y, 0}, aState, aSize))
                 {
-                    result.push_back(applied(rule, {x, y, 0}, aState, aSize.width()));
+                    result.push_back(
+                        applied(rule, {x, y, 0}, aState, aSize.width()));
                 }
             }
         }
@@ -143,24 +164,26 @@ oneChildStates(const std::vector<unsigned char> & aState,
 }
 
 void applyRule(const Rule * aRule,
-        const math::Position<3, int> & aPos,
-        std::vector<unsigned char> & aState,
-        int width)
+               const math::Position<3, int> & aPos,
+               std::vector<unsigned char> & aState,
+               int width)
 {
     for (int y = 0; y < aRule->mOutputSize.height(); y++)
     {
         for (int x = 0; x < aRule->mOutputSize.width(); x++)
         {
-            math::Position<3, int> shiftedPos = aPos + math::Vec<3, int>{x, y, 0};
-            aState.at(getFlatIndex(shiftedPos, {width, 1, 1})) = aRule->mOutputs.at(getFlatIndex({x, y, 0}, aRule->mOutputSize));
+            math::Position<3, int> shiftedPos =
+                aPos + math::Vec<3, int>{x, y, 0};
+            aState.at(getFlatIndex(shiftedPos, {width, 1, 1})) =
+                aRule->mOutputs.at(getFlatIndex({x, y, 0}, aRule->mOutputSize));
         }
     }
 }
 
 std::vector<unsigned char>
 applyToState(const std::vector<unsigned char> & aState,
-        const std::vector<std::tuple<const Rule *, int>> & aSolution,
-        int width)
+             const std::vector<std::tuple<const Rule *, int>> & aSolution,
+             int width)
 {
     std::vector<unsigned char> result = aState;
 
@@ -173,27 +196,26 @@ applyToState(const std::vector<unsigned char> & aState,
 }
 
 bool isInsideRule(const math::Position<3, int> aPos,
-        const Rule * aRule,
-        const math::Position<3, int> aRulePos)
+                  const Rule * aRule,
+                  const math::Position<3, int> aRulePos)
 {
-    return (
-            aRulePos.x() <= aPos.x() &&
-            aPos.x() < aRulePos.x() + aRule->mInputSize.width() &&
-            aRulePos.y() <= aPos.y() &&
-            aPos.y() < aRulePos.y() + aRule->mInputSize.height()); 
+    return (aRulePos.x() <= aPos.x()
+            && aPos.x() < aRulePos.x() + aRule->mInputSize.width()
+            && aRulePos.y() <= aPos.y()
+            && aPos.y() < aRulePos.y() + aRule->mInputSize.height());
 }
 
 bool overlap(const Rule * aRule,
-        const math::Position<3, int> aRulePos,
-        const Rule * aOtherRule,
-        const math::Position<3, int> aOtherRulePos)
+             const math::Position<3, int> aRulePos,
+             const Rule * aOtherRule,
+             const math::Position<3, int> aOtherRulePos)
 {
     for (int y = 0; y < aRule->mInputSize.height(); y++)
     {
         for (int x = 0; x < aRule->mInputSize.width(); x++)
         {
-            if (isInsideRule(aRulePos + math::Vec<3, int>{x, y, 0},
-                        aOtherRule, aOtherRulePos))
+            if (isInsideRule(aRulePos + math::Vec<3, int>{x, y, 0}, aOtherRule,
+                             aOtherRulePos))
             {
                 return true;
             }
@@ -204,12 +226,12 @@ bool overlap(const Rule * aRule,
 }
 
 void setMaskAnIncrement(
-        bool value,
-        int index,
-        const std::vector<std::tuple<const Rule *, int>> & aTiles,
-        std::vector<int> & aAmounts,
-        std::vector<bool> & aMask,
-        int width)
+    bool value,
+    int index,
+    const std::vector<std::tuple<const Rule *, int>> & aTiles,
+    std::vector<int> & aAmounts,
+    std::vector<bool> & aMask,
+    int width)
 {
     aMask.at(index) = value;
     auto [rule, ruleIndex] = aTiles.at(index);
@@ -221,18 +243,19 @@ void setMaskAnIncrement(
     {
         for (int x = 0; x < rule->mInputSize.width(); x++)
         {
-            aAmounts.at(getFlatIndex(pos + math::Vec<3, int>{x, y, 0}, {width, 1, 1})) += increment;
+            aAmounts.at(getFlatIndex(pos + math::Vec<3, int>{x, y, 0},
+                                     {width, 1, 1})) += increment;
         }
     }
 }
-
 
 bool matchRule(const Rule & aRule,
                const math::Position<3, int> & aPos,
                const std::vector<unsigned char> & aState,
                const math::Size<3, int> & aSize)
 {
-    if (aPos.x() + aRule.mInputSize.width() > aSize.width() || aPos.y() + aRule.mInputSize.height() > aSize.height())
+    if (aPos.x() + aRule.mInputSize.width() > aSize.width()
+        || aPos.y() + aRule.mInputSize.height() > aSize.height())
     {
         return false;
     }
@@ -242,10 +265,13 @@ bool matchRule(const Rule & aRule,
         for (int x = 0; x < aRule.mInputSize.width(); x++)
         {
             int ruleFlatIndex = getFlatIndex({x, y, 0}, aRule.mInputSize);
-            math::Position<3, int> shiftedPos = aPos + math::Vec<3, int>{x, y, 0};
+            math::Position<3, int> shiftedPos =
+                aPos + math::Vec<3, int>{x, y, 0};
             int stateFlatIndex = getFlatIndex(shiftedPos, aSize);
 
-            if ((aRule.mInputs.at(ruleFlatIndex) & (1 << aState.at(stateFlatIndex))) == 0)
+            if ((aRule.mInputs.at(ruleFlatIndex)
+                 & (1 << aState.at(stateFlatIndex)))
+                == 0)
             {
                 return false;
             }
@@ -256,9 +282,9 @@ bool matchRule(const Rule & aRule,
 }
 
 std::vector<unsigned char> applied(const Rule & aRule,
-        const math::Position<3, int> & aPos,
-        const std::vector<unsigned char> & aState,
-        int width)
+                                   const math::Position<3, int> & aPos,
+                                   const std::vector<unsigned char> & aState,
+                                   int width)
 {
     std::vector<unsigned char> result = aState;
 
@@ -268,10 +294,12 @@ std::vector<unsigned char> applied(const Rule & aRule,
         {
             for (int x = 0; x < aRule.mOutputSize.width(); x++)
             {
-                unsigned char newValue = aRule.mOutputs.at(getFlatIndex({x, y, z}, aRule.mOutputSize));
+                unsigned char newValue = aRule.mOutputs.at(
+                    getFlatIndex({x, y, z}, aRule.mOutputSize));
                 if (newValue != gWildcardShiftValue)
                 {
-                    result.at(getFlatIndex(aPos + math::Vec<3, int>{x, y, z}, {width, 1, 1})) = newValue;
+                    result.at(getFlatIndex(aPos + math::Vec<3, int>{x, y, z},
+                                           {width, 1, 1})) = newValue;
                 }
             }
         }
@@ -296,27 +324,29 @@ runSearch(const std::vector<unsigned char> & aPresent,
     std::vector<std::vector<int>> forwardPotentials(
         aCharacterSize, std::vector<int>(aPresent.size(), -1));
 
-    Observation::computeBackwardPotentials(backwardPotentials, aFuture, aSize, aRules);
+    Observation::computeBackwardPotentials(backwardPotentials, aFuture, aSize,
+                                           aRules);
     int rootBackwardEstimate =
         Observation::backwardPointwise(backwardPotentials, aPresent);
-    Observation::computeForwardPotentials(forwardPotentials, aPresent, aSize, aRules);
-    int rootForwardEstimate = Observation::forwardPointwise(forwardPotentials, aFuture);
+    Observation::computeForwardPotentials(forwardPotentials, aPresent, aSize,
+                                          aRules);
+    int rootForwardEstimate =
+        Observation::forwardPointwise(forwardPotentials, aFuture);
 
-    if (rootBackwardEstimate < 0 || rootForwardEstimate < 0) {
+    if (rootBackwardEstimate < 0 || rootForwardEstimate < 0)
+    {
         std::cout << "HIIIIN HIIIIN WRONG PROBLEM" << std::endl;
     }
 
-    if (rootBackwardEstimate == 0) {
+    if (rootBackwardEstimate == 0)
+    {
         return {{}};
     }
 
     std::vector<Board> database;
-    database.emplace_back(aPresent, -1, 0, rootBackwardEstimate, rootForwardEstimate);
+    database.emplace_back(aPresent, -1, 0, rootBackwardEstimate,
+                          rootForwardEstimate);
 
-#if defined(__GNUC__) && !defined(__llvm__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstringop-overread"
-#endif
     std::map<std::vector<unsigned char>, int> visited;
 
     visited.emplace(aPresent, 0);
@@ -325,7 +355,8 @@ runSearch(const std::vector<unsigned char> & aPresent,
         return std::get<double>(aLhs) > std::get<double>(aRhs);
     };
 
-    std::priority_queue<std::tuple<int, double>, std::vector<std::tuple<int, double>>,
+    std::priority_queue<std::tuple<int, double>,
+                        std::vector<std::tuple<int, double>>,
                         decltype(priorityComp)>
         frontier(priorityComp);
 
@@ -341,7 +372,9 @@ runSearch(const std::vector<unsigned char> & aPresent,
 
         const Board & parentBoard = database.at(parentIndex);
 
-        auto children = aAll ? allChildStates(parentBoard.mState, aSize, aRules) : oneChildStates(parentBoard.mState, aSize, aRules);
+        auto children = aAll
+                            ? allChildStates(parentBoard.mState, aSize, aRules)
+                            : oneChildStates(parentBoard.mState, aSize, aRules);
 
         for (const auto & childState : children)
         {
@@ -358,35 +391,45 @@ runSearch(const std::vector<unsigned char> & aPresent,
                     oldBoard.mDepth = parentBoard.mDepth + 1;
                     oldBoard.mParentIndex = parentIndex;
 
-                    if (oldBoard.mBackwardEstimate >= 0 && oldBoard.mForwardEstimate >= 0)
+                    if (oldBoard.mBackwardEstimate >= 0
+                        && oldBoard.mForwardEstimate >= 0)
                     {
-                        frontier.emplace(childIndex, oldBoard.rank(random, aDepthCoefficient));
+                        frontier.emplace(
+                            childIndex,
+                            oldBoard.rank(random, aDepthCoefficient));
                     }
                 }
             }
             else
             {
-                int childBackwardEstimate = Observation::backwardPointwise(backwardPotentials, childState);
-                Observation::computeForwardPotentials(forwardPotentials, childState, aSize, aRules);
-                int childForwardEstimate = Observation::forwardPointwise(forwardPotentials, aFuture);
-
+                int childBackwardEstimate = Observation::backwardPointwise(
+                    backwardPotentials, childState);
+                Observation::computeForwardPotentials(
+                    forwardPotentials, childState, aSize, aRules);
+                int childForwardEstimate =
+                    Observation::forwardPointwise(forwardPotentials, aFuture);
 
                 if (childBackwardEstimate < 0 || childForwardEstimate < 0)
                 {
                     continue;
                 }
 
-
-                database.emplace_back(childState, parentIndex, database.at(parentIndex).mDepth + 1, childBackwardEstimate, childForwardEstimate);
+                database.emplace_back(childState, parentIndex,
+                                      database.at(parentIndex).mDepth + 1,
+                                      childBackwardEstimate,
+                                      childForwardEstimate);
                 Board & childBoard = database.back();
-                int childIndex = (int)database.size() - 1;
+                int childIndex = (int) database.size() - 1;
                 visited.emplace(childBoard.mState, childIndex);
-                //printState(std::vector<int>(childBoard.mState.begin(), childBoard.mState.end()), aSize);
+                // printState(std::vector<int>(childBoard.mState.begin(),
+                // childBoard.mState.end()), aSize);
 
                 if (childBoard.mForwardEstimate == 0)
                 {
-                    std::vector<Board> trajectory = Board::trajectory(childIndex, database);
-                    std::vector<Board> reverseTrajectory(trajectory.rbegin(), trajectory.rend());
+                    std::vector<Board> trajectory =
+                        Board::trajectory(childIndex, database);
+                    std::vector<Board> reverseTrajectory(trajectory.rbegin(),
+                                                         trajectory.rend());
 
                     std::vector<std::vector<unsigned char>> result;
                     result.reserve(reverseTrajectory.size());
@@ -405,18 +448,15 @@ runSearch(const std::vector<unsigned char> & aPresent,
                         record = childBackwardEstimate + childForwardEstimate;
                     }
 
-                    frontier.emplace(childIndex, childBoard.rank(random, aDepthCoefficient));
+                    frontier.emplace(
+                        childIndex, childBoard.rank(random, aDepthCoefficient));
                 }
             }
         }
     }
 
     return std::vector<std::vector<unsigned char>>{};
-#if defined(__GNUC__) && !defined(__llvm__)
-#pragma GCC diagnostic pop
-#endif
 };
 
 } // namespace markovjunior
 } // namespace ad
-
