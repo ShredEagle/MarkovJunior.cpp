@@ -1,4 +1,3 @@
-
 #include "Search.h"
 
 #include "Constants.h"
@@ -314,6 +313,10 @@ runSearch(const std::vector<unsigned char> & aPresent,
     std::vector<Board> database;
     database.emplace_back(aPresent, -1, 0, rootBackwardEstimate, rootForwardEstimate);
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overread"
+#endif
     std::map<std::vector<unsigned char>, int> visited;
 
     visited.emplace(aPresent, 0);
@@ -409,7 +412,11 @@ runSearch(const std::vector<unsigned char> & aPresent,
     }
 
     return std::vector<std::vector<unsigned char>>{};
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 };
 
 } // namespace markovjunior
 } // namespace ad
+
