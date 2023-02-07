@@ -237,7 +237,7 @@ int WFCNode::nextUnobservedNode()
 std::optional<int> WFCNode::getGoodSeed()
 {
     for (int i = 0; i < mTries; i++) {
-        int observationSoFar = 0;
+        //int observationSoFar = 0;
         int seed = static_cast<int>(mInterpreter->mRandom());
         mLocalRandom = std::mt19937(seed);
 
@@ -250,7 +250,7 @@ std::optional<int> WFCNode::getGoodSeed()
 
             if (node >= 0) {
                 observe(node);
-                observationSoFar++;
+                //observationSoFar++;
                 bool success = propagate();
 
                 if (!success) {
