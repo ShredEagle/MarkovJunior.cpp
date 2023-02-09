@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <imgui.h>
 #include <math/Color.h>
 #include <math/Vector.h>
@@ -305,10 +306,10 @@ void RuleNode::debugRender(int id)
         float startRuleY = posY;
         float startInputX = p.x;
 
-        for (std::size_t y = 0; y < rule.mInputSize.height(); ++y)
+        for (std::size_t y = 0; y < (std::size_t)rule.mInputSize.height(); ++y)
         {
             posX = startInputX;
-            for (std::size_t x = 0; x < rule.mInputSize.width(); ++x)
+            for (std::size_t x = 0; x < (std::size_t)rule.mInputSize.width(); ++x)
             {
                 unsigned char ruleChar = rule.mByteInput.at(getFlatIndex({static_cast<int>(x), static_cast<int>(y), 0}, rule.mInputSize));
                 auto colorHdr = getColorfromValue(*mGrid, ruleChar);
@@ -323,10 +324,10 @@ void RuleNode::debugRender(int id)
         posX += inputOutputSpacing;
         float startOutputX = posX;
 
-        for (std::size_t y = 0; y < rule.mOutputSize.height(); ++y)
+        for (std::size_t y = 0; y < (std::size_t)rule.mOutputSize.height(); ++y)
         {
             posX = startOutputX;
-            for (std::size_t x = 0; x < rule.mOutputSize.width(); ++x)
+            for (std::size_t x = 0; x < (std::size_t)rule.mOutputSize.width(); ++x)
             {
                 unsigned char ruleChar = rule.mOutputs.at(getFlatIndex({static_cast<int>(x), static_cast<int>(y), 0}, rule.mOutputSize));
                 auto colorHdr = getColorfromValue(*mGrid, ruleChar);
