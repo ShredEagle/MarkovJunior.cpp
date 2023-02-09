@@ -310,7 +310,7 @@ void RuleNode::debugRender(int id)
             posX = startInputX;
             for (std::size_t x = 0; x < rule.mInputSize.width(); ++x)
             {
-                unsigned char ruleChar = rule.mByteInput.at(getFlatIndex({x, y, 0}, rule.mInputSize));
+                unsigned char ruleChar = rule.mByteInput.at(getFlatIndex({static_cast<int>(x), static_cast<int>(y), 0}, rule.mInputSize));
                 auto colorHdr = getColorfromValue(*mGrid, ruleChar);
                 drawImGuiColorSquare(drawList, colorHdr, posX, posY);
 
@@ -328,7 +328,7 @@ void RuleNode::debugRender(int id)
             posX = startOutputX;
             for (std::size_t x = 0; x < rule.mOutputSize.width(); ++x)
             {
-                unsigned char ruleChar = rule.mOutputs.at(getFlatIndex({x, y, 0}, rule.mOutputSize));
+                unsigned char ruleChar = rule.mOutputs.at(getFlatIndex({static_cast<int>(x), static_cast<int>(y), 0}, rule.mOutputSize));
                 auto colorHdr = getColorfromValue(*mGrid, ruleChar);
                 drawImGuiColorSquare(drawList, colorHdr, posX, posY);
                 posX += cellSize + cellSpacing;
