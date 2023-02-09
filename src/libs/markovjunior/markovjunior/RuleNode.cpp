@@ -43,7 +43,7 @@ RuleNode::RuleNode(const pugi::xml_node & aXmlNode,
 
     const Grid & grid = *mGrid;
 
-    mTemperature = aXmlNode.attribute("temperatur").as_double(0.);
+    mTemperature = aXmlNode.attribute("temperature").as_double(0.);
     pugi::xpath_node_set xmlFieldNodes = aXmlNode.select_nodes("field");
 
     if (!xmlFieldNodes.empty())
@@ -385,7 +385,10 @@ void RuleNode::debugRender(int id)
     if (mObservations.size() > 0)
     {
         ImGui::Indent(30.f);
+        ImGui::AlignTextToFramePadding();
         ImGui::Text("Observations");
+        ImGui::SameLine();
+        ImGui::Checkbox("Show trajectory when available", &mShowTrajectory);
         for (const Observation & obs : mObservations)
         {
             if (obs.mTo == -1)

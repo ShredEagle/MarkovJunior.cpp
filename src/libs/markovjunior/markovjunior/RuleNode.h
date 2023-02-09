@@ -72,9 +72,7 @@ public:
     unsigned int mCounter = 0;
     unsigned int mSteps = 0;
     unsigned int mMatchCount = 0;
-    // TODO: only used for debug because mRules contains symmetric rules
     std::vector<Rule> mRules;
-    //bool mFutureComputed; //This is for observation
     std::vector<bool> mLast;
     std::vector<RuleMatch> mMatches;
     std::vector<std::vector<bool>> mMatchMask;
@@ -89,6 +87,9 @@ public:
     bool mFutureComputed = false;
     int mLimit;
     float mDepthCoefficient;
+
+    //DebugData
+    bool mShowTrajectory = false;
 
     void debugRender(int id = 0) override;
 
