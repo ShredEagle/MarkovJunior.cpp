@@ -445,7 +445,7 @@ void drawImGuiColorSquare(ImDrawList * aDrawList,
                              ImVec2(aX + cellSize, aY + cellSize), color);
     aDrawList->AddRect(ImVec2(aX, aY),
                        ImVec2(aX + cellSize, aY + cellSize), imguiWhite,
-                       ImDrawFlags_None, 1.f);
+                       0.f, ImDrawFlags_None, 1.f);
 }
 
 std::ostream & operator<<(std::ostream & os, const RuleNode & aRuleNode)
