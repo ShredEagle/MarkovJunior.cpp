@@ -54,7 +54,7 @@ public:
         mCounter = 0;
     }
 
-    void debugRender() override { ImGui::Text("ConvolutionNode"); }
+    void debugRender(int id = 0) override { ImGui::Text("ConvolutionNode"); }
 
     std::vector<ConvolutionRule> mRules;
     std::vector<int> mKernel;

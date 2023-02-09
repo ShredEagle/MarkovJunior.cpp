@@ -31,6 +31,7 @@ class Interpreter
                 );
         Interpreter(
                 const filesystem::path & aAssetRoot,
+                const filesystem::path & aRelativePath,
                 std::shared_ptr<std::istream> aSteam,
                 const math::Size<3, int> & aSize,
                 const int aSeed
@@ -38,11 +39,17 @@ class Interpreter
 
         void setup();
         void runStep();
+        void testFileOnMultipleSeed();
+        bool reloadFile();
+
+        std::tuple<bool, bool, bool> showDebuggingTools();
 
         // TODO: in the future this should not exist
         const resource::ResourceLocator mResourceLocator;
+        const filesystem::path mFilename;
         pugi::xml_document mXmlParsedDoc;
         SymmetryGroup mGlobalSymmetryGroup;
+        math::Size<3, int> mSize;
         Grid mGrid;
         Grid mStartGrid;
 
@@ -53,6 +60,16 @@ class Interpreter
         int mCounter = 0;
         std::mt19937 mRandom;
         std::uniform_real_distribution<double> mProbabilityDistribution = std::uniform_real_distribution(0.0, 1.0);
+
+        bool mTrackActiveRule = false;
+
+        // Debug data
+        unsigned int mSeed;
+        bool mRun = false;
+        bool mRunningTest = false;
+        std::vector<std::pair<unsigned int, bool>> mTestedSeed;
+        int mStepPerTestIteration = 10;
+        std::string mAcceptableValues = "";
 
     private:
         static pugi::xml_document pathToXmlParsedDoc(const filesystem::path & aPath)
@@ -69,7 +86,6 @@ class Interpreter
         }
 
         bool mOrigin = false;
-
 };
 }
 }

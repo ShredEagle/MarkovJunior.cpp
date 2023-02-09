@@ -8,6 +8,7 @@ set(${TARGET_NAME}_HEADERS
     ConvolutionNode.h
     Field.h
     Grid.h
+    GridUtils.h
     ImageHelpers.h
     Interpreter.h
     Map.h
@@ -30,6 +31,7 @@ set(${TARGET_NAME}_SOURCES
     ConvolutionNode.cpp
     Field.cpp
     Grid.cpp
+    GridUtils.cpp
     ImageHelpers.cpp
     Interpreter.cpp
     Map.cpp

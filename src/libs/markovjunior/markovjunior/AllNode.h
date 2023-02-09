@@ -27,7 +27,11 @@ public:
 
     bool run() override;
 
-    void debugRender() override { ImGui::Text("all"); }
+    void debugRender(int id = 0) override {
+        ImGui::Text("all");
+        ImGui::SameLine();
+        RuleNode::debugRender();
+    }
 };
 
 } // namespace markovjunior

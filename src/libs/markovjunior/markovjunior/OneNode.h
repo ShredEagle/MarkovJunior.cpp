@@ -37,7 +37,11 @@ public:
 
     bool run() override;
 
-    void debugRender() override { ImGui::Text("one"); }
+    void debugRender(int id = 0) override {
+        ImGui::Text("one");
+        ImGui::SameLine();
+        RuleNode::debugRender();
+    };
 };
 
 }

@@ -7,6 +7,8 @@
 #include "markovjunior/Field.h"
 #include "markovjunior/Observation.h"
 
+#include <imgui.h>
+#include <math/Color.h>
 #include <math/Vector.h>
 
 #include <pugixml.hpp>
@@ -35,22 +37,6 @@ public:
     }
 
     bool isRuleNode() override { return true; };
-private:
-    void addRule(const pugi::xml_node & aXmlNode, const SymmetryGroup & aSymmetryGroup )
-    {
-        Rule rule{aXmlNode, mInterpreter->mGrid, mInterpreter->mGrid};
-        rule.mOriginal = true;
-
-        SymmetryGroup ruleSymmetry = getSymmetry(
-                aXmlNode.attribute("symmetry").as_string(""),
-                aSymmetryGroup);
-
-        //TODO maybe check symmetry is ok
-        std::vector<Rule> symmetricRules = createAllSquareSymmetries(rule, ruleSymmetry);
-        mRules.insert(mRules.end(), symmetricRules.begin(), symmetricRules.end());
-    }
-
-public: 
     virtual void addMatch(const int ruleIndex, const math::Position<3, int> & aMatchPosition, std::vector<bool> & aMatchMask)
     {
         aMatchMask.at(mGrid->getFlatGridIndex(aMatchPosition)) = true;
@@ -66,10 +52,27 @@ public:
         mMatchCount++;
     }
 
+private:
+    void addRule(const pugi::xml_node & aXmlNode, const SymmetryGroup & aSymmetryGroup )
+    {
+        Rule rule{aXmlNode, mInterpreter->mGrid, mInterpreter->mGrid};
+        rule.mOriginal = true;
+
+        SymmetryGroup ruleSymmetry = getSymmetry(
+                aXmlNode.attribute("symmetry").as_string(""),
+                aSymmetryGroup);
+
+        //TODO maybe check symmetry is ok
+        std::vector<Rule> symmetricRules = createAllSquareSymmetries(rule, ruleSymmetry);
+        mRules.insert(mRules.end(), symmetricRules.begin(), symmetricRules.end());
+    }
+public:
+
     int mLastMatchedTurn;
     unsigned int mCounter = 0;
     unsigned int mSteps = 0;
     unsigned int mMatchCount = 0;
+    // TODO: only used for debug because mRules contains symmetric rules
     std::vector<Rule> mRules;
     //bool mFutureComputed; //This is for observation
     std::vector<bool> mLast;
@@ -87,8 +90,12 @@ public:
     int mLimit;
     float mDepthCoefficient;
 
+    void debugRender(int id = 0) override;
+
     friend std::ostream & operator<<(std::ostream & os, const RuleNode & aRuleNode);
 };
+
+void drawImGuiColorSquare(ImDrawList * aDrawList, math::hdr::Rgb<float> color, float x, float y);
 
 }
 }

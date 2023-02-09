@@ -47,7 +47,7 @@ class Map : public SequenceNode
         mCurrentStep = -1;
     }
 
-    void debugRender() override { ImGui::Text("map"); }
+    void debugRender(int id = 0) override { ImGui::Text("map"); }
 
     Scale mScale;
     Grid mNewGrid;

@@ -52,8 +52,10 @@ void AllNode::fit(int aRuleIndex, const math::Position<3, int> & aPos, std::vect
 
 bool AllNode::run()
 {
+    mRunning = true;
     if (!RuleNode::run())
     {
+        mRunning = false;
         return false;
     }
 
@@ -63,6 +65,7 @@ bool AllNode::run()
     {
         if (mCounter >= mTrajectory.size())
         {
+            mRunning = false;
             return false;
         }
         mGrid->mState = mTrajectory.at(mCounter++);
@@ -71,6 +74,7 @@ bool AllNode::run()
 
     if (mMatchCount == 0)
     {
+        mRunning = false;
         return false;
     }
 

@@ -131,7 +131,7 @@ bool ConvChain::run()
     return true;
 };
 
-void ConvChain::debugRender()
+void ConvChain::debugRender(int id)
 {
     ImGui::Text("ConvChain");
 }

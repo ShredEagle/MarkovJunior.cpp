@@ -23,7 +23,7 @@ public:
 
     bool run() override;
 
-    void debugRender() override { ImGui::Text("parallel"); }
+    void debugRender(int id = 0) override { ImGui::Text("parallel"); }
 
     std::vector<unsigned char> mNewState;
 };

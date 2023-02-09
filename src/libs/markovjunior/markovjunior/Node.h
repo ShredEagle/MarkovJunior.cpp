@@ -27,6 +27,9 @@ public:
 
     Interpreter * mInterpreter = nullptr;
     Grid * mGrid = nullptr;
+    bool mRunning = false;
+    bool mOpenCollapsingHeader = false;
+    bool mBreakOnStep = false;
 
     virtual bool isRuleNode() { return false; };
 
@@ -37,7 +40,7 @@ public:
     virtual bool run() = 0;
     virtual void reset() = 0;
 
-    virtual void debugRender() = 0;
+    virtual void debugRender(int id = 0) = 0;
 };
 
 class SequenceNode;
@@ -118,7 +121,7 @@ public:
         mCurrentStep = 0;
     }
 
-    void debugRender() override;
+    void debugRender(int i = 0) override;
 
 protected:
     static void setupSequenceNode(SequenceNode * aSequenceNode,
@@ -164,16 +167,7 @@ public:
         return SequenceNode::run();
     }
 
-    void debugRender() override
-    {
-        ImGui::Text("Markov");
-        ImGui::TreePush();
-        for (auto & node : nodes)
-        {
-            node->debugRender();
-        }
-        ImGui::TreePop();
-    }
+    void debugRender(int id = 0) override;
 };
 }
 }

@@ -37,7 +37,7 @@ class ConvChain : public Node
 
     bool run() override;
 
-    void debugRender() override;
+    void debugRender(int id = 0) override;
 
     int mN;
     double mTemperature;

@@ -36,7 +36,7 @@ public:
 
     bool run() override;
 
-    void debugRender() override { ImGui::Text("path"); }
+    void debugRender(int id = 0) override { ImGui::Text("path"); }
 
     math::Vec<3, int> getDirection(
             const math::Position<3, int> & aPos,

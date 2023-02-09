@@ -13,38 +13,39 @@
 namespace ad {
 namespace markovjunior {
 
-const std::map<std::string, ad::math::sdr::Rgb> gColorMatching = {
-    {"B", ad::math::sdr::gBlack},
-    {"W", ad::math::sdr::Rgb{0xff, 0xff, 0xff}},
-    {"t", ad::math::sdr::Rgb{0x32, 0x3c, 39}},
-    {"K", ad::math::sdr::Rgb{255, 112, 146}},
-    {"O", ad::math::sdr::Rgb{255, 153, 0}},
-    {"E", ad::math::sdr::Rgb{0, 0x87, 0x51}},
-    {"D", ad::math::sdr::Rgb{0x5f, 0x57, 0x4f}},
-    {"N", ad::math::sdr::Rgb{0xab, 0x52, 0x36}},
-    {"R", ad::math::sdr::gRed},
-    {"C", ad::math::sdr::gCyan},
-    {"G", ad::math::sdr::Rgb{0x0, 0xe4, 0x36}},
-    {"U", ad::math::sdr::Rgb{0x29, 0xad, 0xff}},
-    {"P", ad::math::sdr::gMagenta},
-    {"Y", ad::math::sdr::Rgb{0xff, 0xec, 0x27}},
-    {"A", ad::math::sdr::Rgb{0xc2, 0xc3, 0xc7}},
-    {"I", ad::math::sdr::Rgb{0x1d, 0x2b, 0x53}},
-    {"F", ad::math::sdr::Rgb{0xff, 0xcc, 0xaa}},
-    {"T", ad::math::sdr::Rgb{0x2b, 0x8a, 0xa9}},
-    {"S", ad::math::sdr::Rgb{0xd0, 0xd8, 0xac}},
-    {"s", ad::math::sdr::Rgb{0xe9, 0xe0, 0xb2}},
-    {"u", ad::math::sdr::Rgb{0x06, 0x5a, 0xb5}}
+const std::map<std::string, ad::math::hdr::Rgb<float>> gColorMatching = {
+    {"B", ad::math::hdr::gBlack<float>},
+    {"W", ad::math::hdr::Rgb<float>{1.f, 1.f, 1.f}},
+    {"t", ad::math::hdr::Rgb<float>{0.2, 0.24, 0.15}},
+    {"K", ad::math::hdr::Rgb<float>{1.f, 0.35f, 146}},
+    {"O", ad::math::hdr::Rgb<float>{1.f, 0.6f, 0.f}},
+    {"E", ad::math::hdr::Rgb<float>{0.f, 0.5f, 0.3f}},
+    {"D", ad::math::hdr::Rgb<float>{0.4f, 0.43f, 0.37f}},
+    {"N", ad::math::hdr::Rgb<float>{0.7f, 0.41f, 0.2f}},
+    {"R", ad::math::hdr::gRed<float>},
+    {"C", ad::math::hdr::gCyan<float>},
+    {"G", ad::math::hdr::Rgb<float>{0.f, 0.9f, 0.2f}},
+    {"U", ad::math::hdr::Rgb<float>{0.2f, 0.7f, 1.f}},
+    {"P", ad::math::hdr::gMagenta<float>},
+    {"Y", ad::math::hdr::Rgb<float>{1.f, 0.9f, 0.2f}},
+    {"A", ad::math::hdr::Rgb<float>{0.6f, 0.6f, 0.64f}},
+    {"I", ad::math::hdr::Rgb<float>{0.1f, 0.16f, 0.4f}},
+    {"F", ad::math::hdr::Rgb<float>{1.f, 0.8f, 0.6f}},
+    {"T", ad::math::hdr::Rgb<float>{0.15f, 0.5f, 0.78f}},
+    {"S", ad::math::hdr::Rgb<float>{0.8f, 0.8f, 0.6f}},
+    {"s", ad::math::hdr::Rgb<float>{0.9f, 0.9f, 0.67f}},
+    {"u", ad::math::hdr::Rgb<float>{0.f, 0.3f, 0.7f}},
+    {"*", ad::math::hdr::Rgb<float>{0.f, 0.3f, 0.7f}}
 };
 
-inline unsigned char convertRgbToUnsignedChar(const math::sdr::Rgb & color)
+inline unsigned char convertRgbToUnsignedChar(const math::hdr::Rgb<float> & color)
 {
-    constexpr auto colorMatchingComp = [](const ad::math::sdr::Rgb & aLhs, const ad::math::sdr::Rgb & aRhs)
+    constexpr auto colorMatchingComp = [](const ad::math::hdr::Rgb<float> & aLhs, const ad::math::hdr::Rgb<float> & aRhs)
     {
         return aLhs.r() + aLhs.g() + aLhs.b() > aRhs.r() + aRhs.g() + aRhs.b();
     };
 
-    static std::map<ad::math::sdr::Rgb, std::string, decltype(colorMatchingComp)> inverseColorMatching(colorMatchingComp);
+    static std::map<ad::math::hdr::Rgb<float>, std::string, decltype(colorMatchingComp)> inverseColorMatching(colorMatchingComp);
 
     if (inverseColorMatching.empty())
     {
@@ -74,8 +75,8 @@ inline std::tuple<std::array<std::vector<int>, 2>, math::Size<3, int>> loadRuleF
         {
             for (int x = 0; x < resultSize.width(); x++)
             {
-                ruleInput.at(getFlatIndex({x, y, z}, resultSize)) = convertRgbToUnsignedChar(image.at(math::Position<2, int>{x, y}));
-                ruleOutput.at(getFlatIndex({x, y, z}, resultSize)) = convertRgbToUnsignedChar(image.at(math::Position<2, int>{x + resultSize.width(), y}));
+                ruleInput.at(getFlatIndex({x, y, z}, resultSize)) = convertRgbToUnsignedChar(arte::to_hdr(image).at(math::Position<2, int>{x, y}));
+                ruleOutput.at(getFlatIndex({x, y, z}, resultSize)) = convertRgbToUnsignedChar(arte::to_hdr(image).at(math::Position<2, int>{x + resultSize.width(), y}));
             }
         }
     }
