@@ -16,8 +16,8 @@ namespace markovjunior {
 const std::map<std::string, ad::math::hdr::Rgb<float>> gColorMatching = {
     {"B", ad::math::hdr::gBlack<float>},
     {"W", ad::math::hdr::Rgb<float>{1.f, 1.f, 1.f}},
-    {"t", ad::math::hdr::Rgb<float>{0.2, 0.24, 0.15}},
-    {"K", ad::math::hdr::Rgb<float>{1.f, 0.35f, 146}},
+    {"t", ad::math::hdr::Rgb<float>{0.2f, 0.24f, 0.15f}},
+    {"K", ad::math::hdr::Rgb<float>{1.f, 0.35f, 0.6f}},
     {"O", ad::math::hdr::Rgb<float>{1.f, 0.6f, 0.f}},
     {"E", ad::math::hdr::Rgb<float>{0.f, 0.5f, 0.3f}},
     {"D", ad::math::hdr::Rgb<float>{0.4f, 0.43f, 0.37f}},
