@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <array>
+#include <imgui.h>
 #include <map>
 #include <string>                        // for string, allocator, operator<=>
 #include <vector>                        // for vector
@@ -52,6 +53,8 @@ public:
     {
         mCounter = 0;
     }
+
+    void debugRender(int id = 0) override { ImGui::Text("ConvolutionNode"); }
 
     std::vector<ConvolutionRule> mRules;
     std::vector<int> mKernel;

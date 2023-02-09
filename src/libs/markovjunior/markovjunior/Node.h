@@ -2,6 +2,8 @@
 #include "SymmetryUtils.h"
 #include "markovjunior/Grid.h"
 
+#include <handy/Crc.h>
+#include <imgui.h>
 #include <pugixml.hpp>
 
 #include <memory>
@@ -25,6 +27,9 @@ public:
 
     Interpreter * mInterpreter = nullptr;
     Grid * mGrid = nullptr;
+    bool mRunning = false;
+    bool mOpenCollapsingHeader = false;
+    bool mBreakOnStep = false;
 
     virtual bool isRuleNode() { return false; };
 
@@ -34,6 +39,8 @@ public:
     }
     virtual bool run() = 0;
     virtual void reset() = 0;
+
+    virtual void debugRender(int id = 0) = 0;
 };
 
 class SequenceNode;
@@ -114,6 +121,8 @@ public:
         mCurrentStep = 0;
     }
 
+    void debugRender(int i = 0) override;
+
 protected:
     static void setupSequenceNode(SequenceNode * aSequenceNode,
             const pugi::xml_node & aXmlNode,
@@ -130,11 +139,14 @@ protected:
 
         for (auto child : aXmlNode.children())
         {
-            aSequenceNode->nodes.push_back(createNode(aSequenceNode, child, symmetrySubgroup, aInterpreter, aGrid));
-
-            if (aSequenceNode->nodes.back()->isSequenceNode())
+            if (handy::crc64(child.name()) != handy::crc64("union"))
             {
-                dynamic_cast<SequenceNode*>(aSequenceNode->nodes.back().get())->parent = aSequenceNode;
+                aSequenceNode->nodes.push_back(createNode(aSequenceNode, child, symmetrySubgroup, aInterpreter, aGrid));
+
+                if (aSequenceNode->nodes.back()->isSequenceNode())
+                {
+                    dynamic_cast<SequenceNode*>(aSequenceNode->nodes.back().get())->parent = aSequenceNode;
+                }
             }
         }
     }
@@ -154,6 +166,8 @@ public:
         mCurrentStep = 0;
         return SequenceNode::run();
     }
+
+    void debugRender(int id = 0) override;
 };
 }
 }

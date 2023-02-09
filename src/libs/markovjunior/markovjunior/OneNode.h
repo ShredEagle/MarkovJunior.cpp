@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RuleNode.h"
+#include <imgui.h>
 
 namespace ad {
 namespace markovjunior {
@@ -35,6 +36,12 @@ public:
     RuleMatch getRandomMatch(std::mt19937 & aRandom);
 
     bool run() override;
+
+    void debugRender(int id = 0) override {
+        ImGui::Text("one");
+        ImGui::SameLine();
+        RuleNode::debugRender();
+    };
 };
 
 }

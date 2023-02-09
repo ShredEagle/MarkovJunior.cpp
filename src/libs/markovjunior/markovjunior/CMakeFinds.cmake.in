@@ -1,4 +1,4 @@
 @find_package@(pugixml @REQUIRED@ CONFIG)
 @find_package@(Handy @REQUIRED@ CONFIG COMPONENTS platform handy resource)
 @find_package@(Math @REQUIRED@ CONFIG COMPONENTS math)
-@find_package@(Graphics @REQUIRED@ CONFIG COMPONENTS arte)
+@find_package@(Graphics @REQUIRED@ CONFIG COMPONENTS arte imguiui)

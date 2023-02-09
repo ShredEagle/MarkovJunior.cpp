@@ -1,4 +1,5 @@
 #include "ConvChain.h"
+#include <imgui.h>
 
 namespace ad {
 namespace markovjunior {
@@ -129,6 +130,11 @@ bool ConvChain::run()
 
     return true;
 };
+
+void ConvChain::debugRender(int id)
+{
+    ImGui::Text("ConvChain");
+}
 
 } // namespace markovjunior
 } // namespace ad
