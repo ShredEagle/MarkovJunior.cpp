@@ -1,10 +1,13 @@
 #include "Map.h"
 
 #include "Interpreter.h"
+#include "markovjunior/Grid.h"
 #include "markovjunior/Commons.h"
 #include "markovjunior/Constants.h"
 #include "markovjunior/Node.h"
 #include "markovjunior/SymmetryUtils.h"
+
+#include <pugixml.hpp>                   // for xpath_node_set, xml_node
 
 #include <cassert>
 

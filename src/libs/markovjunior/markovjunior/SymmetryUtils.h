@@ -1,10 +1,9 @@
 #pragma once
-#include <algorithm>
 #include <array>
 #include <map>
-#include <optional>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 namespace ad {
 namespace markovjunior {
@@ -18,19 +17,7 @@ extern const SymmetryGroup gDefaultSquareGroup;
 SymmetryGroup getSymmetry(const std::string & symmetryString,
                           const SymmetryGroup & aDefaultGroup = gDefaultSquareGroup);
 
-template <class T>
-concept IsSymmetrizable = requires(T t)
-{
-    requires std::equality_comparable<T>;
-    {
-        t.reflect()
-        } -> std::convertible_to<T>;
-    {
-        t.rotate()
-        } -> std::convertible_to<T>;
-};
-
-template <IsSymmetrizable T_rule>
+template <class T_rule>
 std::vector<T_rule> createAllSquareSymmetries(T_rule aRule, SymmetryGroup aSubGroup)
 {
     std::vector<T_rule> possibleSymmetricRules;

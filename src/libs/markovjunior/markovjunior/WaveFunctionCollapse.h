@@ -1,5 +1,6 @@
 #pragma once
 
+#include "markovjunior/Grid.h"
 #include "markovjunior/Node.h"
 
 #include <optional>

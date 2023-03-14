@@ -3,14 +3,13 @@
 
 #include <math/Vector.h>
 
-#include <pugixml.hpp>
-
 #include <iostream>
 #include <algorithm>
-#include <numeric>
-#include <cassert>
 #include <map>
+#include <string>
 #include <vector>
+
+namespace pugi { class xml_node; }
 
 namespace ad {
 namespace markovjunior {

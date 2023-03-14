@@ -1,15 +1,18 @@
 #pragma once
 
 #include "markovjunior/Rule.h"
+#include "markovjunior/Grid.h"
 #include "Node.h"
 
 #include <imgui.h>
 #include <math/Vector.h>
-#include <pugixml.hpp>
+
+namespace pugi { class xml_node; }
 
 namespace ad {
 namespace markovjunior {
 
+class Interpreter;
 
 struct Scale
 {

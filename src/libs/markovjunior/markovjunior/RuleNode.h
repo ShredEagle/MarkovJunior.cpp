@@ -6,14 +6,19 @@
 #include "SymmetryUtils.h"
 #include "markovjunior/Field.h"
 #include "markovjunior/Observation.h"
+#include "markovjunior/Grid.h"
 
-#include <imgui.h>
 #include <math/Color.h>
 #include <math/Vector.h>
 
 #include <pugixml.hpp>
 
 #include <vector>
+#include <algorithm>
+#include <iosfwd>
+#include <tuple>
+
+struct ImDrawList;
 
 namespace ad {
 namespace markovjunior {

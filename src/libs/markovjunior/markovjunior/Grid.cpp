@@ -1,5 +1,9 @@
 #include "Grid.h"
 #include "Rule.h"
+#include <cassert>            // for assert
+#include <numeric>            // for accumulate
+#include <pugixml.hpp>        // for xml_node, xml_attribute, xpath_node_set
+#include <math/Vector.h>      // for Size, Vec, Position
 #include <iostream>
 
 namespace ad {

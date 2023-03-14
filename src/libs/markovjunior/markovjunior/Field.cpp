@@ -4,7 +4,6 @@
 
 #include <math/Vector.h>
 
-#include <memory>
 #include <tuple>
 #include <queue>
 

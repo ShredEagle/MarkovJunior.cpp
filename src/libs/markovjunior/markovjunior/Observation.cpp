@@ -1,9 +1,15 @@
 #include "Observation.h"
 
 #include "markovjunior/Constants.h"
+#include "markovjunior/Rule.h"
 
 namespace ad {
 namespace markovjunior {
+
+Observation::Observation(const unsigned char aFrom, const std::string & aTo, const Grid & aGrid) :
+    mFrom{aGrid.mValues.at(aFrom)}, mTo{aGrid.makeWave(aTo)}
+{
+}
 
 bool Observation::computeFutureSetPresent(std::vector<int> & aFuture,
                                           std::vector<unsigned char> & aState,

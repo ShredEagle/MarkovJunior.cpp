@@ -1,5 +1,18 @@
 #include "ConvChain.h"
+#include "markovjunior/Commons.h"       // for SamplePattern, modulo, create...
+#include "markovjunior/Grid.h"          // for Grid
+#include "markovjunior/ImageHelpers.h"  // for loadConvChainSample
+#include "markovjunior/Interpreter.h"   // for Interpreter
+#include "markovjunior/Node.h"          // for Node
+                                        //
 #include <imgui.h>
+#include <cassert>                      // for assert
+#include <cmath>                        // for pow
+#include <cstddef>                      // for size_t
+#include <map>                          // for map
+#include <pugixml.hpp>                  // for xml_attribute, xml_node, char_t
+#include <random>                       // for mt19937, uniform_real_distrib...
+#include <cstdio>
 
 namespace ad {
 namespace markovjunior {
@@ -22,13 +35,15 @@ ConvChain::ConvChain(const pugi::xml_node & aXmlNode,
         assert(false);
     }
 
-    std::string name = aXmlNode.attribute("sample").as_string();
+    const char * name = aXmlNode.attribute("sample").as_string();
+    char filePath[256];
+    std::snprintf(filePath, 256, "%s/%s%s", "assets/resources/", name, ".png");
     auto [samples, size] = loadConvChainSample(
-        aInterpreter->mResourceLocator.pathFor("assets/resources/" + name + ".png"));
+        aInterpreter->mResourceLocator.pathFor(filePath));
 
     mSample.reserve(samples.size());
     for (auto s : samples) {
-        mSample.emplace_back(s == -1);
+        mSample.push_back((std::byte)(s == -1));
     }
 
     mSubstrate = std::vector<bool>(mGrid->mState.size());
@@ -36,13 +51,13 @@ ConvChain::ConvChain(const pugi::xml_node & aXmlNode,
     mWeights = std::vector<double>((std::size_t)1 << (mN * mN), 0.);
     for (int y = 0; y < size.height(); y++) {
         for (int x = 0; x < size.width(); x++) {
-            std::vector<bool> patternResult = createPattern<bool>(
+            std::vector<std::byte> patternResult = createPattern(
                 [&, size = size](int dx, int dy) {
-                    return mSample.at((x + dx) % size.width()
-                                      + (y + dy) % size.height() * size.width());
+                    return static_cast<std::byte>(mSample.at((x + dx) % size.width()
+                                      + (y + dy) % size.height() * size.width()));
                 },
                 mN);
-            SamplePattern<bool> samplePattern(patternResult.begin(), patternResult.end());
+            SamplePattern samplePattern(patternResult.begin(), patternResult.end());
             auto symmetries = createAllSquareSymmetries(samplePattern, aSymmetryGroup);
 
             for (auto sym : symmetries) {

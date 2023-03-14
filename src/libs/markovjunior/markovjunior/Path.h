@@ -1,17 +1,28 @@
 #pragma once
 
 #include "Node.h"
-
-#include "Interpreter.h"
+#include "markovjunior/Grid.h"
+#include "markovjunior/SymmetryUtils.h"
 
 #include <imgui.h>
 #include <math/Vector.h>
 #include <pugixml.hpp>
+
+#include <algorithm>                     // for copy
+#include <array>                         // for array
+#include <numeric>                       // for accumulate
+#include <string>                        // for string
 #include <queue>
+#include <map>
+#include <tuple>
+#include <vector>
 #include <string>
+#include <random>
 
 namespace ad {
 namespace markovjunior {
+
+class Interpreter;
 
 class Path : public Node
 {

@@ -2,13 +2,19 @@
 
 #include "Grid.h"
 
-#include <iomanip>
 #include <math/Vector.h>
+
+#include <iomanip>
 #include <random>
 #include <vector>
+#include <tuple>
+#include <iostream>
+#include <algorithm>
 
 namespace ad {
 namespace markovjunior {
+
+class Rule;
 
 struct Board
 {

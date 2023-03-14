@@ -3,6 +3,18 @@
 namespace ad {
 namespace markovjunior
 {
+
+AllNode::AllNode(const pugi::xml_node & aXmlNode,
+            const SymmetryGroup & aParentSymmetry,
+            Interpreter * aInterpreter,
+            Grid * aGrid) :
+        RuleNode(aXmlNode, aParentSymmetry, aInterpreter, aGrid)
+{
+    mAllSearch = true;
+    mMatchMask = std::vector<std::vector<bool>>(
+        mRules.size(), std::vector<bool>(mGrid->mState.size(), false));
+}
+
 void AllNode::fit(int aRuleIndex, const math::Position<3, int> & aPos, std::vector<bool> & aNewStateMask, const math::Size<3, int> & aSize)
 {
     Rule rule = mRules.at(aRuleIndex);

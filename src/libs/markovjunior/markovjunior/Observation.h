@@ -1,22 +1,20 @@
 #pragma once
 
 #include "markovjunior/Grid.h"
-#include "markovjunior/Rule.h"
 
 #include <queue>
 #include <string>
 namespace ad {
 namespace markovjunior {
 
+class Rule;
+
 class Observation
 {
   public:
     Observation() = default;
 
-    Observation(const unsigned char aFrom, const std::string & aTo, const Grid & aGrid) :
-        mFrom{aGrid.mValues.at(aFrom)}, mTo{aGrid.makeWave(aTo)}
-    {
-    }
+    Observation(const unsigned char aFrom, const std::string & aTo, const Grid & aGrid);
 
     static bool computeFutureSetPresent(std::vector<int> & aFuture,
                                         std::vector<unsigned char> & aState,

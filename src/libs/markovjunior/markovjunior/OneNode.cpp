@@ -1,10 +1,9 @@
 #include "OneNode.h"
 
-#include "markovjunior/ImageHelpers.h"
+#include "markovjunior/Interpreter.h"
+#include "markovjunior/Rule.h"
 
 #include <cmath>
-#include <imgui.h>
-#include <math/Color.h>
 
 namespace ad {
 namespace markovjunior {

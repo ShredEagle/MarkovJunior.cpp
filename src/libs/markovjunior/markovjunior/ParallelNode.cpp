@@ -1,6 +1,11 @@
-#include "ParallelNode.h"
-
 #include "Constants.h"
+#include "ParallelNode.h"
+#include "markovjunior/Interpreter.h"  // for Interpreter
+#include "markovjunior/Rule.h"         // for Rule
+#include "markovjunior/RuleNode.h"     // for RuleNode
+                                       //
+#include <random>                      // for uniform_real_distribution
+
 
 namespace ad {
 namespace markovjunior {

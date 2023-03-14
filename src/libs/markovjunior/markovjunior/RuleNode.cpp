@@ -2,16 +2,26 @@
 
 #include "Field.h"
 #include "GridUtils.h"
-#include "ImageHelpers.h"
 #include "Observation.h"
 #include "Search.h"
+#include "markovjunior/Interpreter.h"    // for Interpreter
+#include "markovjunior/Node.h"           // for Node
+#include "markovjunior/Rule.h"           // for Rule, countTrailingZeroes
+#include "markovjunior/SymmetryUtils.h"  // for getSymmetry, SymmetryGroup
 
-#include <algorithm>
-#include <cassert>
-#include <cstddef>
-#include <imgui.h>
 #include <math/Color.h>
 #include <math/Vector.h>
+
+#include <algorithm>
+#include <cstddef>
+#include <imgui.h>
+
+#include <iostream>                      // for operator<<, endl, ostream
+#include <iterator>                      // for distance
+#include <map>                           // for map
+#include <random>                        // for mt19937
+#include <string>                        // for string, char_traits
+#include <utility>                       // for __tuple_element_t
 
 namespace ad {
 namespace markovjunior {

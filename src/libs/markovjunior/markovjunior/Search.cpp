@@ -17,9 +17,12 @@
 #include "Constants.h"
 #include "Observation.h"
 #include "Rule.h"
+#include "markovjunior/Grid.h"
+#include <math/Vector.h>
 
 #include <iostream>
-#include <list>
+#include <cstddef>
+#include <iterator>
 #include <queue>
 #include <random>
 #include <vector>

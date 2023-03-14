@@ -26,6 +26,7 @@ set(${TARGET_NAME}_HEADERS
 
 set(${TARGET_NAME}_SOURCES
     AllNode.cpp
+    Commons.cpp
     Constants.cpp
     ConvChain.cpp
     ConvolutionNode.cpp

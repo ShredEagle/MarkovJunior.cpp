@@ -1,18 +1,19 @@
 #pragma once
 
 #include "Commons.h"
-#include "ImageHelpers.h"
-#include "Interpreter.h"
 #include "Node.h"
+#include "markovjunior/SymmetryUtils.h"
+#include <math/Vector.h>                // for Size
+#include <algorithm>
+#include <vector>
 
-#include <cassert>
-#include <cmath>
-#include <functional>
-#include <math/Vector.h>
-#include <pugixml.hpp>
+namespace pugi { class xml_node; }
 
 namespace ad {
 namespace markovjunior {
+
+class Grid;
+class Interpreter;
 
 class ConvChain : public Node
 {
@@ -48,7 +49,7 @@ class ConvChain : public Node
     unsigned char mSubstrateColor;
     int mCounter;
     int mSteps;
-    SamplePattern<bool> mSample;
+    SamplePattern mSample;
     math::Size<3, int> mSize;
 };
 

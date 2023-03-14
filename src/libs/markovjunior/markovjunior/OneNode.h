@@ -3,8 +3,13 @@
 #include "RuleNode.h"
 #include <imgui.h>
 
+namespace pugi { class xml_node; }
+
 namespace ad {
 namespace markovjunior {
+
+class Interpreter;
+class Rule;
 
 class OneNode : public RuleNode
 {

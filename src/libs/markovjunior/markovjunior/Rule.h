@@ -1,16 +1,18 @@
 #pragma once
 
-#include "Commons.h"
-#include "Grid.h"
-#include "markovjunior/ImageHelpers.h"
-
 #include <math/Color.h>
 #include <math/Vector.h>
-#include <pugixml.hpp>
+#include <iosfwd>
+#include <tuple>
+#include <string>
 #include <vector>
+
+namespace pugi { class xml_node; }
 
 namespace ad {
 namespace markovjunior {
+
+class Grid;
 
 typedef std::vector<std::vector<math::Vec<3, int>>> RuleShift;
 

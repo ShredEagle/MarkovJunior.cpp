@@ -2,7 +2,12 @@
 
 #include "Commons.h"
 #include "Constants.h"
+#include "markovjunior/Grid.h"
 
+#include <math/Vector.h>
+
+#include <map>
+#include <pugixml.hpp>
 #include <iostream>
 
 namespace ad {

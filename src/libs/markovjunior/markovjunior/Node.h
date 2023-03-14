@@ -1,18 +1,16 @@
 #pragma once
 #include "SymmetryUtils.h"
-#include "markovjunior/Grid.h"
 
 #include <handy/Crc.h>
-#include <imgui.h>
 #include <pugixml.hpp>
 
 #include <memory>
-#include <cassert>
 
 namespace ad {
 namespace markovjunior {
 
 class Interpreter;
+class Grid;
 
 class Node
 {
@@ -44,7 +42,6 @@ public:
 };
 
 class SequenceNode;
-class MarkovNode;
 
 std::unique_ptr<Node> createNode(
         SequenceNode * aParent,

@@ -7,6 +7,7 @@
 #include "markovjunior/Map.h"
 #include "markovjunior/ParallelNode.h"
 #include "markovjunior/Path.h"
+#include "markovjunior/SymmetryUtils.h"
 #include "OneNode.h"
 
 #include <handy/Crc.h>
@@ -14,6 +15,8 @@
 
 namespace ad {
 namespace markovjunior {
+
+class Grid;
 
 std::unique_ptr<Node> createNode(SequenceNode * aParent,
                                  const pugi::xml_node & aXmlNode,
