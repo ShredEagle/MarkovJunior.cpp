@@ -1,0 +1,5 @@
+[source_folder]
+../
+
+[build_folder]
+../build-conan-{{settings.compiler}}{{settings.compiler.version}}/{{settings.build_type}}/

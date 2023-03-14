@@ -1,0 +1,8 @@
+editables:
+  graphics/cff6cd4822@adnn/develop:
+    path: ../../../graphics/conan
+  MarkovJunior.cpp/local:
+    path: ../../conan
+layout: linux_layout
+root: MarkovJunior.cpp/local
+workspace_generator: cmake
