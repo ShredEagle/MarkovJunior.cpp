@@ -2,7 +2,10 @@
 
 #include "markovjunior/Grid.h"
 
+#include <cstdio>
+#include <fstream>
 #include <imgui.h>
+#include <string>
 #include <tuple>
 
 namespace ad {
@@ -119,10 +122,53 @@ void Interpreter::testFileOnMultipleSeed()
     }
 }
 
+void Interpreter::loadTest()
+{
+    mSeed = mTestSuite.at(mTestSuiteIndex).first;
+    setup();
+}
+
+void Interpreter::runTestSuite()
+{
+    int steps = 0;
+    while(mCurrentBranch != nullptr && (mStepPerTestIteration == -1 || steps++ < mStepPerTestIteration))
+    {
+        runStep();
+    }
+
+    if (mCurrentBranch == nullptr)
+    {
+        bool valid = true;
+        for (unsigned char value : mGrid.mState)
+        {
+            if (mAcceptableValues.find(std::string(1, mGrid.mCharacters.at(value))) == std::string::npos)
+            {
+                valid = false;
+            }
+        }
+
+        mTestSuite.at(mTestSuiteIndex).second = valid ? TestResult::VALID : TestResult::NOT_VALID;
+
+        mTestSuiteIndex++;
+
+        if (mTestSuiteIndex == mTestSuite.size())
+        {
+            mRun = false;
+            mRunningTestSuite = false;
+            mTestSuiteIndex = -1;
+        }
+        else
+        {
+            loadTest();
+        }
+    }
+}
+
 std::tuple<bool, bool, bool> Interpreter::showDebuggingTools()
 {
     bool step = false;
     static bool onlyShowBad = false;
+    static char saveTestFilePath[256] = "/home/franz/gamedev/markov_test_result";
 
     ImGui::Begin("Interpreter debug");
     ImGui::BeginTabBar("interpreter tab bar");
@@ -162,13 +208,14 @@ std::tuple<bool, bool, bool> Interpreter::showDebuggingTools()
         ImGui::InputScalar("seed", ImGuiDataType_U32, &mSeed, &step, &step);
         ImGui::SameLine();
         ImGui::InputInt2("size", mSize.data());
+        ImGui::PopItemWidth();
         ImGui::Checkbox("Track active rule", &mTrackActiveRule);
         ImGui::BeginChild("Tree debugging", ImVec2(0, 0), true);
         mRoot->debugRender();
         ImGui::EndChild();
         ImGui::EndTabItem();
     }
-    if (ImGui::BeginTabItem("Test file"))
+    if (ImGui::BeginTabItem("Test xml"))
     {
         if (ImGui::Button("Run tests"))
         {
@@ -180,18 +227,131 @@ std::tuple<bool, bool, bool> Interpreter::showDebuggingTools()
             mRunningTest = false;
         }
         ImGui::SameLine();
-        ImGui::Checkbox("Only show bad", &onlyShowBad);
+        ImGui::Checkbox("Show bad", &onlyShowBad);
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(100.f);
         ImGui::DragInt("Steps per iteration", &mStepPerTestIteration, 1, -1, 1000);
+        if (ImGui::Button("Save results"))
+        {
+            std::ofstream fileStream;
+            fileStream.open(saveTestFilePath);
+            if (fileStream.is_open())
+            {
+                for (auto [seed, valid] : mTestedSeed)
+                {
+                    if (!valid)
+                    {
+                        fileStream << seed << std::endl;
+                    }
+                }
+            }
+            fileStream.close();
+        }
+        ImGui::SameLine();
+        ImGui::InputText("Result path", saveTestFilePath, IM_ARRAYSIZE(saveTestFilePath));
 
-        ImGui::BeginChild("Results", ImVec2(0, 0), true);
+        ImGui::BeginChild("Results", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true);
+        int good = 0;
+        int bad = 0;
         for (auto [seed, valid] : mTestedSeed)
         {
+            if (valid)
+            {
+                good++;
+            }
+            else
+            {
+                bad++;
+            }
+
             if ((onlyShowBad && !valid) || !onlyShowBad)
             {
                 ImGui::Text("%u is %s", seed, valid ? "good" : "not good");
             }
         }
         ImGui::EndChild();
+        ImGui::Text("%d good / %d bad", good, bad);
+        ImGui::EndTabItem();
+    }
+    if (ImGui::BeginTabItem("Run test file"))
+    {
+
+        if (ImGui::Button("Load file"))
+        {
+            mTestSuite.clear();
+            std::ifstream file;
+            file.open(saveTestFilePath);
+            if (file.is_open())
+            {
+                char readSeed[16];
+                while (file.getline(&readSeed[0], IM_ARRAYSIZE(readSeed)))
+                {
+                    unsigned int seed;
+                    sscanf(readSeed, "%u", &seed);
+                    mTestSuite.push_back({seed, TestResult::NOT_TESTED});
+                }
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Run file"))
+        {
+            mTestSuiteIndex = 0;
+            mRunningTestSuite = true;
+            mStepPerTestIteration = -1;
+            reloadFile();
+            loadTest();
+        }
+
+        ImGui::InputText("Suite path", saveTestFilePath, IM_ARRAYSIZE(saveTestFilePath));
+        if(ImGui::BeginTable("Tests", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+        {
+            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
+            ImGui::TableSetupColumn("Seed");
+            ImGui::TableSetupColumn("Result");
+            ImGui::TableSetupColumn("");
+            ImGui::TableHeadersRow();
+            int i = 0;
+            for (auto [seed, result] : mTestSuite)
+            {
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                if (i == mTestSuiteIndex)
+                {
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::Text("R");
+                }
+                ImGui::TableSetColumnIndex(1);
+                ImGui::AlignTextToFramePadding();
+                ImGui::Text("%u", seed);
+                ImGui::TableSetColumnIndex(2);
+                ImGui::AlignTextToFramePadding();
+                switch(result)
+                {
+                    case TestResult::NOT_TESTED:
+                        ImGui::Text("Not tested");
+                        break;
+                    case TestResult::VALID:
+                        ImGui::Text("Valid");
+                        break;
+                    case TestResult::NOT_VALID:
+                        ImGui::Text("bad");
+                        break;
+                    default:
+                        break;
+
+                }
+                ImGui::TableSetColumnIndex(3);
+                ImGui::PushID(std::to_string(i).c_str());
+                if(ImGui::Button("Replay seed", ImVec2(-FLT_MIN, 0.f)))
+                {
+                    mTestSuiteIndex = i;
+                    loadTest();
+                }
+                ImGui::PopID();
+                i++;
+            }
+            ImGui::EndTable();
+        }
         ImGui::EndTabItem();
     }
     ImGui::EndTabBar();

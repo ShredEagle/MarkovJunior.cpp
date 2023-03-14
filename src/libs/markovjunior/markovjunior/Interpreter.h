@@ -20,6 +20,14 @@
 namespace ad {
 namespace markovjunior {
 
+enum class TestResult
+{
+    NOT_TESTED,
+    VALID,
+    NOT_VALID,
+};
+
+
 class Interpreter
 {
     public:
@@ -39,7 +47,6 @@ class Interpreter
 
         void setup();
         void runStep();
-        void testFileOnMultipleSeed();
         bool reloadFile();
 
         std::tuple<bool, bool, bool> showDebuggingTools();
@@ -64,6 +71,12 @@ class Interpreter
         bool mTrackActiveRule = false;
 
         // Debug data
+        void testFileOnMultipleSeed();
+        void runTestSuite();
+        void loadTest();
+        std::vector<std::pair<unsigned int, TestResult>> mTestSuite;
+        int mTestSuiteIndex = -1;
+        bool mRunningTestSuite = 0;
         unsigned int mSeed;
         bool mRun = false;
         bool mRunningTest = false;

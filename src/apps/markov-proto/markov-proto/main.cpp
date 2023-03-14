@@ -127,6 +127,10 @@ int main()
         {
             interpreter->testFileOnMultipleSeed();
         }
+        else if (interpreter->mRunningTestSuite)
+        {
+            interpreter->runTestSuite();
+        }
         else if (runSimulation || stepSimul)
         {
             for (int i = 0; i != gSteps; i++)
