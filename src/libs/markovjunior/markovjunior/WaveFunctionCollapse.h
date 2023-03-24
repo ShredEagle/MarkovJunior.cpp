@@ -10,6 +10,7 @@
 #include <stack>
 #include <utility>
 #include <vector>
+#include <numeric>
 
 namespace ad {
 namespace markovjunior {

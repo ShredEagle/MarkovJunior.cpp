@@ -111,7 +111,7 @@ void Interpreter::testFileOnMultipleSeed()
         bool valid = true;
         for (unsigned char value : mGrid.mState)
         {
-            if (mAcceptableValues.find(std::string(1, mGrid.mCharacters.at(value))) == std::string::npos)
+            if (mAcceptableValues.find(std::string(1, (char)mGrid.mCharacters.at(value))) == std::string::npos)
             {
                 valid = false;
             }
@@ -141,7 +141,7 @@ void Interpreter::runTestSuite()
         bool valid = true;
         for (unsigned char value : mGrid.mState)
         {
-            if (mAcceptableValues.find(std::string(1, mGrid.mCharacters.at(value))) == std::string::npos)
+            if (mAcceptableValues.find(std::string(1, (char)mGrid.mCharacters.at(value))) == std::string::npos)
             {
                 valid = false;
             }
@@ -151,7 +151,7 @@ void Interpreter::runTestSuite()
 
         mTestSuiteIndex++;
 
-        if (mTestSuiteIndex == mTestSuite.size())
+        if (mTestSuiteIndex == static_cast<int>(mTestSuite.size()))
         {
             mRun = false;
             mRunningTestSuite = false;
@@ -287,7 +287,9 @@ std::tuple<bool, bool, bool> Interpreter::showDebuggingTools()
                 while (file.getline(&readSeed[0], IM_ARRAYSIZE(readSeed)))
                 {
                     unsigned int seed;
-                    sscanf(readSeed, "%u", &seed);
+                    std::stringstream seedStream;
+                    seedStream << readSeed;
+                    seedStream >> seed;
                     mTestSuite.push_back({seed, TestResult::NOT_TESTED});
                 }
             }
