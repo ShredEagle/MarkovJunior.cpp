@@ -1,7 +1,7 @@
 editables:
-  graphics/cff6cd4822@adnn/develop:
+  graphics/3a9a713cde@adnn/develop:
     path: ../../../graphics/conan
-  math/18338feb20@adnn/develop:
+  math/a165ef4960@adnn/develop:
     path: ../../../math/conan
   MarkovJunior.cpp/local:
     path: ../../conan
