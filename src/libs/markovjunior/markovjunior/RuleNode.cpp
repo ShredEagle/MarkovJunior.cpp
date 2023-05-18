@@ -31,6 +31,7 @@ RuleNode::RuleNode(const pugi::xml_node & aXmlNode,
                    Grid * aGrid) :
     Node(aInterpreter, aGrid)
 {
+    mResetOnCompletion = aXmlNode.attribute("reset").as_bool();
     std::string symmetryString = aXmlNode.attribute("symmetry").as_string("");
     SymmetryGroup symmetrySubgroup =
         getSymmetry(symmetryString, aParentSymmetry);
@@ -120,8 +121,17 @@ bool RuleNode::run()
     Grid & grid = *mGrid;
     math::Size<3, int> gridSize = grid.mSize;
 
+    if (mLastMatchedTurn != mInterpreter->mCounter - 1 && mResetOnCompletion)
+    {
+        mCounter = 0;
+    }
+
     if (mSteps > 0 && mCounter >= mSteps)
     {
+        if (mResetOnCompletion)
+        {
+            mCounter = 0;
+        }
         return false;
     }
 

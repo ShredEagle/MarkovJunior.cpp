@@ -90,6 +90,7 @@ public:
     bool mSearch;
     bool mAllSearch = false;
     bool mFutureComputed = false;
+    bool mResetOnCompletion = false;
     int mLimit;
     float mDepthCoefficient;
 
