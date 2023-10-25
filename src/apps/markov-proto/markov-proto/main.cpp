@@ -32,9 +32,9 @@ inline std::mt19937
                             .time_since_epoch()
                             .count());
 inline int gSeed = randomSeedgenerator();
-inline int gSize = 29;
+inline int gSize = 19;
 inline int gSteps = 1;
-inline ad::filesystem::path filename{"snaclvl.xml"};
+inline ad::filesystem::path filename{"snaclvl4.xml"};
 
 inline ApplicationGlfw application{"Markovjunior", gWindowSize,
                                    ApplicationFlag::Window_Keep_Ratio};
