@@ -352,9 +352,7 @@ runSearch(const std::vector<unsigned char> & aPresent,
         int parentIndex = std::get<int>(frontier.top());
         frontier.pop();
 
-        const Board & parentBoard = database.at(parentIndex);
-
-        auto children = aAll ? allChildStates(parentBoard.mState, aSize, aRules) : oneChildStates(parentBoard.mState, aSize, aRules);
+        auto children = aAll ? allChildStates(database[parentIndex].mState, aSize, aRules) : oneChildStates(database[parentIndex].mState, aSize, aRules);
 
         for (const auto & childState : children)
         {
@@ -365,6 +363,7 @@ runSearch(const std::vector<unsigned char> & aPresent,
                 int childIndex = visited.at(childState);
 
                 Board & oldBoard = database.at(childIndex);
+                Board & parentBoard = database.at(parentIndex);
 
                 if (parentBoard.mDepth + 1 < oldBoard.mDepth)
                 {
