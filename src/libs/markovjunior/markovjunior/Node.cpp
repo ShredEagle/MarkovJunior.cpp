@@ -138,7 +138,7 @@ void SequenceNode::debugRender(int id)
             ImVec4{0.3f, 1.f, 0.3f, 1.f} :
             ImVec4{1.f, 1.f, 1.f, 1.f};
     ImGui::TextColored(color, "sequence");
-    ImGui::TreePush();
+    ImGui::TreePush(std::to_string(id).c_str());
 
     int idChild = 0;
     for (auto & node : nodes)
@@ -156,7 +156,7 @@ void MarkovNode::debugRender(int id)
             ImVec4{0.3f, 1.f, 0.3f, 1.f} :
             ImVec4{1.f, 1.f, 1.f, 1.f};
     ImGui::TextColored(color, "markov");
-    ImGui::TreePush();
+    ImGui::TreePush(std::to_string(id).c_str());
     int idChild = 0;
     for (auto & node : nodes)
     {
