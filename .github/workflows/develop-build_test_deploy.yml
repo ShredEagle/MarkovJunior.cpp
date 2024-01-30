@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.5.1
+    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.6.0
     with:
       os: >-
         ["ubuntu-22.04", "windows-2022"]
