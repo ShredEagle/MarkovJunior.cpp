@@ -76,7 +76,7 @@ inline void callbackKeyboard(int key, int, int action, int)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
-        application.getAppInterface()->requestCloseApplication();
+        application.getAppInterface()->requestCloseWindow();
     }
 }
 
