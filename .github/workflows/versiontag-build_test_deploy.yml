@@ -7,14 +7,14 @@ on:
 
 jobs:
   extract_tag:
-    uses: shredeagle/reusable-workflows/.github/workflows/extract_version_tag.yml@v2.6.1
+    uses: shredeagle/reusable-workflows/.github/workflows/extract_version_tag.yml@v2.7.0
 
   build:
     needs: extract_tag
-    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.6.1
+    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.7.0
     with:
       os: >-
-        ["ubuntu-22.04", "windows-2022"]
+        ["ubuntu-24.04", "windows-2022"]
       deployrecipe_userchannel: adnn/stable
       version: ${{ needs.extract_tag.outputs.version }}
       step_runtests: false

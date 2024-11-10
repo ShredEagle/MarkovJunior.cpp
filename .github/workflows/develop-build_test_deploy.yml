@@ -8,10 +8,10 @@ on:
 
 jobs:
   build:
-    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.6.1
+    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.7.0
     with:
       os: >-
-        ["ubuntu-22.04", "windows-2022"]
+        ["ubuntu-24.04", "windows-2022"]
       deployrecipe_userchannel: adnn/develop
       step_runtests: false
     secrets:

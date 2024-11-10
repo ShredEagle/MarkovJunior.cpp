@@ -9,10 +9,10 @@ on:
 
 jobs:
   build-test:
-    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.6.1
+    uses: shredeagle/reusable-workflows/.github/workflows/main_build.yml@v2.7.0
     with:
       os: >-
-        ["ubuntu-22.04", "windows-2022"]
+        ["ubuntu-24.04", "windows-2022"]
       step_runtests: false
     secrets:
       SHREDROBOT_GITHUB_TOKEN: ${{ secrets.SHREDROBOT_GITHUB_TOKEN }}
